@@ -7,6 +7,10 @@ import {
     MantineProvider,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
+import {
+    getLocalStorageItem,
+    setLocalStorageItem,
+} from "../utils/browserHandle";
 
 export default function App(props: AppProps) {
     const { Component, pageProps } = props;
@@ -14,16 +18,15 @@ export default function App(props: AppProps) {
     const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
     const toggleColorScheme = (value?: ColorScheme) => {
         setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
-        // setLocalStorageItem(
-        //     "theme",
-        //     (value as string) || (colorScheme === "dark" ? "light" : "dark")
-        // );
+        setLocalStorageItem(
+            "theme",
+            (value as string) || (colorScheme === "dark" ? "light" : "dark")
+        );
     };
-
+    
     useEffect(() => {
-        // create /lib/browserHandles.ts
-        // const storedTheme = getLocalStorageItem("theme");
-        // if (storedTheme) handleTheme(storedTheme as ColorScheme);
+        const storedTheme = getLocalStorageItem("theme");
+        if (storedTheme) handleTheme(storedTheme as ColorScheme);
     }, []);
 
     const handleTheme = (theme: ColorScheme) => {
@@ -48,7 +51,7 @@ export default function App(props: AppProps) {
                     withGlobalStyles
                     withNormalizeCSS
                     theme={{
-                        colorScheme: "dark",
+                        colorScheme: colorScheme,
                     }}
                 >
                     <Component {...pageProps} />
