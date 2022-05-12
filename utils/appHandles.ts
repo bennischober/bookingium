@@ -1,5 +1,6 @@
 import { MantineTheme } from "@mantine/core";
 import { NextRouter } from "next/router";
+import dayjs from 'dayjs';
 
 // handle theme, language, and other app settings
 
@@ -24,9 +25,17 @@ export function getLastRoute(router: NextRouter): string {
 /** --- OTHER HADNLE --- **/
 
 export function getCurrentYear() {
-    return new Date().getFullYear();
+    return dayjs().format("YYYY");
 }
 
 export function getNameInitials(name: string) {
     return name.split(" ").map(word => word[0]).join("");
+}
+
+/** --- DATA STRUCTURE HANDLE --- **/
+
+// function that adds a new item to a specific index of an array and pushes the rest of the array to the end
+export function addToArray(array: any[], index: number, item: any) {
+    array.splice(index, 0, item);
+    return array;
 }

@@ -32,12 +32,13 @@ export function getFooterData() {
 export function getNavbarData() {
     return [
         { label: "Dashboard", icon: MdDashboard, link: "/" },
+        { label: "Deal Memo", icon: GoFile, link: "/deal-memo" },
+        { label: "Bands", icon: RiFileList3Line, links: [] },
         { label: "Invoice", icon: RiFileList3Line, link: "/invoice" },
         { label: "Contract", icon: RiFileTextLine, link: "/contract" },
-        { label: "Deal Memo", icon: GoFile, link: "/deal-memo" },
+        { label: "Itinerary", icon: RiFileTextLine, link: "/itinerary" },
         { label: "Create new", icon: MdCreateNewFolder, links: [
             { label: "Band", link: "/new/band" },
-            { label: "Event", link: "/new/event" },
             { label: "Location", link: "/new/location" },
             { label: "Promoter", link: "/new/promoter" },
             { label: "Hotel", link: "/new/hotel" },
