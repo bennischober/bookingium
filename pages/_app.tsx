@@ -11,10 +11,10 @@ import {
     getLocalStorageItem,
     setLocalStorageItem,
 } from "../utils/browserHandle";
+import { AppContainer } from "../components/AppContainer";
+import { SessionProvider } from "next-auth/react";
 
-export default function App(props: AppProps) {
-    const { Component, pageProps } = props;
-
+export default function App({ Component, pageProps, ...appPropps }: AppProps) {
     const [colorScheme, setColorScheme] = useState<ColorScheme>("dark");
     const toggleColorScheme = (value?: ColorScheme) => {
         setColorScheme(value || (colorScheme === "dark" ? "light" : "dark"));
@@ -23,7 +23,7 @@ export default function App(props: AppProps) {
             (value as string) || (colorScheme === "dark" ? "light" : "dark")
         );
     };
-    
+
     useEffect(() => {
         const storedTheme = getLocalStorageItem("theme");
         if (storedTheme) handleTheme(storedTheme as ColorScheme);
@@ -31,6 +31,22 @@ export default function App(props: AppProps) {
 
     const handleTheme = (theme: ColorScheme) => {
         setColorScheme(theme);
+    };
+
+    const specialPage: string[] = [
+        "/auth/login",
+        "/auth/register",
+        "/404",
+        "/500",
+    ];
+    const getPageContent = () => {
+        return specialPage.includes(appPropps.router.pathname) ? (
+            <Component {...pageProps} />
+        ) : (
+            <AppContainer>
+                <Component {...pageProps} />
+            </AppContainer>
+        );
     };
 
     return (
@@ -43,20 +59,22 @@ export default function App(props: AppProps) {
                 />
             </Head>
 
-            <ColorSchemeProvider
-                colorScheme={colorScheme}
-                toggleColorScheme={toggleColorScheme}
-            >
-                <MantineProvider
-                    withGlobalStyles
-                    withNormalizeCSS
-                    theme={{
-                        colorScheme: colorScheme,
-                    }}
+            <SessionProvider session={pageProps.session} refetchInterval={0}>
+                <ColorSchemeProvider
+                    colorScheme={colorScheme}
+                    toggleColorScheme={toggleColorScheme}
                 >
-                    <Component {...pageProps} />
-                </MantineProvider>
-            </ColorSchemeProvider>
+                    <MantineProvider
+                        withGlobalStyles
+                        withNormalizeCSS
+                        theme={{
+                            colorScheme: colorScheme,
+                        }}
+                    >
+                        {getPageContent()}
+                    </MantineProvider>
+                </ColorSchemeProvider>
+            </SessionProvider>
         </>
     );
 }
