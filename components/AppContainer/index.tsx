@@ -37,16 +37,7 @@ export function AppContainer(props: AppContainerProps) {
             }
         >
             {props.children}
-            <FooterComponent
-                data={[
-                    {
-                        title: "Row 1",
-                        links: [
-                            { label: "link1", link: "https://www.google.com" },
-                        ],
-                    },
-                ]}
-            />
+            <FooterComponent />
         </AppShell>
     );
 }

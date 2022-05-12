@@ -23,13 +23,6 @@ export interface NavbarProps {
 	hidden?: boolean;
 }
 
-export interface FooterProps {
-	data: {
-		title: string;
-		links: { label: string; link: string }[];
-	}[];
-}
-
 export interface LinksGroupProps {
 	icon: typeof IconBase;
 	label: string;

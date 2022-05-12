@@ -8,8 +8,7 @@ import {
 } from "@mantine/core";
 import { FaGithub, FaLinkedin } from "react-icons/fa";
 import { MdEmail } from "react-icons/md";
-import Link from "next/link";
-import { FooterProps } from "../../types";
+import { getFooterData } from "../../utils/links";
 
 const useStyles = createStyles((theme) => ({
     footer: {
@@ -117,16 +116,9 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 
-const links = {
-    github: "https://www.github.com/bennischober",
-    email: "mailto:bennischober001@gmail.com",
-    linkedin: "https://www.linkedin.com/in/benjamin-schober/",
-};
-
-
-export function FooterComponent({ data }: FooterProps) {
+export function FooterComponent() {
     const { classes } = useStyles();
-    const groups = data.map((group) => {
+    const groups = getFooterData().map((group) => {
         const links = group.links.map((link, index) => (
             <Text<"a">
                 key={index}
@@ -172,17 +164,17 @@ export function FooterComponent({ data }: FooterProps) {
                     position="right"
                     noWrap
                 >
-                    <a href={links.github} rel="noopener noreferrer" target="_blank">
+                    <a href="" rel="noopener noreferrer" target="_blank">
                         <ActionIcon size="lg">
                             <FaGithub />
                         </ActionIcon>
                     </a>
-                    <a href={links.email} rel="noopener noreferrer">
+                    <a href="" rel="noopener noreferrer">
                         <ActionIcon size="lg">
                             <MdEmail />
                         </ActionIcon>
                     </a>
-                    <a href={links.linkedin} rel="noopener noreferrer" target="_blank">
+                    <a href="" rel="noopener noreferrer" target="_blank">
                         <ActionIcon size="lg">
                             <FaLinkedin />
                         </ActionIcon>
