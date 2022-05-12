@@ -1,6 +1,6 @@
-import { MdChecklist, MdCreateNewFolder, MdDashboard, MdMovie, MdOutlineChangeCircle, MdPictureAsPdf } from "react-icons/md";
-import { RiNumbersFill } from "react-icons/ri";
-import { SiPlotly } from "react-icons/si";
+import { MdCreateNewFolder, MdDashboard } from "react-icons/md";
+import { RiFileList3Line, RiFileTextLine } from "react-icons/ri";
+import {GoFile} from "react-icons/go";
 
 
 export function getLinks() {
@@ -32,59 +32,15 @@ export function getFooterData() {
 export function getNavbarData() {
     return [
         { label: "Dashboard", icon: MdDashboard, link: "/" },
-        {
-            label: "Calculators",
-            icon: RiNumbersFill,
-            links: [
-                { label: "PX to REM", link: "/calculators/pxtorem" },
-                { label: "Aspect Ratio", link: "/calculators/aspect-ratio" },
-                { label: "SSQ", link: "/" },
-                { label: "SUS", link: "/" },
-                { label: "Bootstrapping", link: "/" },
-            ],
-        },
-        {
-            label: "Converters",
-            icon: MdOutlineChangeCircle,
-            links: [
-                { label: "JSON to Any", link: "/converters/json-to-any" },
-                { label: "Any to JSON", link: "/converters/any-to-json" },
-                { label: "Any to Any", link: "/converters/any-to-any" },
-            ],
-        },
-        {
-            label: "Generators",
-            icon: MdCreateNewFolder,
-            links: [
-                { label: "UUID", link: "/generators/uuid" },
-                { label: "Mock Data", link: "/generators/mock-data" },
-            ]
-        },
-        {
-            label: "PDF Utilities",
-            icon: MdPictureAsPdf,
-            links: [
-                { label: "PDF to Image", link: "/pdf/pdf-to-image" },
-                { label: "Image to PDF", link: "/pdf/image-to-pdf" },
-                { label: "Create PDF", link: "/pdf/create-pdf" },
-                { label: "Merge PDFs", link: "/pdf/merge-pdf" },
-                { label: "Split PDF", link: "/pdf/split-pdf" },
-            ],
-        },
-        {
-            label: "Plotting",
-            icon: SiPlotly,
-            link: "/plotting",
-        },
-        {
-            label: "ToDo",
-            icon: MdChecklist,
-            link: "/todo",
-        },
-        {
-            label: "Movies",
-            icon: MdMovie,
-            links: [{ label: "Dashboard", link: "movies/dashboard" }],
-        },
+        { label: "Invoice", icon: RiFileList3Line, link: "/invoice" },
+        { label: "Contract", icon: RiFileTextLine, link: "/contract" },
+        { label: "Deal Memo", icon: GoFile, link: "/deal-memo" },
+        { label: "Create new", icon: MdCreateNewFolder, links: [
+            { label: "Band", link: "/new/band" },
+            { label: "Event", link: "/new/event" },
+            { label: "Location", link: "/new/location" },
+            { label: "Promoter", link: "/new/promoter" },
+            { label: "Hotel", link: "/new/hotel" },
+        ] },
     ];
 }
