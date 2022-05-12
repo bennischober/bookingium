@@ -22,6 +22,9 @@
 
 # Data models
 
+Note: Might save names (only company/hotel?) as toLowerCase() and also treat input as lower case (will be much easier to use) OR use lower case on query (would make more sense)
+
+
 ## User | SignIn
 
 ```ts
