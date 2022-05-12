@@ -31,17 +31,46 @@
   "email": string,
   "password" string,
   "log": {
-    "createDate": string | Date,
+    "created": string | Date,
     "lastLogin": string | Date,
   }
 }
 ```
 *might need to be renamed to cpuser (company user)*
 
-ideas:
+Ideas:
 
 - array of users and signin via dynamic login route with companyid
 - or like atlassian: just a normal signin but a user references a company (optional) and is validated after sign in
+
+For future (data structure):
+- add payment information to user
+- add company, phone numbers, address, payment information, etc.
+
+## Deal memo
+Note: By far the most important
+
+```ts
+{
+  "dealid": string,
+  "date": string,
+  "deal": string,
+  "price": string,
+  "posters": number,
+  "notes": string,
+  "references": {
+    "bandid": string,
+    "venueid": string,
+    "loproid": string,
+    "hotelid": string,
+   },
+  "dm": {
+    "userid": string,
+    "created": string | Date,
+    "edited": string,
+  }
+}
+```
 
 
 ## Band
@@ -74,19 +103,95 @@ ideas:
       "email"?: string,
       "phone"?: string
     }
-  ]
+  ],
+  "dm": {
+    "userid": string,
+    "created": string | Date,
+    "edited": string,
+  }
 }
 ```
 
 Note: Before thinking about a schema for these collections, ask again if they have a many:many relation (e.g. a event can only have a single promoter and location)
 
-## Location
-
-## Event
+## Location / Venue
+```ts
+{
+  "venueid": string,
+  "venue": string,
+  "capacity": number,
+  "company": {
+    "name": string,
+    "vatNumber": string,
+    "ustNumber": string,
+    "address": {
+      "street": string,
+      "streetNumber": string,
+      "addressSuffix": string,
+      "zipCode": number,
+      "city": string,
+      "state": string,
+      "country:" string,
+      "countryCode": string,
+    },
+    "contact": {
+      "email": string,
+      "phone": string,
+      "mobilePhone": string,
+      "person": string,
+      "homepage"?: string,
+    },
+  },
+  "dm": {
+    "userid": string,
+    "created": string | Date,
+    "edited": string,
+  }
+}
+```
 
 ## Promoter
+```ts
+{
+  "promoterid": string,
+  "name": string,
+  "email": string,
+  "companyName": string,
+  "dm": {
+    "userid": string,
+    "created": string | Date,
+    "edited": string,
+  }
+}
+```
 
 ## Hotel
+```ts
+{
+  "hotelid": string,
+  "name": string,
+  "address": {
+    "streetNumber": string,
+    "street": string,
+    "addressSuffix": string,
+    "zipCode": number,
+    "city": string,
+    "state": string,
+    "country:" string,
+    "countryCode": string,
+  },
+  "contact": {
+    "email": string,
+    "phone": string,
+    "homepage"?: string,
+  },
+  "dm": {
+    "userid": string,
+    "created": string | Date,
+    "edited": string,
+  }
+}
+```
 
 
 # Upcoming Features
