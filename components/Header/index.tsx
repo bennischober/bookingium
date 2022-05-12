@@ -8,7 +8,6 @@ import {
     useMantineColorScheme,
     useMantineTheme,
     Tooltip,
-    Anchor,
     Group,
     createStyles,
     Code,
@@ -22,7 +21,6 @@ import {
 } from "react-icons/md";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { FaGithub } from "react-icons/fa";
 import metadata from "../../metadata.json";
 
 const useStyles = createStyles((theme) => ({
@@ -93,21 +91,6 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
                     </Group>
 
                     <Group position="right" spacing="xs">
-                        <Tooltip label="Github" openDelay={500}>
-                            <Anchor
-                                href="https://www.github.com/bennischober"
-                                rel="noopener noreferer"
-                                target="_blank"
-                            >
-                                <ActionIcon
-                                    variant="default"
-                                    size={34}
-                                    radius="md"
-                                >
-                                    <FaGithub size={22} />
-                                </ActionIcon>
-                            </Anchor>
-                        </Tooltip>
                         <Tooltip
                             label={
                                 theme?.colorScheme === "dark"
