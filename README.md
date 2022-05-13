@@ -83,7 +83,9 @@ Note: By far the most important
   "bandid": string,
   "name": string,
   "company": {
+    "name": string,
     "vatNumber": string,
+    "ustNumber": string,
     "address": {
       "streetNumber": string,
       "street": string,
@@ -117,7 +119,7 @@ Note: By far the most important
 
 Note: Before thinking about a schema for these collections, ask again if they have a many:many relation (e.g. a event can only have a single promoter and location)
 
-## Location / Venue
+## Venue
 ```ts
 {
   "venueid": string,
@@ -153,13 +155,32 @@ Note: Before thinking about a schema for these collections, ask again if they ha
 }
 ```
 
-## Promoter
+## Lopro (Local Promoter)
 ```ts
 {
-  "promoterid": string,
+  "loproid": string,
   "name": string,
   "email": string,
-  "companyName": string,
+  company: {
+    name: string,
+    vatNumber: string,
+    ustNumber: string,
+    address: {
+        street: string,
+        streetNumber: string,
+        addressSuffix: string,
+        zipCode: string,
+        city: string,
+        state: string,
+        country: string,
+        countryCode: string,
+    },
+    contact: {
+        phone: string,
+        email: string,
+        homepage: string,
+    },
+},
   "dm": {
     "userid": string,
     "created": string | Date,
@@ -206,3 +227,4 @@ Note: Before thinking about a schema for these collections, ask again if they ha
 - [PDF generation](https://pdfme.com/docs/getting-started)
 - [Newsletter with Nodemailer](https://nodemailer.com/about/)
 - [Deployment](https://reactjsexample.com/how-to-deploy-nextjs-database-app-with-docker-multi-container/)
+- Maps: [main](https://www.npmjs.com/package/leaflet) with [react components](https://www.npmjs.com/package/react-leaflet) and [search](https://www.npmjs.com/package/leaflet-search) | [Creating routes](https://www.qed42.com/insights/coe/javascript/navigation-leaflet-maps) 
