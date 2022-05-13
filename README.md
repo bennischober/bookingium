@@ -82,6 +82,7 @@ Note: By far the most important
 {
   "bandid": string,
   "name": string,
+  "notes": string,
   "company": {
     "name": string,
     "vatNumber": string,
@@ -99,14 +100,15 @@ Note: By far the most important
     "contact": {
       "email": string,
       "phone": string,
-      "homepage"?: string,
+      "mobilePhone": string,
+      "homepage": string,
     },
   },
   "members": [
     {
       "name": string,
-      "email"?: string,
-      "phone"?: string
+      "email": string,
+      "phone": string
     }
   ],
   "dm": {
@@ -125,6 +127,7 @@ Note: Before thinking about a schema for these collections, ask again if they ha
   "venueid": string,
   "venue": string,
   "capacity": number,
+  "notes": string,
   "company": {
     "name": string,
     "vatNumber": string,
@@ -140,9 +143,9 @@ Note: Before thinking about a schema for these collections, ask again if they ha
       "countryCode": string,
     },
     "contact": {
-      "email": string,
       "phone": string,
       "mobilePhone": string,
+      "email": string,
       "person": string,
       "homepage"?: string,
     },
@@ -161,6 +164,7 @@ Note: Before thinking about a schema for these collections, ask again if they ha
   "loproid": string,
   "name": string,
   "email": string,
+  "notes": string,
   company: {
     name: string,
     vatNumber: string,
@@ -177,6 +181,7 @@ Note: Before thinking about a schema for these collections, ask again if they ha
     },
     contact: {
         phone: string,
+        mobilePhone: string,
         email: string,
         homepage: string,
     },
@@ -194,9 +199,10 @@ Note: Before thinking about a schema for these collections, ask again if they ha
 {
   "hotelid": string,
   "name": string,
+  "notes": string,
   "address": {
-    "streetNumber": string,
     "street": string,
+    "streetNumber": string
     "addressSuffix": string,
     "zipCode": number,
     "city": string,
@@ -205,8 +211,9 @@ Note: Before thinking about a schema for these collections, ask again if they ha
     "countryCode": string,
   },
   "contact": {
-    "email": string,
     "phone": string,
+    "mobilePhone": string,
+    "email": string,
     "homepage"?: string,
   },
   "dm": {
