@@ -48,9 +48,7 @@ export function NavbarComponent(props: NavbarProps) {
     const links = getNavbarData().map((item, index) => {
         if (index === 2) {
             item.links = data;
-            console.log({...item});
         }
-
         return <LinksGroup {...item} key={item.label} />;
     });
 
