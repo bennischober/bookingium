@@ -12,6 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     switch (method) {
         case 'GET':
+            // Note: The data has to be prefetched by the userid to get only the deal memos for a specific user.
             try {
                 const dealMemo = await DealMemo.findById(id); // get specific item
                 if (!dealMemo) {

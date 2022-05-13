@@ -1,6 +1,10 @@
 import mongoose from 'mongoose';
 import dayjs from 'dayjs';
 
+
+// Note: all data will be given immediately - add hotelNotes to dealMemo (will be input first and later replaced by real data)
+// Except of hotel. Hotel will be added later
+
 const dealMemoSchema = new mongoose.Schema({
     dealId: {
         type: String,
