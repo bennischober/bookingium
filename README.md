@@ -163,6 +163,8 @@ Note: Before thinking about a schema for these collections, ask again if they ha
 {
   "loproid": string,
   "name": string,
+  "phone": string,
+  "mobilePhone": string,
   "email": string,
   "notes": string,
   company: {
