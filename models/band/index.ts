@@ -1,7 +1,9 @@
 import mongoose from 'mongoose';
 import dayjs from 'dayjs';
+const { Schema } = mongoose;
 
 const bandSchema = new mongoose.Schema({
+    _id: Schema.Types.ObjectId,
     bandid: {
         type: String,
         required: true,

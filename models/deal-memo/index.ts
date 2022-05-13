@@ -12,12 +12,10 @@ const dealMemoSchema = new mongoose.Schema({
     price: { type: Number },
     posters: { type: Number },
     notes: { type: String },
-    references: {
-        bandid: { type: String, required: true },
-        venueid: { type: String }, // equals location
-        loproid: { type: String }, // equals promoter
-        hotelid: { type: String },
-    },
+    bandid: { type: mongoose.Schema.Types.ObjectId, ref: 'Band', required: true },
+    venueid: { type: mongoose.Schema.Types.ObjectId, ref: 'Venue' }, // equals location
+    loproid: { type: mongoose.Schema.Types.ObjectId, ref: 'Lopro' }, // equals promoter
+    hotelid: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' },
     dm: {
         userid: { type: String, required: true },
         created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
