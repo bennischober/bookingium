@@ -61,12 +61,10 @@ Note: By far the most important
   "price": string,
   "posters": number,
   "notes": string,
-  "references": {
-    "bandid": string,
-    "venueid": string,
-    "loproid": string,
-    "hotelid": string,
-   },
+  "bandid": string,
+  "venueid": string,
+  "loproid": string,
+  "hotelid": string,
   "dm": {
     "userid": string,
     "created": string | Date,
