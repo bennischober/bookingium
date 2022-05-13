@@ -8,7 +8,10 @@ const loproSchema = new mongoose.Schema({
         unique: true,
     },
     name: { type: String, required: true },
+    phone: { type: String },
+    mobilePhone: { type: String },
     email: { type: String, required: true },
+    notes: { type: String },
     company: {
         name: { type: String },
         vatNumber: { type: String },
@@ -25,6 +28,7 @@ const loproSchema = new mongoose.Schema({
         },
         contact: {
             phone: { type: String },
+            mobilePhone: { type: String },
             email: { type: String },
             homepage: { type: String },
         },

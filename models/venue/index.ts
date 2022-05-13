@@ -9,6 +9,7 @@ const venueSchema = new mongoose.Schema({
     },
     venue: { type: String, required: true },
     capacity: { type: Number },
+    notes: { type: String },
     company: {
         name: { type: String },
         vatNumber: { type: String },
@@ -25,6 +26,7 @@ const venueSchema = new mongoose.Schema({
         },
         contact: {
             phone: { type: String },
+            mobilePhone: { type: String },
             email: { type: String },
             homepage: { type: String },
         },

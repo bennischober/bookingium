@@ -8,8 +8,11 @@ const bandSchema = new mongoose.Schema({
         unique: true,
     },
     name: { type: String, required: true },
+    notes: { type: String },
     company: {
+        name: { type: String },
         vatNumber: { type: String },
+        ustNumber: { type: String },
         address: {
             street: { type: String },
             streetNumber: { type: String },
@@ -22,6 +25,7 @@ const bandSchema = new mongoose.Schema({
         },
         contact: {
             phone: { type: String },
+            mobilePhone: { type: String },
             email: { type: String },
             homepage: { type: String },
         },
