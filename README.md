@@ -158,7 +158,7 @@ Note: Before thinking about a schema for these collections, ask again if they ha
 ## Lopro (Local Promoter)
 ```ts
 {
-  "promoterid": string,
+  "loproid": string,
   "name": string,
   "email": string,
   company: {
