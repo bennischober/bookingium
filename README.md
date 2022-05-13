@@ -83,7 +83,9 @@ Note: By far the most important
   "bandid": string,
   "name": string,
   "company": {
+    "name": string,
     "vatNumber": string,
+    "ustNumber": string,
     "address": {
       "streetNumber": string,
       "street": string,
@@ -159,7 +161,26 @@ Note: Before thinking about a schema for these collections, ask again if they ha
   "promoterid": string,
   "name": string,
   "email": string,
-  "companyName": string,
+  company: {
+    name: string,
+    vatNumber: string,
+    ustNumber: string,
+    address: {
+        street: string,
+        streetNumber: string,
+        addressSuffix: string,
+        zipCode: string,
+        city: string,
+        state: string,
+        country: string,
+        countryCode: string,
+    },
+    contact: {
+        phone: string,
+        email: string,
+        homepage: string,
+    },
+},
   "dm": {
     "userid": string,
     "created": string | Date,
