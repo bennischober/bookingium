@@ -117,7 +117,7 @@ Note: By far the most important
 
 Note: Before thinking about a schema for these collections, ask again if they have a many:many relation (e.g. a event can only have a single promoter and location)
 
-## Location / Venue
+## Venue
 ```ts
 {
   "venueid": string,
@@ -153,7 +153,7 @@ Note: Before thinking about a schema for these collections, ask again if they ha
 }
 ```
 
-## Promoter
+## Lopro (Local Promoter)
 ```ts
 {
   "promoterid": string,
@@ -206,3 +206,4 @@ Note: Before thinking about a schema for these collections, ask again if they ha
 - [PDF generation](https://pdfme.com/docs/getting-started)
 - [Newsletter with Nodemailer](https://nodemailer.com/about/)
 - [Deployment](https://reactjsexample.com/how-to-deploy-nextjs-database-app-with-docker-multi-container/)
+- Maps: [main](https://www.npmjs.com/package/leaflet) with [react components](https://www.npmjs.com/package/react-leaflet) and [search](https://www.npmjs.com/package/leaflet-search) 
