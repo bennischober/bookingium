@@ -27,4 +27,22 @@ const dealMemoSchema = new mongoose.Schema({
     }
 }); // , { collection: 'dealMemo' }
 
+export interface IDealMemo extends mongoose.Document {
+    dealId: string;
+    deal: string;
+    date: string;
+    price: number;
+    posters: number;
+    notes: string;
+    bandid: mongoose.Types.ObjectId;
+    venueid: mongoose.Types.ObjectId;
+    loproid: mongoose.Types.ObjectId;
+    hotelid: mongoose.Types.ObjectId | null;
+    dm: {
+        userid: string;
+        created: string;
+        edited: string;
+    };
+}
+
 export default mongoose.models.DealMemo || mongoose.model('DealMemo', dealMemoSchema);

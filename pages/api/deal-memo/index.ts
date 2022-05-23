@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from '../../../lib/mongodb';
 import DealMemo from '../../../models/deal-memo';
-import Band from "../../../models/band";
+import {Band} from "../../../models/band";
 import mongoose from "mongoose";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -45,6 +45,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     });
     */
 
+    console.log(req.body);
+
     switch (method) {
         case 'GET':
             try {
@@ -70,6 +72,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 const dealMemo = await DealMemo.create(req.body); // create new db entry
                 res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
+                console.log(error);
                 res.status(500).json({ success: false, error: error });
             }
 
