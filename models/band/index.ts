@@ -1,8 +1,7 @@
-import mongoose from 'mongoose';
+import { Document, model, Model, models, Schema } from 'mongoose';
 import dayjs from 'dayjs';
-const { Schema } = mongoose;
 
-const bandSchema = new mongoose.Schema({
+const bandSchema: Schema = new Schema({
     _id: Schema.Types.ObjectId,
     bandid: {
         type: String,
@@ -46,4 +45,43 @@ const bandSchema = new mongoose.Schema({
     },
 });
 
-export default mongoose.models.Band || mongoose.model('Band', bandSchema);
+export interface IBand extends Document {
+    _id: Schema.Types.ObjectId;
+    bandid: string;
+    name: string;
+    notes: string;
+    company: {
+        name: string;
+        vatNumber: string;
+        ustNumber: string;
+        address: {
+            street: string;
+            streetNumber: string;
+            addressSuffix: string;
+            zipCode: string;
+            city: string;
+            state: string;
+            country: string;
+            countryCode: string;
+        };
+        contact: {
+            phone: string;
+            mobilePhone: string;
+            email: string;
+            homepage: string;
+        };
+    };
+    members: {
+        name: string;
+        email: string;
+        phone: string;
+    }[];
+    dm: {
+        userid: string;
+        created: string;
+        edited: string;
+    };
+}
+
+
+export const Band: Model<IBand> = models.Band || model<IBand>('Band', bandSchema);
