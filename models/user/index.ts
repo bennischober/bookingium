@@ -1,7 +1,8 @@
-import mongoose from 'mongoose';
+import { Document, model, Model, models, Schema } from 'mongoose';
 import dayjs from 'dayjs';
 
-const userSchema = new mongoose.Schema({
+const userSchema: Schema = new Schema({
+    _id: Schema.Types.ObjectId,
     userid: {
         type: String,
         required: true,
@@ -14,6 +15,18 @@ const userSchema = new mongoose.Schema({
         created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
         lastLogin: { type: String },
     }
-}); // , { collection: 'users' }
+});
 
-export default mongoose.models.User || mongoose.model('User', userSchema);
+export interface IUser extends Document {
+    _id: Schema.Types.ObjectId;
+    userid: string;
+    name: string;
+    email: string;
+    password: string;
+    log: {
+        created: string;
+        lastLogin: string;
+    };
+}
+
+export const User: Model<IUser> = models.User || model<IUser>('User', userSchema);

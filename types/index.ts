@@ -39,6 +39,10 @@ export interface LoginComponentProps {
 	forgotPassword: () => void;
 }
 
+export interface RegisterComponentProps {
+	registerHandler: (registerData: RegisterFormValues) => void;
+}
+
 export interface UserButtonProps {
 	image?: string;
 	name: string;
@@ -64,4 +68,19 @@ export interface LoginFormValues {
 	email: string;
 	password: string;
 	remember: boolean;
+}
+
+export interface RegisterFormValues {
+	name: string;
+	email: string;
+	password: string;
+	passwordConfirmation: string;
+	accept: boolean;
+}
+
+export interface RegisterHandleData {
+	name: string;
+	email: string;
+	password: string;
+	accept: boolean;
 }

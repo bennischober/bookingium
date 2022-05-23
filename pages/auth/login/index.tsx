@@ -49,12 +49,12 @@ export default function LoginPage({ session }: SessionProps) {
     };
 
     const handleLogin = (
-        username: string,
+        email: string,
         password: string,
         remember: boolean
     ) => {
         signIn("credentials", {
-            username: username,
+            username: email,
             password: password,
         });
     };
