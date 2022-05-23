@@ -11,14 +11,28 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         password: body.password,
     };
 
-    if (method !== "POST") return;
-
     await connect();
 
-    const user = await User.findOne({ email: registerData.email });
-    if(!user) return res.status(404).json({ success: false, error: "User not found" });
+    switch (method) {
+        case "POST":
+            try {
+                const user = await User.findOne({ email: registerData.email });
+                if (!user)
+                    return res
+                        .status(404)
+                        .json({ success: false, error: "User not found" });
+                if (!bcrypt.compareSync(registerData.password, user.password))
+                    return res
+                        .status(401)
+                        .json({ success: false, error: "Password incorrect" });
 
-    if(!bcrypt.compareSync(registerData.password, user.password)) return res.status(401).json({ success: false, error: "Password incorrect" });
+                res.status(200).json({ success: true, user: user });
+            } catch (err) {
+                res.status(500).json({ success: false, error: err });
+            }
+            break;
 
-    res.status(200).json({ success: true, user: user });
+        default:
+            break;
+    }
 };

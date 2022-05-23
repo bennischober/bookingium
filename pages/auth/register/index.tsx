@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Anchor, Title, Text, Container, LoadingOverlay, Space } from "@mantine/core";
+import {
+    Anchor,
+    Title,
+    Text,
+    Container,
+    LoadingOverlay,
+    Space,
+} from "@mantine/core";
 import { showNotification, cleanNotifications } from "@mantine/notifications";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -18,7 +25,6 @@ export default function RegisterPage() {
     if (session && session.status === "authorized") {
         router.push("/user/dashboard");
     }
-    
 
     const registerHandler = async (registerData: RegisterHandleData) => {
         // activate loading overlay
@@ -26,7 +32,7 @@ export default function RegisterPage() {
 
         // make user exists check
         try {
-            await axios.get("/api/users/register/checkEmail", {
+            await axios.get("/api/user/register/checkEmail", {
                 params: {
                     email: registerData.email,
                 },
@@ -60,17 +66,18 @@ export default function RegisterPage() {
             password: hash,
         };
 
-        const res = await axios.post(
-            "/api/users/register",
-            userData
-        );
-
-        if (res.status === 200) {
-            signIn("credentials", {
-                username: registerData.email,
-                password: registerData.password,
-            });
-            setVisible(false);
+        try {
+            const res = await axios.post("/api/user/register", userData);
+            if (res.status === 200) {
+                signIn("credentials", {
+                    username: registerData.email,
+                    password: registerData.password,
+                });
+                setVisible(false);
+                console.log("registration successfull");
+            }
+        } catch (err) {
+            console.log(err);
         }
     };
 

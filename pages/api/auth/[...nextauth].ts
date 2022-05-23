@@ -11,36 +11,35 @@ export default NextAuth({
 				password: { label: "Password", type: "password", placeholder: "password" }
 			},
 			authorize: async (credentials) => {
-				console.log("authorize", credentials);
-
 				try {
 					const res = await axios({
 						method: "post",
-						url: "http://localhost:3000/api/users/login",
-						data: credentials
+						url: "http://localhost:3000/api/user/login",
+						data: {
+							email: credentials?.username,
+							password: credentials?.password
+						}
 					});
 					const user = await res.data;
-
+					
 					// status 200 => user exists
 					if (res.status === 200) {
 						return {
-							id: user.id,
-							name: user.name,
-							email: user.username,
-							userid: user.userid,
+							id: user.user._id,
+							name: user.user.name,
+							email: user.user.email,
+							userid: user.user.userid,
 							status: "authorized"
 						}
 					}
-
 					return {
-						id: user.id,
+						id: user._id,
 						name: user.name,
-						email: user.username,
+						username: user.email,
 						userid: user.userid,
 						status: "unauthorized"
 					};
 				} catch (err) {
-					console.log("err", err);
 					return {
 						id: 0,
 						name: "",

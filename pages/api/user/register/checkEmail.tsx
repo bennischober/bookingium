@@ -8,16 +8,22 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         method,
     } = req;
 
-    if (method !== "GET") return;
-
     await connect();
 
-    try {
-        const user = await User.findOne({ email: email });
-        res.status(200).json({ success: true, user: user });
-    } catch (err) {
-        res.status(500).json({ success: false, error: err });
-    }
+    switch (method) {
+        case "GET":
+            try {
+                const user = await User.findOne({ email: email });
+                if (!user)
+                    return res.status(200).json({ success: true, user: user });
+                res.status(409).json({ success: false, user: user });
+            } catch (err) {
+                res.status(500).json({ success: false, error: err });
+            }
+            break;
 
-    res.status(409).json({ email: email });
+        default:
+            res.status(409).json({ success: false, email: email });
+            break;
+    }
 };
