@@ -7,9 +7,12 @@ import {
     Autocomplete,
     Button,
     Container,
+    Group,
+    Modal,
     NumberInput,
     Paper,
     Space,
+    Stack,
     Textarea,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
@@ -17,6 +20,8 @@ import dayjs from "dayjs";
 import { DealMemoProps } from "../../types";
 import { IBand } from "../../models/band";
 import mongoose from "mongoose";
+import { useState } from "react";
+import { CreateBandForm } from "../../components/CreateBandForm";
 
 interface DealMemoFormValues {
     band: string;
@@ -36,12 +41,14 @@ interface BandFormValues {
 // also import {v4 as uuid4} from 'uuid'; to generate a unique id for deal memo
 
 // add popups, if hotel/band/venue does not exits
-
 // also add auto complete for band, venue, lopro, hotel
 
-// add date input field
+// split component stuff to own file; only leave session and payload validation in here
+// also add new get request, if new band is added
 
 export default function DealMemoPage({ session, payload }: DealMemoProps) {
+    const [modalOpened, setModalOpened] = useState(false);
+
     const dealForm = useForm<DealMemoFormValues>({
         initialValues: {
             band: "",
@@ -72,7 +79,7 @@ export default function DealMemoPage({ session, payload }: DealMemoProps) {
         });
 
         if (!band) {
-            console.log("band not found");
+            console.log("band not found, aborting save action!");
             return;
         }
 
@@ -102,73 +109,93 @@ export default function DealMemoPage({ session, payload }: DealMemoProps) {
         : [];
 
     return (
-        <Container size="xs">
-            <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
-                <form
-                    onSubmit={dealForm.onSubmit((values) =>
-                        onDealSubmit(values)
-                    )}
-                >
-                    <Autocomplete
-                        label="Choose a band"
-                        placeholder="Band name"
-                        data={autoCompleteData}
-                        {...dealForm.getInputProps("band")}
-                        required
-                    />
-                    <Space h="xl" />
-                    <Textarea
-                        label="Deal"
-                        placeholder="Deal information"
-                        {...dealForm.getInputProps("deal")}
-                        autosize
-                        minRows={3}
-                        required
-                    />
-                    <Space h="xl" />
-                    <DatePicker
-                        id="mantine-2wgfg6a6v"
-                        label="Date"
-                        defaultValue={dayjs().toDate()}
-                        {...dealForm.getInputProps("date")}
-                        required
-                    />
-                    <Space h="xl" />
-                    <NumberInput
-                        label="Price"
-                        {...dealForm.getInputProps("price")}
-                        min={0}
-                        stepHoldDelay={500}
-                        stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-                        required
-                    />
-                    <Space h="xl" />
-                    <NumberInput
-                        label="Posters"
-                        {...dealForm.getInputProps("posters")}
-                        min={0}
-                        stepHoldDelay={500}
-                        stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-                        required
-                    />
-                    <Space h="xl" />
-                    <Textarea
-                        label="Notes"
-                        {...dealForm.getInputProps("notes")}
-                        autosize
-                        minRows={3}
-                    />
-                    <Space h="xl" />
-                    <Button type="submit" fullWidth mt="xl">
-                        Submit data
-                    </Button>
-                </form>
-            </Paper>
-        </Container>
+        <>
+            <Container size="xs">
+                <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
+                    <form
+                        onSubmit={dealForm.onSubmit((values) =>
+                            onDealSubmit(values)
+                        )}
+                    >
+                        <Stack>
+                            <Autocomplete
+                                label="Choose a band"
+                                placeholder="Band name"
+                                data={autoCompleteData}
+                                {...dealForm.getInputProps("band")}
+                                required
+                            />
+                            <Button onClick={() => setModalOpened(true)}>
+                                Add Band
+                            </Button>
+                        </Stack>
+                        <Space h="xl" />
+                        <Textarea
+                            label="Deal"
+                            placeholder="Deal information"
+                            {...dealForm.getInputProps("deal")}
+                            autosize
+                            minRows={3}
+                            required
+                        />
+                        <Space h="xl" />
+                        <DatePicker
+                            id="mantine-2wgfg6a6v"
+                            label="Date"
+                            defaultValue={dayjs().toDate()}
+                            {...dealForm.getInputProps("date")}
+                            required
+                        />
+                        <Space h="xl" />
+                        <NumberInput
+                            label="Price"
+                            {...dealForm.getInputProps("price")}
+                            min={0}
+                            stepHoldDelay={500}
+                            stepHoldInterval={(t) =>
+                                Math.max(1000 / t ** 2, 25)
+                            }
+                            required
+                        />
+                        <Space h="xl" />
+                        <NumberInput
+                            label="Posters"
+                            {...dealForm.getInputProps("posters")}
+                            min={0}
+                            stepHoldDelay={500}
+                            stepHoldInterval={(t) =>
+                                Math.max(1000 / t ** 2, 25)
+                            }
+                            required
+                        />
+                        <Space h="xl" />
+                        <Textarea
+                            label="Notes"
+                            {...dealForm.getInputProps("notes")}
+                            autosize
+                            minRows={3}
+                        />
+                        <Space h="xl" />
+                        <Button type="submit" fullWidth mt="xl">
+                            Submit data
+                        </Button>
+                    </form>
+                </Paper>
+            </Container>
+            <Modal
+                opened={modalOpened}
+                onClose={() => setModalOpened(false)}
+                title="Hi!"
+            >
+                <CreateBandForm />
+            </Modal>
+        </>
     );
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    // this throws an error, because the http headers will be sent by getSession and axios.get
+
     const session = await getSession({ req: ctx.req });
     const pl =
         session && session.userid
