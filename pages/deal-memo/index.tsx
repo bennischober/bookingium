@@ -23,17 +23,12 @@ import mongoose from "mongoose";
 import { useState } from "react";
 import { CreateBandForm } from "../../components/CreateBandForm";
 
-interface DealMemoFormValues {
+export interface DealMemoFormValues {
     band: string;
     date: Date;
     deal: string;
     price: Number;
     posters: Number;
-    notes: string;
-}
-
-interface BandFormValues {
-    name: string;
     notes: string;
 }
 
