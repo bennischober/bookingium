@@ -1,6 +1,7 @@
 import { MantineTheme } from "@mantine/core";
 import { NextRouter } from "next/router";
 import dayjs from 'dayjs';
+import { SessionProps } from "../types";
 
 // handle theme, language, and other app settings
 
@@ -21,6 +22,14 @@ export function getLastRoute(router: NextRouter): string {
     return router.query.from === undefined ? "/" : router.query.from;
 }
 
+export function handleSession(router: NextRouter, session: SessionProps["session"], pathname: string, query: { from: string }) {
+    if ((session && session.status === "unathorized") || !session) {
+        router.push({
+            pathname: pathname,
+            query
+        });
+    }
+}
 
 /** --- OTHER HADNLE --- **/
 
