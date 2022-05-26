@@ -20,7 +20,12 @@ import { IBand } from "../../models/band";
 import { DealMemoFormProps, DealMemoFormValues } from "../../types";
 import { BandForm } from "../BandForm";
 
-export default function DealMemoForm({ bands, session }: DealMemoFormProps) {
+export default function DealMemoForm({
+    bands,
+    session,
+    fetchBands,
+    fetchMemos,
+}: DealMemoFormProps) {
     const [modalOpened, setModalOpened] = useState(false);
 
     const dealForm = useForm<DealMemoFormValues>({
@@ -74,6 +79,9 @@ export default function DealMemoForm({ bands, session }: DealMemoFormProps) {
         };
 
         axios.post("/api/deal-memo", memoData);
+
+        // await => refetch data
+        //fetchMemos();
     };
 
     const autoCompleteData = bands
@@ -164,7 +172,7 @@ export default function DealMemoForm({ bands, session }: DealMemoFormProps) {
                 overflow="inside"
                 centered
             >
-                <BandForm />
+                <BandForm fetchMemos={fetchBands} />
             </Modal>
         </>
     );
