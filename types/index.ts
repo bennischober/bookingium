@@ -59,6 +59,10 @@ export interface BandFormProps {
 	fetchBands?: () => void;
 }
 
+export interface DealMemoListProps {
+	memos: IDealMemo[];
+}
+
 /** --- SSR PAGE PROPS --- **/
 export interface SessionProps extends Session {
 	session: {
