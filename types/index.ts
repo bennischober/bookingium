@@ -1,10 +1,10 @@
-/** --- COMPONENTS --- **/
-
+import { UseFormReturnType } from "@mantine/form/lib/use-form";
 import { Session } from "next-auth";
 import { IconBase } from "react-icons/lib";
 import { IBand } from "../models/band";
 import { IDealMemo } from "../models/deal-memo";
 
+/** --- COMPONENTS --- **/
 export interface PageTemplateProps {
 	title: string;
 	description?: string;
@@ -50,6 +50,11 @@ export interface UserButtonProps {
 	color?: string;
 }
 
+// or type to any?
+export interface InputComponentProps<T> {
+	Form: UseFormReturnType<T>;
+}
+
 /** --- OTHER --- **/
 export interface SessionProps extends Session {
 	session: {
@@ -83,4 +88,36 @@ export interface RegisterHandleData {
 	email: string;
 	password: string;
 	accept: boolean;
+}
+
+export interface AddressInputValues {
+	streetNumber: string;
+	street: string;
+	addressSuffix: string;
+	zipCode: number;
+	city: string;
+	state: string;
+	country: string;
+	countryCode: string;
+}
+
+export interface BandFormValues extends AddressInputValues, ContactInputValues {
+    bandName: string;
+    notes: string;
+    companyName: string;
+    vatNumber: string;
+    ustNumber: string;
+    members: {
+        name: string;
+        role: string;
+        email: string;
+        phone: string;
+    }[];
+}
+
+export interface ContactInputValues {
+	email: string;
+    phone: string;
+    mobilePhone: string;
+    homepage: string;
 }
