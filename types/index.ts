@@ -55,7 +55,11 @@ export interface InputComponentProps<T> {
 	Form: UseFormReturnType<T>;
 }
 
-/** --- OTHER --- **/
+export interface BandFormProps {
+	fetchBands?: () => void;
+}
+
+/** --- SSR PAGE PROPS --- **/
 export interface SessionProps extends Session {
 	session: {
 		status: string;
@@ -67,6 +71,8 @@ export interface SessionProps extends Session {
 export interface DealMemoFormProps {
 	session: SessionProps["session"];
 	bands: IBand[];
+	fetchBands: () => void;
+	fetchMemos: () => void;
 }
 
 export interface DealMemoProps {
@@ -75,26 +81,8 @@ export interface DealMemoProps {
 	memos: IDealMemo[];
 }
 
-export interface LoginFormValues {
-	email: string;
-	password: string;
-	remember: boolean;
-}
 
-export interface RegisterFormValues {
-	name: string;
-	email: string;
-	password: string;
-	passwordConfirmation: string;
-	accept: boolean;
-}
-
-export interface RegisterHandleData {
-	name: string;
-	email: string;
-	password: string;
-	accept: boolean;
-}
+/** --- FORM TYPES --- **/
 
 export interface AddressInputValues {
 	streetNumber: number;
@@ -135,4 +123,25 @@ export interface DealMemoFormValues {
 	price: Number;
 	posters: Number;
 	notes: string;
+}
+
+export interface LoginFormValues {
+	email: string;
+	password: string;
+	remember: boolean;
+}
+
+export interface RegisterFormValues {
+	name: string;
+	email: string;
+	password: string;
+	passwordConfirmation: string;
+	accept: boolean;
+}
+
+export interface RegisterHandleData {
+	name: string;
+	email: string;
+	password: string;
+	accept: boolean;
 }

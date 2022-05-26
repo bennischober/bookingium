@@ -172,7 +172,7 @@ export default function DealMemoForm({
                 overflow="inside"
                 centered
             >
-                <BandForm fetchMemos={fetchBands} />
+                <BandForm fetchBands={fetchBands} />
             </Modal>
         </>
     );

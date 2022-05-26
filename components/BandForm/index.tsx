@@ -1,28 +1,31 @@
-import z from 'zod';
+import z from "zod";
 import {
     Accordion,
     Box,
     Button,
-    Paper,
     Space,
     Text,
     Textarea,
     TextInput,
 } from "@mantine/core";
-import { formList, useForm, zodResolver  } from "@mantine/form";
+import { formList, useForm, zodResolver } from "@mantine/form";
 import { MdOutlineAdd } from "react-icons/md";
-import { BandFormValues } from "../../types";
+import { BandFormProps, BandFormValues } from "../../types";
 import AddressInput from "../AddressInput";
 import ContactInput from "../ContactInput";
 
 const schema = z.object({
-    bandName: z.string().min(3, { message: 'Band name must be at least 3 characters' }),
-    companyName: z.string().min(3, { message: 'Company name must be at least 3 characters' }),
-    email: z.string().email().or(z.literal('')), // so empty or an email!
-    homepage: z.string().url().or(z.literal('')),
-})
+    bandName: z
+        .string()
+        .min(3, { message: "Band name must be at least 3 characters" }),
+    companyName: z
+        .string()
+        .min(3, { message: "Company name must be at least 3 characters" }),
+    email: z.string().email().or(z.literal("")), // so empty or an email!
+    homepage: z.string().url().or(z.literal("")),
+});
 
-export function BandForm() {
+export function BandForm({ fetchBands }: BandFormProps) {
     const bandForm = useForm<BandFormValues>({
         schema: zodResolver(schema),
         initialValues: {
@@ -44,7 +47,7 @@ export function BandForm() {
             mobilePhone: "",
             homepage: "",
             members: formList([{ name: "", role: "", email: "", phone: "" }]),
-        }
+        },
     });
 
     const members = bandForm.values.members.map((_, index) => (
@@ -71,9 +74,18 @@ export function BandForm() {
         </Box>
     ));
 
+    const handleSubmit = (values: BandFormValues) => {
+        console.log(values);
+
+        // also handle refetch for bands, only if given
+        //if (fetchBands) fetchBands();
+    };
+
     return (
         <>
-            <form onSubmit={bandForm.onSubmit((values) => console.log(values))}>
+            <form
+                onSubmit={bandForm.onSubmit((values) => handleSubmit(values))}
+            >
                 <TextInput
                     label="Band Name"
                     {...bandForm.getInputProps("bandName")}
