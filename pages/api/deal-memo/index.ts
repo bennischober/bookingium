@@ -15,7 +15,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     if (err) {
                         return res.status(500).json({ success: false, error: err });
                     }
-                    console.log("you are here!");
                     return res.status(200).json({ success: true, data: dealMemos });
                 });
             } catch (error) {
