@@ -6,6 +6,7 @@ import {
     Paper,
     Space,
     Text,
+    Textarea,
     TextInput,
 } from "@mantine/core";
 import { formList, useForm, zodResolver  } from "@mantine/form";
@@ -30,7 +31,7 @@ export function BandForm() {
             companyName: "",
             vatNumber: "",
             ustNumber: "",
-            streetNumber: "",
+            streetNumber: 0,
             street: "",
             addressSuffix: "",
             zipCode: 0,
@@ -71,14 +72,14 @@ export function BandForm() {
     ));
 
     return (
-        <Paper>
+        <>
             <form onSubmit={bandForm.onSubmit((values) => console.log(values))}>
                 <TextInput
                     label="Band Name"
                     {...bandForm.getInputProps("bandName")}
                     required
                 />
-                <TextInput label="Notes" {...bandForm.getInputProps("notes")} />
+                <Textarea label="Notes" {...bandForm.getInputProps("notes")} />
                 <Space h="xl" />
                 <TextInput
                     label="Company Name"
@@ -123,6 +124,6 @@ export function BandForm() {
                     Add Band
                 </Button>
             </form>
-        </Paper>
+        </>
     );
 }
