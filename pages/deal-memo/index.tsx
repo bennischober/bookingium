@@ -181,6 +181,9 @@ export default function DealMemoPage({ session, payload }: DealMemoProps) {
                 opened={modalOpened}
                 onClose={() => setModalOpened(false)}
                 title="Add a new Band"
+                size="xl"
+                overflow="inside"
+                centered
             >
                 <BandForm />
             </Modal>
