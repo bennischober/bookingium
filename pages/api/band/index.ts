@@ -22,9 +22,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
                 // no specific data found => send all bands
                 const bands = await Band.find({});
-                res.status(200).json({ success: true, data: bands });
+                return res.status(200).json({ success: true, data: bands });
             } catch (error) {
-                res.status(500).json({ success: false, error: error });
+                return res.status(500).json({ success: false, error: error });
             }
             break;
         default:
