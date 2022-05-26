@@ -5,6 +5,7 @@ import { getSession } from "next-auth/react";
 import axios from "axios";
 import DealMemoForm from "../../components/DealMemoForm";
 import { PageTemplate } from "../../components/PageTemplate";
+import { DealMemoList } from "../../components/DealMemoList";
 import { handleSession } from "../../utils/appHandles";
 import { DealMemoProps } from "../../types";
 
@@ -36,17 +37,6 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
         setMemosData(res.data);
     };
 
-    const allMemos = memosData.map((memo) => {
-        return {
-            dealId: memo.dealId,
-            date: memo.date,
-            deal: memo.deal,
-            price: memo.price,
-            posters: memo.posters,
-            notes: memo.notes,
-        };
-    });
-
     return (
         <PageTemplate title="Deal Memos">
             <DealMemoForm
@@ -55,6 +45,7 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
                 fetchBands={fetchBands}
                 fetchMemos={fetchMemos}
             />
+            <DealMemoList memos={memosData} />
         </PageTemplate>
     );
 }
@@ -73,7 +64,14 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             : null;
     const bands = pl ? await pl.data : null;
 
-    const mm = await axios.get("http://localhost:3000/api/deal-memo");
+    const mm =
+        session && session.userid
+            ? await axios.get("http://localhost:3000/api/deal-memo", {
+                  params: {
+                      userid: session.userid,
+                  },
+              })
+            : null;
     const memos = mm ? await mm.data : null;
 
     return {
