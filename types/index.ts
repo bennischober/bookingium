@@ -91,7 +91,7 @@ export interface RegisterHandleData {
 }
 
 export interface AddressInputValues {
-	streetNumber: string;
+	streetNumber: number;
 	street: string;
 	addressSuffix: string;
 	zipCode: number;
