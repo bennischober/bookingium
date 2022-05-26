@@ -64,9 +64,15 @@ export interface SessionProps extends Session {
 	};
 }
 
+export interface DealMemoFormProps {
+	session: SessionProps["session"];
+	bands: IBand[];
+}
+
 export interface DealMemoProps {
 	session: SessionProps["session"];
-	payload: IBand[];
+	bands: IBand[];
+	memos: IDealMemo[];
 }
 
 export interface LoginFormValues {
@@ -102,22 +108,31 @@ export interface AddressInputValues {
 }
 
 export interface BandFormValues extends AddressInputValues, ContactInputValues {
-    bandName: string;
-    notes: string;
-    companyName: string;
-    vatNumber: string;
-    ustNumber: string;
-    members: {
-        name: string;
-        role: string;
-        email: string;
-        phone: string;
-    }[];
+	bandName: string;
+	notes: string;
+	companyName: string;
+	vatNumber: string;
+	ustNumber: string;
+	members: {
+		name: string;
+		role: string;
+		email: string;
+		phone: string;
+	}[];
 }
 
 export interface ContactInputValues {
 	email: string;
-    phone: string;
-    mobilePhone: string;
-    homepage: string;
+	phone: string;
+	mobilePhone: string;
+	homepage: string;
+}
+
+export interface DealMemoFormValues {
+	band: string;
+	date: Date;
+	deal: string;
+	price: Number;
+	posters: Number;
+	notes: string;
 }
