@@ -12,6 +12,16 @@ import {
     BsArrowUp as AscIcon,
 } from "react-icons/bs";
 
+// move interface and styles to other file
+
+// other table interactions todo:
+// https://github.com/TanStack/table/blob/alpha/examples/react/column-sizing/src/main.tsx
+// https://github.com/TanStack/table/blob/alpha/examples/react/pagination/src/main.tsx
+// or
+// https://github.com/TanStack/table/blob/alpha/examples/react/pagination-controlled/src/main.tsx
+// any maybe
+// https://github.com/TanStack/table/tree/alpha/examples/react/row-selection
+
 export interface DataGridProps {
     columns: any[];
     data: any[];
