@@ -5,13 +5,10 @@ import DealMemoForm from "../../components/DealMemoForm";
 import { PageTemplate } from "../../components/PageTemplate";
 import { DealMemoProps } from "../../types";
 
-// Rework component and move interfaces
-// also import {v4 as uuid4} from 'uuid'; to generate a unique id for deal memo
-
 // add popups, if hotel/band/venue does not exits
 // also add auto complete for band, venue, lopro, hotel
 
-// split component stuff to own file; only leave session and payload validation in here
+// only leave session and payload validation in here
 // also add new get request, if new band is added
 
 export default function DealMemoPage({ session, bands }: DealMemoProps) {
