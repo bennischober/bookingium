@@ -8,15 +8,18 @@ import { PageTemplate } from "../../components/PageTemplate";
 import { DealMemoList } from "../../components/DealMemoList";
 import { handleSession } from "../../utils/appHandles";
 import { DealMemoProps } from "../../types";
+import { Button, Center, Collapse, Space } from "@mantine/core";
 
-// add popups, if hotel/band/venue does not exits
+// add popups, if hotel/venue does not exits
 // also add auto complete for band, venue, lopro, hotel
 
-// also add new get request, if new band is added
-
 export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
+    // fetched data
     const [bandsData, setBandsData] = useState(bands);
     const [memosData, setMemosData] = useState(memos);
+
+    // other state
+    const [addMemoOpened, setAddMemoOpened] = useState(false);
 
     const router = useRouter();
     useEffect(() => {
@@ -39,12 +42,21 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
 
     return (
         <PageTemplate title="Deal Memos">
-            <DealMemoForm
-                session={session}
-                bands={bandsData}
-                fetchBands={fetchBands}
-                fetchMemos={fetchMemos}
-            />
+            <Center>
+                <Button onClick={() => setAddMemoOpened((o) => !o)}>
+                    Add new Deal Memo
+                </Button>
+            </Center>
+            <Space h="xl" />
+            <Collapse in={addMemoOpened}>
+                <DealMemoForm
+                    session={session}
+                    bands={bandsData}
+                    fetchBands={fetchBands}
+                    fetchMemos={fetchMemos}
+                />
+                <Space h="xl" />
+            </Collapse>
             <DealMemoList memos={memosData} />
         </PageTemplate>
     );
