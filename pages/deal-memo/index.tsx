@@ -21,7 +21,7 @@ import { DealMemoProps } from "../../types";
 import { IBand } from "../../models/band";
 import mongoose from "mongoose";
 import { useState } from "react";
-import { CreateBandForm } from "../../components/CreateBandForm";
+import { BandForm } from "../../components/BandForm";
 
 export interface DealMemoFormValues {
     band: string;
@@ -180,9 +180,9 @@ export default function DealMemoPage({ session, payload }: DealMemoProps) {
             <Modal
                 opened={modalOpened}
                 onClose={() => setModalOpened(false)}
-                title="Hi!"
+                title="Add a new Band"
             >
-                <CreateBandForm />
+                <BandForm />
             </Modal>
         </>
     );
