@@ -20,6 +20,10 @@ import { IBand } from "../../models/band";
 import { DealMemoFormProps, DealMemoFormValues } from "../../types";
 import { BandForm } from "../BandForm";
 
+// make fetchBands and fetchMemos functional in bands and this component
+
+// create component with autocomplete and create button only for further use (band, venue, lopro, hotel)
+
 export default function DealMemoForm({
     bands,
     session,
