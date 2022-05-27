@@ -19,6 +19,7 @@ import { useForm } from "@mantine/form";
 import { IBand } from "../../models/band";
 import { DealMemoFormProps, DealMemoFormValues } from "../../types";
 import { BandForm } from "../BandForm";
+import { SearchOrAdd } from "../SearchOrAdd";
 
 // make fetchBands and fetchMemos functional in bands and this component
 
@@ -103,18 +104,20 @@ export default function DealMemoForm({
                             onDealSubmit(values)
                         )}
                     >
-                        <Stack>
-                            <Autocomplete
-                                label="Choose a band"
-                                placeholder="Band name"
-                                data={autoCompleteData}
-                                {...dealForm.getInputProps("band")}
-                                required
-                            />
-                            <Button onClick={() => setModalOpened(true)}>
-                                Add Band
-                            </Button>
-                        </Stack>
+                        <SearchOrAdd
+                            ac={{
+                                data: autoCompleteData,
+                                useForm: dealForm,
+                                required: true,
+                                label: "Choose a band",
+                                placeholder: "Band name",
+                                inputProps: "band",
+                            }}
+                            md={{
+                                button: "Add Band",
+                                handleOpen: setModalOpened,
+                            }}
+                        />
                         <Space h="xl" />
                         <Textarea
                             label="Deal"
