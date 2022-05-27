@@ -11,14 +11,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'GET':
             if (!userid) return res.status(403).json({ success: true, data: { message: "Access not granted!" } });
             try {
-                // use populated data
-                // currently no error handling, because i would get a warning, if nothing is returned in the api call
-                const dt = await DealMemo.find({ 'dm.userid': userid }).populate('bandid').exec();
+                // send unpopulated data, because populated data is not needed here!
+                // might change back to populated data, but currently this is not needed
+                const dt = await DealMemo.find({ 'dm.userid': userid }).exec();
                 return res.status(200).json({ success: true, data: dt });
             } catch (error) {
-                // send unpopulated data, if population error occurs
-                const dealMemos = await DealMemo.find({}); // get all entries
-                return res.status(200).json({ success: true, data: dealMemos });
+                return res.status(500).json({ success: true, data: error });
             }
         case 'POST':
             try {
