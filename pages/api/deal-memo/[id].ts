@@ -10,47 +10,50 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     await connect();
 
+    // also secure this endpoint with a userid!
+
+    // id of the deal memo is required, only progress if available
+    if (!id) return res.status(400).json({ success: false, data: { error: "Bad request. Some parameters are missing!" } });
+
     switch (method) {
         case 'GET':
-            // Note: The data has to be prefetched by the userid to get only the deal memos for a specific user.
             try {
-                const dealMemo = await DealMemo.findById(id); // get specific item
+                // get specific item
+                const dealMemo = await DealMemo.findOne({ dealId: id });
                 if (!dealMemo) {
-                    return res.status(404).json({ success: false, error: { "message": "No deal memo found!" } });
+                    return res.status(404).json({ success: false, data: { error: `No data found for the id ${id}!` } });
                 }
-                res.status(200).json({ success: true, data: dealMemo });
+                return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
-                res.status(500).json({ success: false, error: error });
+                return res.status(500).json({ success: false, error: error });
             }
-            break;
         case 'PUT':
             try {
+                // update specific item
                 const dealMemo = await DealMemo.findByIdAndUpdate(id, req.body, {
                     new: true,
                     runValidators: true,
-                }); // update specific item
+                });
                 if (!dealMemo) {
                     return res.status(404).json({ success: false, error: { "message": "No deal memo found!" } });
                 }
-                res.status(200).json({ success: true, data: dealMemo });
+                return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
-                res.status(500).json({ success: false, error: error });
+                return res.status(500).json({ success: false, error: error });
             }
-            break;
         case 'DELETE':
             try {
-                const dealMemo = await DealMemo.findByIdAndDelete(id); // delete specific item
+                // delete specific item
+                const dealMemo = await DealMemo.findByIdAndDelete(id);
                 if (!dealMemo) {
                     return res.status(404).json({ success: false, error: { "message": "No deal memo found!" } });
                 }
-                res.status(200).json({ success: true, data: {} });
+                return res.status(200).json({ success: true, data: {} });
             }
             catch (error) {
-                res.status(500).json({ success: false, error: error });
+                return res.status(500).json({ success: false, error: error });
             }
-            break;
         default:
-            res.status(400).json({ success: false, error: { "message": "HTTP Method not found!" } });
-            break;
+            return res.status(400).json({ success: false, error: { "message": "HTTP Method not found!" } });
     }
 }
