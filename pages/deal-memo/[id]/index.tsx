@@ -1,19 +1,32 @@
+import { Button, Text } from "@mantine/core";
 import axios from "axios";
 import { GetServerSideProps } from "next";
+import { useRouter } from "next/router";
+import { MdArrowBack } from "react-icons/md";
 import { IDealMemo } from "../../../models/deal-memo";
+import { goToLastRoute } from "../../../utils/appHandles";
+
+// move interface to types file
+// move jsx stuff to new component
 
 export interface CompleteDealMemoPageProps {
     memo: IDealMemo;
 }
 
-// Add "Back to Memos" button on top
-// set router query parameter to pathBefore to get back to memos page without calling router.push("/deal-memo")
-
 export default function CompleteDealMemoPage({
     memo,
 }: CompleteDealMemoPageProps) {
+    const router = useRouter();
+
     return (
         <>
+            <Button
+                leftIcon={<MdArrowBack />}
+                variant="subtle"
+                onClick={() => goToLastRoute(router)}
+            >
+                <Text>Go back</Text>
+            </Button>
             <h1>Complete Deal Memos</h1>
             {memo.dealId}
         </>
