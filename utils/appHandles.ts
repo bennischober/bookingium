@@ -22,6 +22,17 @@ export function getLastRoute(router: NextRouter): string {
     return router.query.from === undefined ? "/" : router.query.from;
 }
 
+export function goToLastRoute(router: NextRouter) {
+    router.push(getLastRoute(router));
+}
+
+export function changeRoute(router: NextRouter, pathname: string, query: { from?: string }) {
+    router.push({
+        pathname,
+        query
+    });
+}
+
 export function handleSession(router: NextRouter, session: SessionProps["session"], pathname: string, query: { from: string }) {
     if ((session && session.status === "unathorized") || !session) {
         router.push({
