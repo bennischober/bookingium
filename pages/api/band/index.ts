@@ -2,6 +2,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from '../../../lib/mongodb';
 import { Band } from "../../../models/band";
 
+// add this in future: https://nextjs.org/docs/api-routes/response-helpers#adding-typescript-types
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { method, body, query: { userid } } = req;
 
@@ -18,6 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                         }
                         return res.status(200).json({ success: true, data: bands });
                     });
+                    //res.end();
                 }
 
                 // no specific data found => send all bands
@@ -28,7 +31,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
             break;
         default:
-            res.status(400).json({ success: false, error: { "message": "HTTP Method not found!" } });
+            return res.status(400).json({ success: false, error: { "message": "HTTP Method not found!" } });
             break;
     }
 }

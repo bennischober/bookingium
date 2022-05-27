@@ -64,6 +64,7 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     // this throws an error, because the http headers will be sent by getSession and axios.get
+    // https://stackoverflow.com/a/65546189
 
     const session = await getSession({ req: ctx.req });
     const pl =

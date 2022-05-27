@@ -10,13 +10,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (method) {
         case 'GET':
             try {
-                // use populated data
-                DealMemo.find({ 'dm.userid': userid }).populate('bandid').exec((err, dealMemos) => {
-                    if (err) {
-                        return res.status(500).json({ success: false, error: err });
-                    }
-                    return res.status(200).json({ success: true, data: dealMemos });
-                });
+                if (userid) {
+                    // use populated data
+                    DealMemo.find({ 'dm.userid': userid }).populate('bandid').exec((err, dealMemos) => {
+                        if (err) {
+                            return res.status(500).json({ success: false, error: err });
+                        }
+                        return res.status(200).json({ success: true, data: dealMemos });
+                    });
+                }
+
+                // no specific data found => send all bands
+                const memos = await DealMemo.find({});
+                return res.status(200).json({ success: true, data: memos });
             } catch (error) {
                 // or standalone data?
                 const dealMemos = await DealMemo.find({}); // get all entries
@@ -40,7 +46,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             break;
 
         default:
-            res.status(400).json({ success: false, error: { "message": "HTTP Method not found!" } });
+            return res.status(400).json({ success: false, error: { "message": "HTTP Method not found!" } });
             break;
     }
 }
