@@ -22,6 +22,8 @@ import {
 // any maybe
 // https://github.com/TanStack/table/tree/alpha/examples/react/row-selection
 
+// Grid settings could also be added => user specific text size and column spacing
+
 export interface DataGridProps {
     columns: any[];
     data: any[];
