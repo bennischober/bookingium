@@ -19,7 +19,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'GET':
             try {
                 // get specific item
-                const dealMemo = await DealMemo.findOne({ dealId: id });
+                const dealMemo = await DealMemo.findOne({ dealId: id }).populate('bandid').exec();
                 if (!dealMemo) {
                     return res.status(404).json({ success: false, data: { error: `No data found for the id ${id}!` } });
                 }
