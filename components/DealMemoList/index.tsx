@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { DealMemoListProps } from "../../types";
 import { DataGrid } from "../DataGrid";
 import { createTable } from "@tanstack/react-table";
+import { changeRoute } from "../../utils/appHandles";
 
 // Future ToDo:
 // https://github.com/mantinedev/mantine/discussions/195
@@ -21,7 +22,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
     const router = useRouter();
 
     const handleDealClick = (dealId: string) => {
-        router.push(`/deal-memo/${dealId}`);
+        changeRoute(router, `/deal-memo/${dealId}`, { from: router.pathname});
     };
 
     let table = createTable().setRowType<DealMemoListValues>();
