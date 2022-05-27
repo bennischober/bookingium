@@ -24,7 +24,7 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
     const router = useRouter();
     useEffect(() => {
         if (router && router.query) {
-            handleSession(router, session, "/", { from: router.pathname });
+            handleSession(router, session, "/auth/login", { from: router.pathname });
         }
     }, [router, session]);
 
@@ -90,8 +90,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     return {
         props: {
             session,
-            bands: bands?.data,
-            memos: memos?.data,
+            bands: bands && bands.data ? bands.data : [],
+            memos: memos && memos.data ? memos.data : [],
         },
     };
 };
