@@ -57,6 +57,8 @@ export interface InputComponentProps<T> {
 
 export interface BandFormProps {
 	fetchBands?: () => void;
+	close?: () => void;
+	session: SessionProps["session"];
 }
 
 export interface DealMemoListProps {

@@ -89,6 +89,10 @@ export default function DealMemoForm({
         fetchMemos();
     };
 
+    const closeModals = () => {
+        setBandModalOpened(false);
+    }
+
     const autoCompleteData = bands
         ? bands?.map((val) => {
               return val.name;
@@ -179,7 +183,7 @@ export default function DealMemoForm({
                 overflow="inside"
                 centered
             >
-                <BandForm fetchBands={fetchBands} />
+                <BandForm fetchBands={fetchBands} session={session} close={closeModals} />
             </Modal>
         </>
     );
