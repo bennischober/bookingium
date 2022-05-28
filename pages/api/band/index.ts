@@ -7,8 +7,6 @@ import { Band } from "../../../models/band";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { method, query: { userid } } = req;
 
-    console.log(userid, req.body.data);
-
     await connect();
 
     switch (method) {
