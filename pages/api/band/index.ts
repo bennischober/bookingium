@@ -7,6 +7,8 @@ import { Band } from "../../../models/band";
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { method, query: { userid } } = req;
 
+    console.log(userid, req.body.data);
+
     await connect();
 
     switch (method) {
@@ -18,7 +20,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 const data = await Band.find({ 'dm.userid': userid }).exec();
                 return res.status(200).json({ success: true, data: data });
             } catch (error) {
-                return res.status(500).json({ success: false, error: error });
+                return res.status(500).json({ success: false, data: error });
+            }
+        case 'POST':
+            try {
+                const band = await Band.create(req.body.data); // create new db entry
+                return res.status(200).json({ success: true, data: band });
+            } catch (error) {
+                return res.status(500).json({ success: false, data: error });
             }
         default:
             return res.status(400).json({ success: false, error: { "message": "HTTP Method not found!" } });

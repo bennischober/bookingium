@@ -2,7 +2,7 @@ import { Document, model, Model, models, Schema } from 'mongoose';
 import dayjs from 'dayjs';
 
 const bandSchema: Schema = new Schema({
-    _id: Schema.Types.ObjectId,
+    // _id: Schema.Types.ObjectId,
     bandid: {
         type: String,
         required: true,
@@ -46,7 +46,7 @@ const bandSchema: Schema = new Schema({
 });
 
 export interface IBand extends Document {
-    _id: Schema.Types.ObjectId;
+    // _id: Schema.Types.ObjectId;
     bandid: string;
     name: string;
     notes: string;
@@ -56,9 +56,9 @@ export interface IBand extends Document {
         ustNumber: string;
         address: {
             street: string;
-            streetNumber: string;
+            streetNumber: number;
             addressSuffix: string;
-            zipCode: string;
+            zipCode: number;
             city: string;
             state: string;
             country: string;

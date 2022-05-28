@@ -13,6 +13,11 @@ import { MdOutlineAdd } from "react-icons/md";
 import { BandFormProps, BandFormValues } from "../../types";
 import AddressInput from "../AddressInput";
 import ContactInput from "../ContactInput";
+import axios from "axios";
+import mongoose from "mongoose";
+import { v4 as uuidv4 } from "uuid";
+import { IBand } from "../../models/band";
+import dayjs from "dayjs";
 
 const schema = z.object({
     bandName: z
@@ -25,7 +30,7 @@ const schema = z.object({
     homepage: z.string().url().or(z.literal("")),
 });
 
-export function BandForm({ fetchBands }: BandFormProps) {
+export function BandForm({ fetchBands, close, session }: BandFormProps) {
     const bandForm = useForm<BandFormValues>({
         schema: zodResolver(schema),
         initialValues: {
@@ -74,11 +79,56 @@ export function BandForm({ fetchBands }: BandFormProps) {
         </Box>
     ));
 
-    const handleSubmit = (values: BandFormValues) => {
-        console.log(values);
+    const handleSubmit = async (values: BandFormValues) => {
+        console.log(session);
+
+        const bandData = {
+            _id: new mongoose.Types.ObjectId(),
+            bandid: uuidv4(),
+            name: values.bandName,
+            notes: values.notes,
+            company: {
+                name: values.companyName,
+                vatNumber: values.vatNumber,
+                ustNumber: values.ustNumber,
+                address: {
+                    streetNumber: values.streetNumber,
+                    street: values.street,
+                    addressSuffix: values.addressSuffix,
+                    zipCode: values.zipCode,
+                    city: values.city,
+                    state: values.state,
+                    country: values.country,
+                    countryCode: values.countryCode,
+                },
+                contact: {
+                    email: values.email,
+                    phone: values.phone,
+                    mobilePhone: values.mobilePhone,
+                    homepage: values.homepage,
+                },
+            },
+            members: values.members,
+            dm: {
+                userid: session.userid,
+                created: dayjs().toISOString(),
+                edited: dayjs().toISOString(),
+            },
+        };
+
+        await axios.post("/api/band", {
+            // params: {
+            //     userid: session.userid,
+            // },
+            data: bandData,
+        });
+
+        if (close) close();
+
+        bandForm.reset();
 
         // also handle refetch for bands, only if given
-        //if (fetchBands) fetchBands();
+        if (fetchBands) fetchBands();
     };
 
     return (
