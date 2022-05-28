@@ -31,9 +31,14 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
     }, [router, session]);
 
     const fetchBands = async () => {
-        const res = await axios.get("http://localhost:3000/api/band");
+        const res = await axios.get("http://localhost:3000/api/band", {
+            params: {
+                userid: session.userid,
+            },
+        });
+        const bands = await res.data.data;
         if (res.status !== 200) return;
-        setBandsData(res.data);
+        setBandsData(bands);
     };
 
     const fetchMemos = async () => {
@@ -45,7 +50,6 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
         if (res.status !== 200) return;
         const memos = await res.data.data;
         setMemosData(memos);
-        console.log("fetching memos!");
     };
 
     const closeForm = () => {
