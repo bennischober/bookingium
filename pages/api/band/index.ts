@@ -4,6 +4,8 @@ import { Band } from "../../../models/band";
 
 // add this in future: https://nextjs.org/docs/api-routes/response-helpers#adding-typescript-types
 
+// also secure complete endpoint with userid
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { method, query: { userid } } = req;
 
