@@ -150,3 +150,12 @@ export interface RegisterHandleData {
 	password: string;
 	accept: boolean;
 }
+
+/** --- DATA GRID TYPES --- **/
+export interface DealMemoListValues {
+    dealId: string;
+    deal: string;
+    price: number;
+    posters: number;
+    notes: string;
+}

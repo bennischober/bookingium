@@ -1,22 +1,10 @@
 import { useMemo } from "react";
 import { Button, Paper, ScrollArea, Title } from "@mantine/core";
 import { useRouter } from "next/router";
-import { DealMemoListProps } from "../../types";
+import { DealMemoListProps, DealMemoListValues } from "../../types";
 import { DataGrid } from "../DataGrid";
 import { createTable } from "@tanstack/react-table";
 import { changeRoute } from "../../utils/appHandles";
-
-// Future ToDo:
-// https://github.com/mantinedev/mantine/discussions/195
-// https://codesandbox.io/s/react-table-datagrid-eojw8
-
-export interface DealMemoListValues {
-    dealId: string;
-    deal: string;
-    price: number;
-    posters: number;
-    notes: string;
-}
 
 export function DealMemoList({ memos }: DealMemoListProps) {
     const router = useRouter();
