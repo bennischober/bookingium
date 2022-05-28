@@ -20,7 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'POST':
             try {
-                const dealMemo = await DealMemo.create(req.body); // create new db entry
+                const dealMemo = await DealMemo.create(req.body.data); // create new db entry
                 return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
                 return res.status(500).json({ success: false, data: error });

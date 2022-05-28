@@ -1,5 +1,5 @@
-import React from "react";
-import { Button, Paper, Table, Title } from "@mantine/core";
+import { useMemo } from "react";
+import { Button, Paper, ScrollArea, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { DealMemoListProps } from "../../types";
 import { DataGrid } from "../DataGrid";
@@ -22,12 +22,12 @@ export function DealMemoList({ memos }: DealMemoListProps) {
     const router = useRouter();
 
     const handleDealClick = (dealId: string) => {
-        changeRoute(router, `/deal-memo/${dealId}`, { from: router.pathname});
+        changeRoute(router, `/deal-memo/${dealId}`, { from: router.pathname });
     };
 
     let table = createTable().setRowType<DealMemoListValues>();
 
-    const columns = React.useMemo(
+    const columns = useMemo(
         () => [
             table.createDataColumn("dealId", {
                 cell: (info) => (
@@ -70,9 +70,11 @@ export function DealMemoList({ memos }: DealMemoListProps) {
     }));
 
     return (
-        <Paper shadow="xs" p="xl" withBorder>
-            <Title order={1}>Deal Memos</Title>
-            <DataGrid columns={columns} data={rows} />
-        </Paper>
+        <ScrollArea>
+            <Paper shadow="xs" p="xl" withBorder>
+                <Title order={1}>Deal Memos</Title>
+                <DataGrid columns={columns} data={rows} />
+            </Paper>
+        </ScrollArea>
     );
 }

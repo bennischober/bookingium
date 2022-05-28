@@ -24,20 +24,32 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
     const router = useRouter();
     useEffect(() => {
         if (router && router.query) {
-            handleSession(router, session, "/auth/login", { from: router.pathname });
+            handleSession(router, session, "/auth/login", {
+                from: router.pathname,
+            });
         }
     }, [router, session]);
 
     const fetchBands = async () => {
-        const res = await axios.get("/api/band");
+        const res = await axios.get("http://localhost:3000/api/band");
         if (res.status !== 200) return;
         setBandsData(res.data);
     };
 
     const fetchMemos = async () => {
-        const res = await axios.get("/api/deal-memo");
+        const res = await axios.get("http://localhost:3000/api/deal-memo", {
+            params: {
+                userid: session.userid,
+            },
+        });
         if (res.status !== 200) return;
-        setMemosData(res.data);
+        const memos = await res.data.data;
+        setMemosData(memos);
+        console.log("fetching memos!");
+    };
+
+    const closeForm = () => {
+        setAddMemoOpened(false);
     };
 
     return (
@@ -54,6 +66,7 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
                     bands={bandsData}
                     fetchBands={fetchBands}
                     fetchMemos={fetchMemos}
+                    closeForm={closeForm}
                 />
                 <Space h="xl" />
             </Collapse>

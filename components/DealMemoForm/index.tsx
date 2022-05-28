@@ -4,14 +4,12 @@ import dayjs from "dayjs";
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import {
-    Autocomplete,
     Button,
     Container,
     Modal,
     NumberInput,
     Paper,
     Space,
-    Stack,
     Textarea,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
@@ -30,8 +28,9 @@ export default function DealMemoForm({
     session,
     fetchBands,
     fetchMemos,
+    closeForm,
 }: DealMemoFormProps) {
-    const [modalOpened, setModalOpened] = useState(false);
+    const [bandModalOpened, setBandModalOpened] = useState(false);
 
     const dealForm = useForm<DealMemoFormValues>({
         initialValues: {
@@ -54,7 +53,7 @@ export default function DealMemoForm({
         }),
     });
 
-    const onDealSubmit = (values: DealMemoFormValues) => {
+    const onDealSubmit = async (values: DealMemoFormValues) => {
         let band = {} as IBand;
         bands.forEach((val) => {
             if (val.name === values.band) {
@@ -83,10 +82,13 @@ export default function DealMemoForm({
             },
         };
 
-        axios.post("/api/deal-memo", memoData);
+        await axios.post("/api/deal-memo", { data: memoData });
+
+        if (closeForm) closeForm();
+        dealForm.reset();
 
         // await => refetch data
-        //fetchMemos();
+        fetchMemos();
     };
 
     const autoCompleteData = bands
@@ -115,7 +117,7 @@ export default function DealMemoForm({
                             }}
                             md={{
                                 button: "Add Band",
-                                handleOpen: setModalOpened,
+                                handleOpen: setBandModalOpened,
                             }}
                         />
                         <Space h="xl" />
@@ -172,8 +174,8 @@ export default function DealMemoForm({
                 </Paper>
             </Container>
             <Modal
-                opened={modalOpened}
-                onClose={() => setModalOpened(false)}
+                opened={bandModalOpened}
+                onClose={() => setBandModalOpened(false)}
                 title="Add a new Band"
                 size="xl"
                 overflow="inside"

@@ -77,6 +77,7 @@ export interface DealMemoFormProps {
 	bands: IBand[];
 	fetchBands: () => void;
 	fetchMemos: () => void;
+	closeForm?: () => void;
 }
 
 export interface DealMemoProps {
