@@ -19,8 +19,6 @@ import { DealMemoFormProps, DealMemoFormValues } from "../../types";
 import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../SearchOrAdd";
 
-// make fetchBands and fetchMemos functional in bands and this component
-
 // create component with autocomplete and create button only for further use (band, venue, lopro, hotel)
 
 export default function DealMemoForm({
