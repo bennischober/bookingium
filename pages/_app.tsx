@@ -6,6 +6,7 @@ import {
     ColorSchemeProvider,
     MantineProvider,
 } from "@mantine/core";
+import { NotificationsProvider } from "@mantine/notifications";
 import { useEffect, useState } from "react";
 import {
     getLocalStorageItem,
@@ -71,7 +72,9 @@ export default function App({ Component, pageProps, ...appPropps }: AppProps) {
                             colorScheme: colorScheme,
                         }}
                     >
-                        {getPageContent()}
+                        <NotificationsProvider>
+                            {getPageContent()}
+                        </NotificationsProvider>
                     </MantineProvider>
                 </ColorSchemeProvider>
             </SessionProvider>
