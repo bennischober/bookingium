@@ -30,7 +30,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'PUT':
             try {
                 // update specific item
-                const dealMemo = await DealMemo.findByIdAndUpdate(id, req.body, {
+                const dealMemo = await DealMemo.findByIdAndUpdate(id, req.body.data, {
                     new: true,
                     runValidators: true,
                 });

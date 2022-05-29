@@ -56,7 +56,7 @@ export interface InputComponentProps<T> {
 }
 
 export interface BandFormProps {
-	fetchBands?: () => void;
+	handleBands?: (data: {}) => void;
 	close?: () => void;
 	session: SessionProps["session"];
 }
@@ -77,15 +77,27 @@ export interface SessionProps extends Session {
 export interface DealMemoFormProps {
 	session: SessionProps["session"];
 	bands: IBand[];
-	fetchBands: () => void;
-	fetchMemos: () => void;
-	closeForm?: () => void;
+	handleBands: (data: {}) => void;
+	handleMemos: (data: {}) => void;
+	closeForm: () => void;
 }
 
 export interface DealMemoProps {
 	session: SessionProps["session"];
 	bands: IBand[];
 	memos: IDealMemo[];
+}
+
+export interface CompleteDealMemoPageProps {
+    session: SessionProps["session"];
+    memo: IDealMemo;
+}
+
+export interface DealEditFormProps {
+    handleMemos: (data: {}) => void;
+	session: SessionProps["session"];
+    data: DealEditFormValues;
+    bandName: string;
 }
 
 
@@ -151,6 +163,14 @@ export interface RegisterHandleData {
 	email: string;
 	password: string;
 	accept: boolean;
+}
+
+export interface DealEditFormValues {
+    deal: string;
+    date: Date;
+    price: number;
+    posters: number;
+    notes: string;
 }
 
 /** --- DATA GRID TYPES --- **/

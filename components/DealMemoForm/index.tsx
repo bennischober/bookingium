@@ -1,5 +1,4 @@
 import { useState } from "react";
-import axios from "axios";
 import dayjs from "dayjs";
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
@@ -11,21 +10,20 @@ import {
     Paper,
     Space,
     Textarea,
+    Title,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { IBand } from "../../models/band";
-import { DealMemoFormProps, DealMemoFormValues } from "../../types";
+import { DealEditFormProps, DealEditFormValues, DealMemoFormProps, DealMemoFormValues } from "../../types";
 import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../SearchOrAdd";
 
-// create component with autocomplete and create button only for further use (band, venue, lopro, hotel)
-
-export default function DealMemoForm({
+export function DealMemoForm({
     bands,
     session,
-    fetchBands,
-    fetchMemos,
+    handleBands,
+    handleMemos,
     closeForm,
 }: DealMemoFormProps) {
     const [bandModalOpened, setBandModalOpened] = useState(false);
@@ -80,18 +78,15 @@ export default function DealMemoForm({
             },
         };
 
-        await axios.post("/api/deal-memo", { data: memoData });
+        handleMemos(memoData);
 
         if (closeForm) closeForm();
         dealForm.reset();
-
-        // await => refetch data
-        fetchMemos();
     };
 
     const closeModals = () => {
         setBandModalOpened(false);
-    }
+    };
 
     const autoCompleteData = bands
         ? bands?.map((val) => {
@@ -183,8 +178,92 @@ export default function DealMemoForm({
                 overflow="inside"
                 centered
             >
-                <BandForm fetchBands={fetchBands} session={session} close={closeModals} />
+                <BandForm
+                    handleBands={handleBands}
+                    close={closeModals}
+                    session={session}
+                />
             </Modal>
         </>
+    );
+}
+
+export function DealEditForm({ handleMemos, session, data, bandName }: DealEditFormProps) {
+    const Form = useForm<DealEditFormValues>({
+        initialValues: {
+            deal: data.deal,
+            date: data.date,
+            price: data.price,
+            posters: data.posters,
+            notes: data.notes,
+        },
+    });
+
+    const onDealSubmit = (values: DealEditFormValues) => {
+        const memoData = {
+            deal: values.deal,
+            date: values.date,
+            price: values.price,
+            posters: values.posters,
+            notes: values.notes,
+            dm: {
+                edited: dayjs().toISOString(),
+                userid: session.userid,
+            },
+        };
+
+        handleMemos(memoData);
+    };
+
+    return (
+        <form onSubmit={Form.onSubmit((values) => onDealSubmit(values))}>
+            <Title order={2}>Bandname: {bandName}</Title>
+            <Space h="xl" />
+            <Textarea
+                label="Deal"
+                placeholder="Deal information"
+                {...Form.getInputProps("deal")}
+                autosize
+                minRows={3}
+                required
+            />
+            <Space h="xl" />
+            <DatePicker
+                id="mantine-2wgfg6a6v"
+                label="Date"
+                defaultValue={dayjs().toDate()}
+                {...Form.getInputProps("date")}
+                required
+            />
+            <Space h="xl" />
+            <NumberInput
+                label="Price"
+                {...Form.getInputProps("price")}
+                min={0}
+                stepHoldDelay={500}
+                stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+                required
+            />
+            <Space h="xl" />
+            <NumberInput
+                label="Posters"
+                {...Form.getInputProps("posters")}
+                min={0}
+                stepHoldDelay={500}
+                stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+                required
+            />
+            <Space h="xl" />
+            <Textarea
+                label="Notes"
+                {...Form.getInputProps("notes")}
+                autosize
+                minRows={3}
+            />
+            <Space h="xl" />
+            <Button type="submit" fullWidth mt="xl">
+                Submit data
+            </Button>
+        </form>
     );
 }

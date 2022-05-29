@@ -3,12 +3,12 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
 import axios from "axios";
-import DealMemoForm from "../../components/DealMemoForm";
+import { Button, Center, Collapse, Space } from "@mantine/core";
+import { DealMemoForm } from "../../components/DealMemoForm";
 import { PageTemplate } from "../../components/PageTemplate";
 import { DealMemoList } from "../../components/DealMemoList";
-import { handleSession } from "../../utils/appHandles";
+import { getBands, getMemos, handleSession } from "../../utils/appHandles";
 import { DealMemoProps } from "../../types";
-import { Button, Center, Collapse, Space } from "@mantine/core";
 
 // add popups, if hotel/venue does not exits
 // also add auto complete for band, venue, lopro, hotel
@@ -30,25 +30,21 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
         }
     }, [router, session]);
 
-    const fetchBands = async () => {
-        const res = await axios.get("http://localhost:3000/api/band", {
-            params: {
-                userid: session.userid,
-            },
-        });
-        const bands = await res.data.data;
-        if (res.status !== 200) return;
+    const handleBands = async (data: {}) => {
+        // post band data
+        await axios.post("/api/band", { data: data });
+
+        // refetch band data
+        const bands = await getBands(session);
         setBandsData(bands);
     };
 
-    const fetchMemos = async () => {
-        const res = await axios.get("http://localhost:3000/api/deal-memo", {
-            params: {
-                userid: session.userid,
-            },
-        });
-        if (res.status !== 200) return;
-        const memos = await res.data.data;
+    const handleMemos = async (data: {}) => {
+        // post memo data
+        await axios.post("/api/deal-memo", { data: data });
+
+        // refetch memo data
+        const memos = await getMemos(session);
         setMemosData(memos);
     };
 
@@ -68,8 +64,8 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
                 <DealMemoForm
                     session={session}
                     bands={bandsData}
-                    fetchBands={fetchBands}
-                    fetchMemos={fetchMemos}
+                    handleBands={handleBands}
+                    handleMemos={handleMemos}
                     closeForm={closeForm}
                 />
                 <Space h="xl" />
