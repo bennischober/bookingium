@@ -14,7 +14,9 @@ import { CompleteDealMemoPageProps } from "../../../types";
 import { goToLastRoute, isPopulated } from "../../../utils/appHandles";
 
 // move interface to types file
-// move jsx stuff to new component
+// move jsx stuff to new component, if everything is finished and works properly
+
+// might need to think about how to handle the hotel data. Initially there might not be any hotel
 
 export default function CompleteDealMemoPage({
     memo,
@@ -100,6 +102,9 @@ export default function CompleteDealMemoPage({
                     </Paper>
                 </Tabs.Tab>
                 <Tabs.Tab label="Band data"></Tabs.Tab>
+                <Tabs.Tab label="Venue data"></Tabs.Tab>
+                <Tabs.Tab label="Local promoter data"></Tabs.Tab>
+                <Tabs.Tab label="Hotel data"></Tabs.Tab>
             </Tabs>
         </>
     );
