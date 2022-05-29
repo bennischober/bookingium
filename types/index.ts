@@ -176,8 +176,13 @@ export interface DealEditFormValues {
 /** --- DATA GRID TYPES --- **/
 export interface DealMemoListValues {
     dealId: string;
+	band: string;
     deal: string;
+	date: string;
     price: number;
     posters: number;
     notes: string;
+	// venue: string;
+	// lopro: string;
+	// hotel: string;
 }

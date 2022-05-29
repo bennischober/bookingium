@@ -5,6 +5,7 @@ import { DealMemoListProps, DealMemoListValues } from "../../types";
 import { DataGrid } from "../DataGrid";
 import { createTable } from "@tanstack/react-table";
 import { changeRoute } from "../../utils/appHandles";
+import dayjs from "dayjs";
 
 export function DealMemoList({ memos }: DealMemoListProps) {
     const router = useRouter();
@@ -28,8 +29,16 @@ export function DealMemoList({ memos }: DealMemoListProps) {
                 ), // info.getValue()
                 footer: (props) => props.column.id,
             }),
+            table.createDataColumn("band", {
+                cell: (info) => info.getValue(),
+                footer: (props) => props.column.id,
+            }),
             table.createDataColumn("deal", {
                 cell: (info) => info.getValue(),
+                footer: (props) => props.column.id,
+            }),
+            table.createDataColumn("date", {
+                cell: (info) => dayjs(info.getValue()).format("DD.MM.YYYY"),
                 footer: (props) => props.column.id,
             }),
             table.createDataColumn("price", {
@@ -50,6 +59,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
 
     const rows = memos.map((memo) => ({
         dealId: memo.dealId,
+        band: memo.bandid,
         deal: memo.deal,
         date: memo.date,
         price: memo.price,
