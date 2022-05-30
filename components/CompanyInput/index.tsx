@@ -1,4 +1,4 @@
-import { TextInput } from "@mantine/core";
+import { Accordion, TextInput } from "@mantine/core";
 import { InputComponentProps } from "../../types";
 import AddressInput from "../AddressInput";
 import ContactInput from "../ContactInput";
@@ -13,20 +13,28 @@ import ContactInput from "../ContactInput";
 export function CompanyInput({ Form }: InputComponentProps<any>) {
     return (
         <>
-            <TextInput
-                label="Company Name"
-                {...Form.getInputProps("companyName")}
-            />
-            <TextInput
-                label="VAT Number"
-                {...Form.getInputProps("vatNumber")}
-            />
-            <TextInput
-                label="UST Number"
-                {...Form.getInputProps("ustNumber")}
-            />
-            <AddressInput Form={Form} />
-            <ContactInput Form={Form} />
+            <Accordion>
+                <Accordion.Item label="Company">
+                    <TextInput
+                        label="Company Name"
+                        {...Form.getInputProps("companyName")}
+                    />
+                    <TextInput
+                        label="VAT Number"
+                        {...Form.getInputProps("vatNumber")}
+                    />
+                    <TextInput
+                        label="UST Number"
+                        {...Form.getInputProps("ustNumber")}
+                    />
+                </Accordion.Item>
+                <Accordion.Item label="Company Address">
+                    <AddressInput Form={Form} />
+                </Accordion.Item>
+                <Accordion.Item label="Company Contact">
+                    <ContactInput Form={Form} />
+                </Accordion.Item>
+            </Accordion>
         </>
     );
 }
