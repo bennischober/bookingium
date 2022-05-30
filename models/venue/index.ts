@@ -38,4 +38,37 @@ const venueSchema = new mongoose.Schema({
     },
 });
 
+export interface IVenue extends Document {
+    venueid: string;
+    venue: string;
+    capacity: number;
+    notes: string;
+    company: {
+        name: string;
+        vatNumber: string;
+        ustNumber: string;
+        address: {
+            street: string;
+            streetNumber: string;
+            addressSuffix: string;
+            zipCode: string;
+            city: string;
+            state: string;
+            country: string;
+            countryCode: string;
+        };
+        contact: {
+            phone: string;
+            mobilePhone: string;
+            email: string;
+            homepage: string;
+        };
+    };
+    dm: {
+        userid: string;
+        created: string;
+        edited: string;
+    };
+}
+
 export default mongoose.models.Venue || mongoose.model('Venue', venueSchema);

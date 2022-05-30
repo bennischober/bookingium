@@ -40,4 +40,39 @@ const loproSchema = new mongoose.Schema({
     }
 });
 
+export interface ILopro extends Document {
+    loproid: string;
+    name: string;
+    phone: string;
+    mobilePhone: string;
+    email: string;
+    notes: string;
+    company: {
+        name: string;
+        vatNumber: string;
+        ustNumber: string;
+        address: {
+            street: string;
+            streetNumber: string;
+            addressSuffix: string;
+            zipCode: string;
+            city: string;
+            state: string;
+            country: string;
+            countryCode: string;
+        };
+        contact: {
+            phone: string;
+            mobilePhone: string;
+            email: string;
+            homepage: string;
+        };
+    };
+    dm: {
+        userid: string;
+        created: string;
+        edited: string;
+    };
+}
+
 export default mongoose.models.Lopro || mongoose.model('Lopro', loproSchema);

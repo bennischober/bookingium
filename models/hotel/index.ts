@@ -32,4 +32,31 @@ const hotelSchema = new mongoose.Schema({
     }
 });
 
+export interface IHotel extends Document {
+    hotelid: string;
+    name: string;
+    notes: string;
+    address: {
+        street: string;
+        streetNumber: string;
+        addressSuffix: string;
+        zipCode: string;
+        city: string;
+        state: string;
+        country: string;
+        countryCode: string;
+    };
+    contact: {
+        phone: string;
+        mobilePhone: string;
+        email: string;
+        homepage: string;
+    };
+    dm: {
+        userid: string;
+        created: string;
+        edited: string;
+    };
+}
+
 export default mongoose.models.Hotel || mongoose.model('Hotel', hotelSchema);
