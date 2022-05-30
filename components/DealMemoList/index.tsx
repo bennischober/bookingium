@@ -1,14 +1,26 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button, Paper, ScrollArea, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { DealMemoListProps, DealMemoListValues } from "../../types";
 import { DataGrid } from "../DataGrid";
 import { createTable } from "@tanstack/react-table";
-import { changeRoute } from "../../utils/appHandles";
+import { changeRoute, isPopulated } from "../../utils/appHandles";
 import dayjs from "dayjs";
+import { IBand } from "../../models/band";
 
 export function DealMemoList({ memos }: DealMemoListProps) {
+    const [bandData, setBandData] = useState<IBand[]>([] as IBand[]);
     const router = useRouter();
+
+    useEffect(() => {
+        let data: IBand[] = [];
+        memos.forEach((memo) => {
+            if (isPopulated<IBand>(memo.bandid)) {
+                data.push(memo.bandid);
+            }
+        });
+        setBandData(data);
+    }, [memos]);
 
     const handleDealClick = (dealId: string) => {
         changeRoute(router, `/deal-memo/${dealId}`, { from: router.pathname });
@@ -26,7 +38,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
                     >
                         {info.getValue()}
                     </Button>
-                ), // info.getValue()
+                ),
                 footer: (props) => props.column.id,
             }),
             table.createDataColumn("band", {
@@ -57,9 +69,9 @@ export function DealMemoList({ memos }: DealMemoListProps) {
         []
     );
 
-    const rows = memos.map((memo) => ({
+    const rows = memos.map((memo, index) => ({
         dealId: memo.dealId,
-        band: memo.bandid,
+        band: bandData[index] && bandData[index].name ? bandData[index].name : "",
         deal: memo.deal,
         date: memo.date,
         price: memo.price,

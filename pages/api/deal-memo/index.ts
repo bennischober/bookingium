@@ -11,9 +11,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'GET':
             if (!userid) return res.status(403).json({ success: true, data: { message: "Access not granted!" } });
             try {
-                // send unpopulated data, because populated data is not needed here!
-                // might change back to populated data, but currently this is not needed
-                const dt = await DealMemo.find({ 'dm.userid': userid }).exec();
+                // send populated data => needed in deal memo list
+                const dt = await DealMemo.find({ 'dm.userid': userid }).populate('bandid').exec();
                 return res.status(200).json({ success: true, data: dt });
             } catch (error) {
                 return res.status(500).json({ success: true, data: error });
