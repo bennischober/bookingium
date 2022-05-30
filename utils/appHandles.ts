@@ -1,4 +1,4 @@
-import { MantineTheme } from "@mantine/core";
+import { MantineNumberSize, MantineTheme } from "@mantine/core";
 import { NextRouter } from "next/router";
 import dayjs from 'dayjs';
 import { SessionProps } from "../types";
@@ -61,6 +61,14 @@ export function addToArray(array: any[], index: number, item: any) {
     return array;
 }
 
+export function convertToType<T>(data: any): T {
+    return data as T;
+}
+
+export function convertMantineSizeToNumber(size: MantineNumberSize) {
+    return size === "xs" ? 0 : size === "sm" ? 25 : size === "md" ? 50 : size === "lg" ? 75 : size === "xl" ? 100 : 0;
+}
+
 /** --- FETCH HANDLE --- **/
 export const getBands = async (session: SessionProps["session"]) => {
     // get url form links.ts
@@ -86,6 +94,6 @@ export const getMemos = async (session: SessionProps["session"]) => {
 };
 
 /** --- DATABASE HANDLE --- **/
-export function isPopulated<T>(obj: T | any) : obj is T {
+export function isPopulated<T>(obj: T | any): obj is T {
     return (obj && obj.name && typeof obj.name === 'string');
 }
