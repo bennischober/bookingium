@@ -65,6 +65,11 @@ export interface DealMemoListProps {
 	memos: IDealMemo[];
 }
 
+export interface DataGridProps {
+    columns: any[];
+    data: any[];
+}
+
 /** --- SSR PAGE PROPS --- **/
 export interface SessionProps extends Session {
 	session: {

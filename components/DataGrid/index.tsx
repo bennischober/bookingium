@@ -11,6 +11,7 @@ import {
     BsArrowDownUp as SortIcon,
     BsArrowUp as AscIcon,
 } from "react-icons/bs";
+import { DataGridProps } from "../../types";
 
 // move interface and styles to other file
 
@@ -23,11 +24,6 @@ import {
 // https://github.com/TanStack/table/tree/alpha/examples/react/row-selection
 
 // Grid settings could also be added => user specific text size and column spacing
-
-export interface DataGridProps {
-    columns: any[];
-    data: any[];
-}
 
 const useStyles = createStyles((t) => ({
     tableContainer: {
