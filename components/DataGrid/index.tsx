@@ -28,8 +28,6 @@ import { DataGridHeader } from "../DataGridHeader";
 // any maybe
 // https://github.com/TanStack/table/tree/alpha/examples/react/row-selection
 
-// Grid settings could also be added => user specific text size and column spacing
-
 const useStyles = createStyles((t) => ({
     tableContainer: {
         "& > thead > tr > th": {
