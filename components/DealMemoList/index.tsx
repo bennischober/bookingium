@@ -12,6 +12,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
     const [bandData, setBandData] = useState<IBand[]>([] as IBand[]);
     const router = useRouter();
 
+    // maybe try this already on ssr?
     useEffect(() => {
         let data: IBand[] = [];
         memos.forEach((memo) => {
