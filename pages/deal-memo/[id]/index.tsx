@@ -7,6 +7,7 @@ import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MdArrowBack, MdCheck, MdClose } from "react-icons/md";
+import { BandEditForm } from "../../../components/BandForm";
 import { DealEditForm } from "../../../components/DealMemoForm";
 import { IBand } from "../../../models/band";
 import { IDealMemo } from "../../../models/deal-memo";
@@ -32,7 +33,7 @@ export default function CompleteDealMemoPage({
         }
     }, [bandData]);
 
-    const handleMemos = async (data: {}) => {
+    const handleMemo = async (data: {}) => {
         showNotification({
             id: "load-data",
             loading: true,
@@ -72,6 +73,10 @@ export default function CompleteDealMemoPage({
         });
     };
 
+    const handleBand = async (data: {}) => {
+        console.log(data);
+    };
+
     return (
         <>
             <Button
@@ -88,7 +93,7 @@ export default function CompleteDealMemoPage({
                 <Tabs.Tab label="Deal data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         <DealEditForm
-                            handleMemos={handleMemos}
+                            handleMemos={handleMemo}
                             session={session}
                             data={{
                                 deal: memoData.deal,
@@ -105,7 +110,38 @@ export default function CompleteDealMemoPage({
                         />
                     </Paper>
                 </Tabs.Tab>
-                <Tabs.Tab label="Band data"></Tabs.Tab>
+                <Tabs.Tab label="Band data">
+                    <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
+                        <BandEditForm
+                            session={session}
+                            handleBand={handleBand}
+                            data={{
+                                bandName: bandData?.name,
+                                notes: bandData?.notes,
+                                companyName: bandData?.company?.name,
+                                vatNumber: bandData?.company?.vatNumber,
+                                ustNumber: bandData?.company?.ustNumber,
+                                streetNumber:
+                                    bandData?.company?.address?.streetNumber,
+                                street: bandData?.company?.address?.street,
+                                addressSuffix:
+                                    bandData?.company?.address?.addressSuffix,
+                                zipCode: bandData?.company?.address?.zipCode,
+                                city: bandData?.company?.address?.city,
+                                state: bandData?.company?.address?.state,
+                                country: bandData?.company?.address?.country,
+                                countryCode:
+                                    bandData?.company?.address?.countryCode,
+                                email: bandData?.company?.contact?.email,
+                                phone: bandData?.company?.contact?.phone,
+                                mobilePhone:
+                                    bandData.company?.contact?.mobilePhone,
+                                homepage: bandData?.company?.contact?.homepage,
+                                members: bandData?.members,
+                            }}
+                        />
+                    </Paper>
+                </Tabs.Tab>
                 <Tabs.Tab label="Venue data"></Tabs.Tab>
                 <Tabs.Tab label="Local promoter data"></Tabs.Tab>
                 <Tabs.Tab label="Hotel data"></Tabs.Tab>

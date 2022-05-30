@@ -62,6 +62,12 @@ export interface BandFormProps {
 	session: SessionProps["session"];
 }
 
+export interface BandEditFormProps {
+    session: SessionProps["session"];
+    handleBand: (data: {}) => void;
+	data: BandFormValues;
+}
+
 export interface DealMemoListProps {
 	memos: IDealMemo[];
 }

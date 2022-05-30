@@ -34,6 +34,7 @@ const bandSchema: Schema = new Schema({
     members: [
         {
             name: { type: String },
+            role: { type: String },
             email: { type: String },
             phone: { type: String },
         }
@@ -73,6 +74,7 @@ export interface IBand extends Document {
     };
     members: {
         name: string;
+        role: string;
         email: string;
         phone: string;
     }[];
