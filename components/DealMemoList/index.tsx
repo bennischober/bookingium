@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button, Paper, ScrollArea, Title } from "@mantine/core";
+import { Button, Paper, ScrollArea, Text, Title } from "@mantine/core";
 import { useRouter } from "next/router";
 import { DealMemoListProps, DealMemoListValues } from "../../types";
 import { DataGrid } from "../DataGrid";
@@ -33,12 +33,15 @@ export function DealMemoList({ memos }: DealMemoListProps) {
         () => [
             table.createDataColumn("dealId", {
                 cell: (info) => (
-                    <Button
-                        variant="subtle"
+                    <Text
+                        underline
+                        variant="link"
+                        style={{ cursor: "pointer", fontSize: "inherit" }}
+                        //variant="subtle"
                         onClick={() => handleDealClick(info.getValue())}
                     >
                         {info.getValue()}
-                    </Button>
+                    </Text>
                 ),
                 footer: (props) => props.column.id,
             }),
@@ -72,7 +75,8 @@ export function DealMemoList({ memos }: DealMemoListProps) {
 
     const rows = memos.map((memo, index) => ({
         dealId: memo.dealId,
-        band: bandData[index] && bandData[index].name ? bandData[index].name : "",
+        band:
+            bandData[index] && bandData[index].name ? bandData[index].name : "",
         deal: memo.deal,
         date: memo.date,
         price: memo.price,
@@ -83,8 +87,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
     return (
         <ScrollArea>
             <Paper shadow="xs" p="xl" withBorder>
-                <Title order={1}>Deal Memos</Title>
-                <DataGrid columns={columns} data={rows} />
+                <DataGrid columns={columns} data={rows} title="Deal Memos" />
             </Paper>
         </ScrollArea>
     );

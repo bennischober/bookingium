@@ -1,4 +1,4 @@
-import { createStyles, Group, Table, useCss } from "@mantine/core";
+import { createStyles, Group, Table } from "@mantine/core";
 import {
     createTable,
     getCoreRowModel,
@@ -11,7 +11,12 @@ import {
     BsArrowDownUp as SortIcon,
     BsArrowUp as AscIcon,
 } from "react-icons/bs";
-import { DataGridProps } from "../../types";
+import { DataGridProps, DataGridSettingsValues } from "../../types";
+import {
+    getDataGridSettings,
+    setLocalStorageItem,
+} from "../../utils/browserHandle";
+import { DataGridHeader } from "../DataGridHeader";
 
 // move interface and styles to other file
 
@@ -50,8 +55,11 @@ const useStyles = createStyles((t) => ({
     sortDirectionIcon: { transition: "transform 200ms ease" },
 }));
 
-export function DataGrid({ columns, data }: DataGridProps) {
+export function DataGrid({ columns, data, title }: DataGridProps) {
     const [sorting, setSorting] = useState<SortingState>([]);
+    const [settings, setSettings] = useState<DataGridSettingsValues>(
+        getDataGridSettings()
+    );
     const { classes } = useStyles();
 
     let table = createTable().setRowType<any>();
@@ -68,75 +76,93 @@ export function DataGrid({ columns, data }: DataGridProps) {
         debugTable: true,
     });
 
+    const onChangeSettings = (settings: DataGridSettingsValues) => {
+        setSettings(settings);
+
+        // save settings to browser or db?
+        setLocalStorageItem("memo-data-grid", JSON.stringify(settings));
+    };
+
     return (
-        <Table
-            striped
-            highlightOnHover
-            verticalSpacing="md"
-            className={classes.tableContainer}
-        >
-            <thead>
-                {useTable.getHeaderGroups().map((headerGroup) => (
-                    <tr key={headerGroup.id}>
-                        {headerGroup.headers.map((header) => {
+        <>
+            <DataGridHeader title={title} changeSettings={onChangeSettings} />
+            <Table
+                striped
+                highlightOnHover
+                verticalSpacing={settings.verticalSpacing}
+                horizontalSpacing={settings.horizontalSpacing}
+                fontSize={settings.fontSize}
+                className={classes.tableContainer}
+            >
+                <thead>
+                    {useTable.getHeaderGroups().map((headerGroup) => (
+                        <tr key={headerGroup.id}>
+                            {headerGroup.headers.map((header) => {
+                                return (
+                                    <th
+                                        key={header.id}
+                                        colSpan={header.colSpan}
+                                    >
+                                        {header.isPlaceholder ? null : (
+                                            <div
+                                                {...{
+                                                    className:
+                                                        header.column.getCanSort()
+                                                            ? "cursor-pointer select-none"
+                                                            : "",
+                                                    onClick:
+                                                        header.column.getToggleSortingHandler(),
+                                                }}
+                                            >
+                                                <Group
+                                                    noWrap
+                                                    position={"apart"}
+                                                >
+                                                    {header.renderHeader()}
+                                                    {header.column.getIsSorted() ? (
+                                                        <AscIcon
+                                                            className={
+                                                                classes.sortDirectionIcon
+                                                            }
+                                                            style={{
+                                                                transform:
+                                                                    (header.column.getIsSorted() as string) ===
+                                                                    "asc"
+                                                                        ? "rotate(180deg)"
+                                                                        : "none",
+                                                            }}
+                                                        />
+                                                    ) : (
+                                                        <SortIcon />
+                                                    )}
+                                                </Group>
+                                            </div>
+                                        )}
+                                    </th>
+                                );
+                            })}
+                        </tr>
+                    ))}
+                </thead>
+                <tbody>
+                    {useTable
+                        .getRowModel()
+                        .rows.slice(0, 10)
+                        .map((row) => {
                             return (
-                                <th key={header.id} colSpan={header.colSpan}>
-                                    {header.isPlaceholder ? null : (
-                                        <div
-                                            {...{
-                                                className:
-                                                    header.column.getCanSort()
-                                                        ? "cursor-pointer select-none"
-                                                        : "",
-                                                onClick:
-                                                    header.column.getToggleSortingHandler(),
-                                            }}
-                                        >
-                                            <Group noWrap position={"apart"}>
-                                                {header.renderHeader()}
-                                                {header.column.getIsSorted() ? (
-                                                    <AscIcon
-                                                        className={
-                                                            classes.sortDirectionIcon
-                                                        }
-                                                        style={{
-                                                            transform:
-                                                                (header.column.getIsSorted() as string) ===
-                                                                "asc"
-                                                                    ? "rotate(180deg)"
-                                                                    : "none",
-                                                        }}
-                                                    />
-                                                ) : (
-                                                    <SortIcon />
-                                                )}
-                                            </Group>
-                                        </div>
-                                    )}
-                                </th>
+                                <tr key={row.id}>
+                                    {row.getVisibleCells().map((cell) => {
+                                        return (
+                                            <td key={cell.id}>
+                                                {cell.renderCell()}
+                                            </td>
+                                        );
+                                    })}
+                                </tr>
                             );
                         })}
-                    </tr>
-                ))}
-            </thead>
-            <tbody>
-                {useTable
-                    .getRowModel()
-                    .rows.slice(0, 10)
-                    .map((row) => {
-                        return (
-                            <tr key={row.id}>
-                                {row.getVisibleCells().map((cell) => {
-                                    return (
-                                        <td key={cell.id}>
-                                            {cell.renderCell()}
-                                        </td>
-                                    );
-                                })}
-                            </tr>
-                        );
-                    })}
-            </tbody>
-        </Table>
+                </tbody>
+            </Table>
+        </>
     );
 }

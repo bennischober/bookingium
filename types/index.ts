@@ -1,3 +1,4 @@
+import { MantineNumberSize } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form/lib/use-form";
 import { Session } from "next-auth";
 import { IconBase } from "react-icons/lib";
@@ -68,6 +69,18 @@ export interface DealMemoListProps {
 export interface DataGridProps {
     columns: any[];
     data: any[];
+	title: string;
+}
+
+export interface DataGridHeaderProps {
+    title: string;
+	changeSettings: (settings: DataGridSettingsValues) => void;
+}
+
+export interface DataGridSettingsProps {
+    opened: boolean;
+    onClose: () => void;
+    onChangeSettings: (settings: DataGridSettingsValues) => void;
 }
 
 /** --- SSR PAGE PROPS --- **/
@@ -177,6 +190,13 @@ export interface DealEditFormValues {
     posters: number;
     notes: string;
 }
+
+export interface DataGridSettingsValues {
+    fontSize: MantineNumberSize;
+    verticalSpacing: MantineNumberSize;
+    horizontalSpacing:  MantineNumberSize;
+}
+
 
 /** --- DATA GRID TYPES --- **/
 export interface DealMemoListValues {
