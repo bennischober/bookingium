@@ -1,6 +1,8 @@
 
 /**---- STORAGE ----**/
 
+import { DataGridSettingsValues } from "../types";
+
 export function getLocalStorageItem(key: string) {
     return localStorage.getItem(key);
 }
@@ -32,6 +34,20 @@ export function getLocalStorageEntries() {
 export function getLocalStorageSize() {
     return localStorage.length;
 }
+
+/**---- SPECIFIC STORAGE ITEMS ----**/
+export function getDataGridSettings(): DataGridSettingsValues {
+    const settings = getLocalStorageItem("memo-data-grid");
+    if (settings) {
+        return JSON.parse(settings);
+    }
+    return {
+        fontSize: "sm",
+        verticalSpacing: "sm",
+        horizontalSpacing: "sm"
+    };
+}
+
 
 /**---- HEAD ----**/
 export function updateHTMLLanguage(language: string) {
