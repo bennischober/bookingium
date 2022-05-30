@@ -1,14 +1,5 @@
 import { Slider } from "@mantine/core";
-
-export interface ControlledSliderProps {
-    marks: {
-        value: number;
-        label: string;
-    }[];
-    value: number;
-    onChange: (value: number) => void;
-    onChangeEnd?: (value: number) => void;
-}
+import { ControlledSliderProps } from "../../types";
 
 export function ControlledSlider({
     marks,

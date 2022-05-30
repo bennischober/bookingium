@@ -83,6 +83,16 @@ export interface DataGridSettingsProps {
     onChangeSettings: (settings: DataGridSettingsValues) => void;
 }
 
+export interface ControlledSliderProps {
+    marks: {
+        value: number;
+        label: string;
+    }[];
+    value: number;
+    onChange: (value: number) => void;
+    onChangeEnd?: (value: number) => void;
+}
+
 /** --- SSR PAGE PROPS --- **/
 export interface SessionProps extends Session {
 	session: {
