@@ -63,8 +63,8 @@ export interface BandFormProps {
 }
 
 export interface BandEditFormProps {
-    session: SessionProps["session"];
-    handleBand: (data: {}) => void;
+	session: SessionProps["session"];
+	handleBand: (data: {}) => void;
 	data: BandFormValues;
 }
 
@@ -73,30 +73,30 @@ export interface DealMemoListProps {
 }
 
 export interface DataGridProps {
-    columns: any[];
-    data: any[];
+	columns: any[];
+	data: any[];
 	title: string;
 }
 
 export interface DataGridHeaderProps {
-    title: string;
+	title: string;
 	changeSettings: (settings: DataGridSettingsValues) => void;
 }
 
 export interface DataGridSettingsProps {
-    opened: boolean;
-    onClose: () => void;
-    onChangeSettings: (settings: DataGridSettingsValues) => void;
+	opened: boolean;
+	onClose: () => void;
+	onChangeSettings: (settings: DataGridSettingsValues) => void;
 }
 
 export interface ControlledSliderProps {
-    marks: {
-        value: number;
-        label: string;
-    }[];
-    value: number;
-    onChange: (value: number) => void;
-    onChangeEnd?: (value: number) => void;
+	marks: {
+		value: number;
+		label: string;
+	}[];
+	value: number;
+	onChange: (value: number) => void;
+	onChangeEnd?: (value: number) => void;
 }
 
 /** --- SSR PAGE PROPS --- **/
@@ -111,8 +111,11 @@ export interface SessionProps extends Session {
 export interface DealMemoFormProps {
 	session: SessionProps["session"];
 	bands: IBand[];
-	handleBands: (data: {}) => void;
 	handleMemos: (data: {}) => void;
+	handleBands: (data: {}) => void;
+	handleVenues: (data: {}) => void;
+	handleLopros: (data: {}) => void;
+	handleHotels: (data: {}) => void;
 	closeForm: () => void;
 }
 
@@ -123,16 +126,22 @@ export interface DealMemoProps {
 }
 
 export interface CompleteDealMemoPageProps {
-    session: SessionProps["session"];
-    memo: IDealMemo;
+	session: SessionProps["session"];
+	memo: IDealMemo;
 }
 
 export interface DealEditFormProps {
-    handleMemos: (data: {}) => void;
+	handleMemos: (data: {}) => void;
 	session: SessionProps["session"];
-    data: DealEditFormValues;
-    bandName: string;
+	data: DealEditFormValues;
+	bandName: string;
 	created: string;
+}
+
+export interface VenueFormProps {
+	handleVenue: (data: {}) => void;
+	close?: () => void;
+	session: SessionProps["session"];
 }
 
 
@@ -149,25 +158,28 @@ export interface AddressInputValues {
 	countryCode: string;
 }
 
-export interface BandFormValues extends AddressInputValues, ContactInputValues {
-	bandName: string;
-	notes: string;
+export interface ContactInputValues {
+	email: string;
+	phone: string;
+	mobilePhone: string;
+	homepage: string;
+}
+
+export interface CompanyInputValues extends AddressInputValues, ContactInputValues {
 	companyName: string;
 	vatNumber: string;
 	ustNumber: string;
+}
+
+export interface BandFormValues extends CompanyInputValues {
+	bandName: string;
+	notes: string;
 	members: {
 		name: string;
 		role: string;
 		email: string;
 		phone: string;
 	}[];
-}
-
-export interface ContactInputValues {
-	email: string;
-	phone: string;
-	mobilePhone: string;
-	homepage: string;
 }
 
 export interface DealMemoFormValues {
@@ -204,29 +216,48 @@ export interface RegisterHandleData {
 }
 
 export interface DealEditFormValues {
-    deal: string;
-    date: Date;
-    fee: number;
+	deal: string;
+	date: Date;
+	fee: number;
 	ticketPriceVVK: number;
 	ticketPriceAK: number;
-    posters: number;
+	posters: number;
 	status: string;
-    notes: string;
+	notes: string;
+}
+
+export interface VenueFormValues extends CompanyInputValues {
+	venue: string;
+	capacity: number;
+	notes: string;
+}
+
+export interface LoproFormValues extends CompanyInputValues {
+	name: string;
+	phone: string;
+	mobilePhone: string;
+	email: string;
+	notes: string;
+}
+
+export interface HotelFormValues extends CompanyInputValues {
+	name: string;
+	notes: string;
 }
 
 export interface DataGridSettingsValues {
-    fontSize: MantineNumberSize;
-    verticalSpacing: MantineNumberSize;
-    horizontalSpacing:  MantineNumberSize;
+	fontSize: MantineNumberSize;
+	verticalSpacing: MantineNumberSize;
+	horizontalSpacing: MantineNumberSize;
 }
 
 
 /** --- DATA GRID TYPES --- **/
 export interface DealMemoListValues {
-    dealId: string;
+	dealId: string;
 	band: string;
-    deal: string;
+	deal: string;
 	date: string;
-    fee: number;
-    status: string;
+	fee: number;
+	status: string;
 }
