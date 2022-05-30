@@ -13,8 +13,11 @@ const dealMemoSchema = new mongoose.Schema({
     },
     deal: { type: String, required: true },
     date: { type: String, required: true },
-    price: { type: Number },
+    fee: { type: Number },
+    ticketPriceVVK: { type: Number },
+    ticketPriceAK: { type: Number },
     posters: { type: Number },
+    status: { type: String },
     notes: { type: String },
     bandid: { type: mongoose.Schema.Types.ObjectId, ref: 'Band', required: true },
     venueid: { type: mongoose.Schema.Types.ObjectId, ref: 'Venue' }, // equals location
@@ -31,8 +34,11 @@ export interface IDealMemo extends mongoose.Document {
     dealId: string;
     deal: string;
     date: string;
-    price: number;
+    fee: number;
+    ticketPriceVVK: number;
+    ticketPriceAK: number;
     posters: number;
+    status: string;
     notes: string;
     bandid: mongoose.Types.ObjectId;
     venueid: mongoose.Types.ObjectId;

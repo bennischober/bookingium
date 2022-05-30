@@ -5,9 +5,11 @@ import { v4 as uuidv4 } from "uuid";
 import {
     Button,
     Container,
+    Group,
     Modal,
     NumberInput,
     Paper,
+    Select,
     Space,
     Textarea,
     Title,
@@ -15,7 +17,12 @@ import {
 import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { IBand } from "../../models/band";
-import { DealEditFormProps, DealEditFormValues, DealMemoFormProps, DealMemoFormValues } from "../../types";
+import {
+    DealEditFormProps,
+    DealEditFormValues,
+    DealMemoFormProps,
+    DealMemoFormValues,
+} from "../../types";
 import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../SearchOrAdd";
 
@@ -33,8 +40,11 @@ export function DealMemoForm({
             band: "",
             date: dayjs().toDate(),
             deal: "",
-            price: 0,
+            fee: 0,
+            ticketPriceVVK: 0,
+            ticketPriceAK: 0,
             posters: 0,
+            status: "pending",
             notes: "",
         },
         validate: (values: DealMemoFormValues) => ({
@@ -44,7 +54,7 @@ export function DealMemoForm({
                     ? undefined
                     : "Date is required",
             deal: values.deal.length > 0 ? undefined : "Deal is required",
-            price: values.price >= 0 ? undefined : "Price is required",
+            fee: values.fee >= 0 ? undefined : "Price is required",
             posters: values.posters >= 0 ? undefined : "Posters is required",
         }),
     });
@@ -68,8 +78,11 @@ export function DealMemoForm({
             deal: values.deal,
             bandid: band._id,
             date: values.date,
-            price: values.price,
+            fee: values.fee,
+            ticketPriceVVK: values.ticketPriceVVK,
+            ticketPriceAK: values.ticketPriceAK,
             posters: values.posters,
+            status: values.status,
             notes: values.notes,
             dm: {
                 userid: session.userid,
@@ -136,8 +149,8 @@ export function DealMemoForm({
                         />
                         <Space h="xl" />
                         <NumberInput
-                            label="Price"
-                            {...dealForm.getInputProps("price")}
+                            label="Fee"
+                            {...dealForm.getInputProps("fee")}
                             min={0}
                             stepHoldDelay={500}
                             stepHoldInterval={(t) =>
@@ -145,6 +158,29 @@ export function DealMemoForm({
                             }
                             required
                         />
+                        <Space h="xl" />
+                        <Group grow>
+                            <NumberInput
+                                label="Ticked VVK Price"
+                                {...dealForm.getInputProps("ticketPriceVVK")}
+                                min={0}
+                                stepHoldDelay={500}
+                                stepHoldInterval={(t) =>
+                                    Math.max(1000 / t ** 2, 25)
+                                }
+                                required
+                            />
+                            <NumberInput
+                                label="Ticket AK Price"
+                                {...dealForm.getInputProps("ticketPriceAK")}
+                                min={0}
+                                stepHoldDelay={500}
+                                stepHoldInterval={(t) =>
+                                    Math.max(1000 / t ** 2, 25)
+                                }
+                                required
+                            />
+                        </Group>
                         <Space h="xl" />
                         <NumberInput
                             label="Posters"
@@ -154,6 +190,26 @@ export function DealMemoForm({
                             stepHoldInterval={(t) =>
                                 Math.max(1000 / t ** 2, 25)
                             }
+                            required
+                        />
+                        <Space h="xl" />
+                        <Select
+                            label="Status"
+                            {...dealForm.getInputProps("status")}
+                            data={[
+                                {
+                                    value: "pending",
+                                    label: "Pending",
+                                },
+                                {
+                                    value: "accepted",
+                                    label: "Accepted",
+                                },
+                                {
+                                    value: "rejected",
+                                    label: "Rejected",
+                                },
+                            ]}
                             required
                         />
                         <Space h="xl" />
@@ -188,13 +244,22 @@ export function DealMemoForm({
     );
 }
 
-export function DealEditForm({ handleMemos, session, data, bandName }: DealEditFormProps) {
+export function DealEditForm({
+    handleMemos,
+    session,
+    data,
+    bandName,
+    created,
+}: DealEditFormProps) {
     const Form = useForm<DealEditFormValues>({
         initialValues: {
             deal: data.deal,
             date: data.date,
-            price: data.price,
+            fee: data.fee,
+            ticketPriceVVK: data.ticketPriceVVK,
+            ticketPriceAK: data.ticketPriceAK,
             posters: data.posters,
+            status: data.status,
             notes: data.notes,
         },
     });
@@ -203,12 +268,13 @@ export function DealEditForm({ handleMemos, session, data, bandName }: DealEditF
         const memoData = {
             deal: values.deal,
             date: values.date,
-            price: values.price,
+            fee: values.fee,
             posters: values.posters,
             notes: values.notes,
             dm: {
                 edited: dayjs().toISOString(),
                 userid: session.userid,
+                created: created,
             },
         };
 
@@ -237,13 +303,32 @@ export function DealEditForm({ handleMemos, session, data, bandName }: DealEditF
             />
             <Space h="xl" />
             <NumberInput
-                label="Price"
-                {...Form.getInputProps("price")}
+                label="Fee"
+                {...Form.getInputProps("fee")}
                 min={0}
                 stepHoldDelay={500}
                 stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
                 required
             />
+            <Space h="xl" />
+            <Group grow>
+                <NumberInput
+                    label="Ticked VVK Price"
+                    {...Form.getInputProps("ticketPriceVVK")}
+                    min={0}
+                    stepHoldDelay={500}
+                    stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+                    required
+                />
+                <NumberInput
+                    label="Ticket AK Price"
+                    {...Form.getInputProps("ticketPriceAK")}
+                    min={0}
+                    stepHoldDelay={500}
+                    stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+                    required
+                />
+            </Group>
             <Space h="xl" />
             <NumberInput
                 label="Posters"
@@ -251,6 +336,26 @@ export function DealEditForm({ handleMemos, session, data, bandName }: DealEditF
                 min={0}
                 stepHoldDelay={500}
                 stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+                required
+            />
+            <Space h="xl" />
+            <Select
+                label="Status"
+                {...Form.getInputProps("status")}
+                data={[
+                    {
+                        value: "pending",
+                        label: "Pending",
+                    },
+                    {
+                        value: "accepted",
+                        label: "Accepted",
+                    },
+                    {
+                        value: "rejected",
+                        label: "Rejected",
+                    },
+                ]}
                 required
             />
             <Space h="xl" />

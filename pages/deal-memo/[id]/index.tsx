@@ -93,11 +93,15 @@ export default function CompleteDealMemoPage({
                             data={{
                                 deal: memoData.deal,
                                 date: dayjs(memoData.date).toDate(),
-                                price: memoData.price,
+                                fee: memoData.fee,
+                                ticketPriceVVK: memoData.ticketPriceVVK,
+                                ticketPriceAK: memoData.ticketPriceAK,
                                 posters: memoData.posters,
+                                status: memoData.status,
                                 notes: memoData.notes,
                             }}
                             bandName={bandData.name}
+                            created={memoData.dm.created}
                         />
                     </Paper>
                 </Tabs.Tab>

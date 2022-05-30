@@ -126,6 +126,7 @@ export interface DealEditFormProps {
 	session: SessionProps["session"];
     data: DealEditFormValues;
     bandName: string;
+	created: string;
 }
 
 
@@ -167,8 +168,11 @@ export interface DealMemoFormValues {
 	band: string;
 	date: Date;
 	deal: string;
-	price: Number;
-	posters: Number;
+	fee: number;
+	ticketPriceVVK: number;
+	ticketPriceAK: number;
+	posters: number;
+	status: string;
 	notes: string;
 }
 
@@ -196,8 +200,11 @@ export interface RegisterHandleData {
 export interface DealEditFormValues {
     deal: string;
     date: Date;
-    price: number;
+    fee: number;
+	ticketPriceVVK: number;
+	ticketPriceAK: number;
     posters: number;
+	status: string;
     notes: string;
 }
 
@@ -214,10 +221,6 @@ export interface DealMemoListValues {
 	band: string;
     deal: string;
 	date: string;
-    price: number;
-    posters: number;
-    notes: string;
-	// venue: string;
-	// lopro: string;
-	// hotel: string;
+    fee: number;
+    status: string;
 }
