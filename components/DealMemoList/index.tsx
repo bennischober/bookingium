@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Button, Paper, ScrollArea, Text, Title } from "@mantine/core";
+import { Paper, ScrollArea, Text } from "@mantine/core";
 import { useRouter } from "next/router";
 import { DealMemoListProps, DealMemoListValues } from "../../types";
 import { DataGrid } from "../DataGrid";
@@ -37,7 +37,6 @@ export function DealMemoList({ memos }: DealMemoListProps) {
                         underline
                         variant="link"
                         style={{ cursor: "pointer", fontSize: "inherit" }}
-                        //variant="subtle"
                         onClick={() => handleDealClick(info.getValue())}
                     >
                         {info.getValue()}
@@ -49,23 +48,19 @@ export function DealMemoList({ memos }: DealMemoListProps) {
                 cell: (info) => info.getValue(),
                 footer: (props) => props.column.id,
             }),
-            table.createDataColumn("deal", {
-                cell: (info) => info.getValue(),
-                footer: (props) => props.column.id,
-            }),
             table.createDataColumn("date", {
                 cell: (info) => dayjs(info.getValue()).format("DD.MM.YYYY"),
                 footer: (props) => props.column.id,
             }),
-            table.createDataColumn("price", {
+            table.createDataColumn("deal", {
                 cell: (info) => info.getValue(),
                 footer: (props) => props.column.id,
             }),
-            table.createDataColumn("posters", {
+            table.createDataColumn("fee", {
                 cell: (info) => info.getValue(),
                 footer: (props) => props.column.id,
             }),
-            table.createDataColumn("notes", {
+            table.createDataColumn("status", {
                 cell: (info) => info.getValue(),
                 footer: (props) => props.column.id,
             }),
@@ -79,9 +74,8 @@ export function DealMemoList({ memos }: DealMemoListProps) {
             bandData[index] && bandData[index].name ? bandData[index].name : "",
         deal: memo.deal,
         date: memo.date,
-        price: memo.price,
-        posters: memo.posters,
-        notes: memo.notes,
+        fee: memo.fee,
+        status: memo.status,
     }));
 
     return (
