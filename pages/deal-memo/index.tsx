@@ -30,6 +30,15 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
         }
     }, [router, session]);
 
+    const handleMemos = async (data: {}) => {
+        // post memo data
+        await axios.post("/api/deal-memo", { data: data });
+
+        // refetch memo data
+        const memos = await getMemos(session);
+        setMemosData(memos);
+    };
+
     const handleBands = async (data: {}) => {
         // post band data
         await axios.post("/api/band", { data: data });
@@ -39,13 +48,19 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
         setBandsData(bands);
     };
 
-    const handleMemos = async (data: {}) => {
-        // post memo data
-        await axios.post("/api/deal-memo", { data: data });
+    // add other forms => add api calls on ssr => add data to state => add data to autocomplete in forms => populate data on specific memo => add edit components for specific memo
+    // => think about a good way to handle the hotel data (if it is not choosen in the form => how to do it in edit form on specific memo)
+    const handleVenues = async (data: {}) => {
+        console.log(data);
+        await axios.post("/api/venue", { data: data });
+    };
 
-        // refetch memo data
-        const memos = await getMemos(session);
-        setMemosData(memos);
+    const handleLopros = async (data: {}) => {
+        console.log(data);
+    };
+
+    const handleHotels = async (data: {}) => {
+        console.log(data);
     };
 
     const closeForm = () => {
@@ -66,6 +81,9 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
                     bands={bandsData}
                     handleBands={handleBands}
                     handleMemos={handleMemos}
+                    handleVenues={handleVenues}
+                    handleLopros={handleLopros}
+                    handleHotels={handleHotels}
                     closeForm={closeForm}
                 />
                 <Space h="xl" />

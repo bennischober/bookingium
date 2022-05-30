@@ -4,6 +4,9 @@ import { Session } from "next-auth";
 import { IconBase } from "react-icons/lib";
 import { IBand } from "../models/band";
 import { IDealMemo } from "../models/deal-memo";
+import { IHotel } from "../models/hotel";
+import { ILopro } from "../models/lopro";
+import { IVenue } from "../models/venue";
 
 /** --- COMPONENTS --- **/
 export interface PageTemplateProps {
@@ -111,6 +114,9 @@ export interface SessionProps extends Session {
 export interface DealMemoFormProps {
 	session: SessionProps["session"];
 	bands: IBand[];
+	venues?: IVenue[];
+	lopros?: ILopro[];
+	hotels?: IHotel[];
 	handleMemos: (data: {}) => void;
 	handleBands: (data: {}) => void;
 	handleVenues: (data: {}) => void;
@@ -240,7 +246,7 @@ export interface LoproFormValues extends CompanyInputValues {
 	notes: string;
 }
 
-export interface HotelFormValues extends CompanyInputValues {
+export interface HotelFormValues extends AddressInputValues, ContactInputValues {
 	name: string;
 	notes: string;
 }

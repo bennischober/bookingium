@@ -25,15 +25,20 @@ import {
 } from "../../types";
 import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../SearchOrAdd";
+import { VenueForm } from "../VenueForm";
 
 export function DealMemoForm({
     bands,
     session,
-    handleBands,
     handleMemos,
+    handleBands,
+    handleVenues,
+    handleLopros,
+    handleHotels,
     closeForm,
 }: DealMemoFormProps) {
     const [bandModalOpened, setBandModalOpened] = useState(false);
+    const [venueModalOpened, setVenueModalOpened] = useState(false);
 
     const dealForm = useForm<DealMemoFormValues>({
         initialValues: {
@@ -99,9 +104,11 @@ export function DealMemoForm({
 
     const closeModals = () => {
         setBandModalOpened(false);
+        setVenueModalOpened(false);
     };
 
-    const autoCompleteData = bands
+    // useMemo?
+    const bandsAutoComplete = bands
         ? bands?.map((val) => {
               return val.name;
           })
@@ -118,7 +125,7 @@ export function DealMemoForm({
                     >
                         <SearchOrAdd
                             ac={{
-                                data: autoCompleteData,
+                                data: bandsAutoComplete,
                                 useForm: dealForm,
                                 required: true,
                                 label: "Choose a band",
@@ -126,7 +133,7 @@ export function DealMemoForm({
                                 inputProps: "band",
                             }}
                             md={{
-                                button: "Add Band",
+                                button: "Add band",
                                 handleOpen: setBandModalOpened,
                             }}
                         />
@@ -223,6 +230,51 @@ export function DealMemoForm({
                             minRows={3}
                         />
                         <Space h="xl" />
+                        <SearchOrAdd
+                            ac={{
+                                data: bandsAutoComplete,
+                                useForm: dealForm,
+                                required: true,
+                                label: "Choose a venue",
+                                placeholder: "Venue name",
+                                inputProps: "band",
+                            }}
+                            md={{
+                                button: "Add venue",
+                                handleOpen: setVenueModalOpened,
+                            }}
+                        />
+                        <Space h="xl" />
+                        <SearchOrAdd
+                            ac={{
+                                data: bandsAutoComplete,
+                                useForm: dealForm,
+                                required: true,
+                                label: "Choose a local promoter",
+                                placeholder: "lopro name",
+                                inputProps: "band",
+                            }}
+                            md={{
+                                button: "Add local promoter",
+                                handleOpen: setBandModalOpened,
+                            }}
+                        />
+                        <Space h="xl" />
+                        <SearchOrAdd
+                            ac={{
+                                data: bandsAutoComplete,
+                                useForm: dealForm,
+                                required: true,
+                                label: "Choose a hotel",
+                                placeholder: "Hotel name",
+                                inputProps: "band",
+                            }}
+                            md={{
+                                button: "Add hotel",
+                                handleOpen: setBandModalOpened,
+                            }}
+                        />
+                        <Space h="xl" />
                         <Button type="submit" fullWidth mt="xl">
                             Submit data
                         </Button>
@@ -239,6 +291,20 @@ export function DealMemoForm({
             >
                 <BandForm
                     handleBands={handleBands}
+                    close={closeModals}
+                    session={session}
+                />
+            </Modal>
+            <Modal
+                opened={venueModalOpened}
+                onClose={() => setVenueModalOpened(false)}
+                title="Add a new Venue"
+                size="xl"
+                overflow="inside"
+                centered
+            >
+                <VenueForm
+                    handleVenue={handleVenues}
                     close={closeModals}
                     session={session}
                 />
