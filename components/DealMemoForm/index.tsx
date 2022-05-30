@@ -150,6 +150,7 @@ export function DealMemoForm({
                         <Space h="xl" />
                         <NumberInput
                             label="Fee"
+                            icon="€"
                             {...dealForm.getInputProps("fee")}
                             min={0}
                             stepHoldDelay={500}
@@ -162,6 +163,7 @@ export function DealMemoForm({
                         <Group grow>
                             <NumberInput
                                 label="Ticked VVK Price"
+                                icon="€"
                                 {...dealForm.getInputProps("ticketPriceVVK")}
                                 min={0}
                                 stepHoldDelay={500}
@@ -172,6 +174,7 @@ export function DealMemoForm({
                             />
                             <NumberInput
                                 label="Ticket AK Price"
+                                icon="€"
                                 {...dealForm.getInputProps("ticketPriceAK")}
                                 min={0}
                                 stepHoldDelay={500}
@@ -304,6 +307,7 @@ export function DealEditForm({
             <Space h="xl" />
             <NumberInput
                 label="Fee"
+                icon="€"
                 {...Form.getInputProps("fee")}
                 min={0}
                 stepHoldDelay={500}
@@ -314,6 +318,7 @@ export function DealEditForm({
             <Group grow>
                 <NumberInput
                     label="Ticked VVK Price"
+                    icon="€"
                     {...Form.getInputProps("ticketPriceVVK")}
                     min={0}
                     stepHoldDelay={500}
@@ -322,6 +327,7 @@ export function DealEditForm({
                 />
                 <NumberInput
                     label="Ticket AK Price"
+                    icon="€"
                     {...Form.getInputProps("ticketPriceAK")}
                     min={0}
                     stepHoldDelay={500}
