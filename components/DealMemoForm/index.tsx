@@ -29,6 +29,7 @@ import { VenueForm } from "../VenueForm";
 
 export function DealMemoForm({
     bands,
+    venues,
     session,
     handleMemos,
     handleBands,
@@ -51,6 +52,9 @@ export function DealMemoForm({
             posters: 0,
             status: "pending",
             notes: "",
+            venue: "",
+            lopro: "",
+            hotel: "",
         },
         validate: (values: DealMemoFormValues) => ({
             band: values.band.length > 0 ? undefined : "Band is required",
@@ -60,7 +64,14 @@ export function DealMemoForm({
                     : "Date is required",
             deal: values.deal.length > 0 ? undefined : "Deal is required",
             fee: values.fee >= 0 ? undefined : "Price is required",
+            ticketPriceVVK:
+                values.ticketPriceVVK >= 0 ? undefined : "Price is required",
+            ticketPriceAK:
+                values.ticketPriceAK >= 0 ? undefined : "Price is required",
             posters: values.posters >= 0 ? undefined : "Posters is required",
+            status: values.status.length > 0 ? undefined : "Status is required",
+            venue: values.venue.length > 0 ? undefined : "Venue is required",
+            lopro: values.lopro.length > 0 ? undefined : "Lopro is required",
         }),
     });
 
@@ -111,6 +122,12 @@ export function DealMemoForm({
     const bandsAutoComplete = bands
         ? bands?.map((val) => {
               return val.name;
+          })
+        : [];
+
+    const venuesAutoComplete = venues
+        ? venues?.map((val) => {
+              return val.venue;
           })
         : [];
 
@@ -232,12 +249,12 @@ export function DealMemoForm({
                         <Space h="xl" />
                         <SearchOrAdd
                             ac={{
-                                data: bandsAutoComplete,
+                                data: venuesAutoComplete,
                                 useForm: dealForm,
                                 required: true,
                                 label: "Choose a venue",
                                 placeholder: "Venue name",
-                                inputProps: "band",
+                                inputProps: "venue",
                             }}
                             md={{
                                 button: "Add venue",
@@ -252,7 +269,7 @@ export function DealMemoForm({
                                 required: true,
                                 label: "Choose a local promoter",
                                 placeholder: "lopro name",
-                                inputProps: "band",
+                                inputProps: "lopro",
                             }}
                             md={{
                                 button: "Add local promoter",
@@ -264,10 +281,10 @@ export function DealMemoForm({
                             ac={{
                                 data: bandsAutoComplete,
                                 useForm: dealForm,
-                                required: true,
+                                required: false,
                                 label: "Choose a hotel",
                                 placeholder: "Hotel name",
-                                inputProps: "band",
+                                inputProps: "hotel",
                             }}
                             md={{
                                 button: "Add hotel",
