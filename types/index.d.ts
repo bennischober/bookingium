@@ -129,6 +129,9 @@ export interface DealMemoProps {
 	session: SessionProps["session"];
 	bands: IBand[];
 	memos: IDealMemo[];
+	venues?: IVenue[];
+	lopros?: ILopro[];
+	hotels?: IHotel[];
 }
 
 export interface CompleteDealMemoPageProps {
@@ -198,6 +201,9 @@ export interface DealMemoFormValues {
 	posters: number;
 	status: string;
 	notes: string;
+	venue: string;
+	lopro: string;
+	hotel?: string;
 }
 
 export interface LoginFormValues {
