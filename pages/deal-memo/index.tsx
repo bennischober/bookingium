@@ -13,10 +13,16 @@ import { DealMemoProps } from "../../types";
 // add popups, if hotel/venue does not exits
 // also add auto complete for band, venue, lopro, hotel
 
-export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
+export default function DealMemoPage({
+    session,
+    bands,
+    memos,
+    venues,
+}: DealMemoProps) {
     // fetched data
     const [bandsData, setBandsData] = useState(bands);
     const [memosData, setMemosData] = useState(memos);
+    const [venueData, setVenueData] = useState(venues);
 
     // other state
     const [addMemoOpened, setAddMemoOpened] = useState(false);
@@ -71,7 +77,7 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
         <PageTemplate title="Deal Memos">
             <Center>
                 <Button onClick={() => setAddMemoOpened((o) => !o)}>
-                    Add new Deal Memo
+                    {addMemoOpened ? "Close Deal Memo Form" : "Open Deal Memo Form"}
                 </Button>
             </Center>
             <Space h="xl" />
@@ -79,6 +85,7 @@ export default function DealMemoPage({ session, bands, memos }: DealMemoProps) {
                 <DealMemoForm
                     session={session}
                     bands={bandsData}
+                    venues={venueData}
                     handleBands={handleBands}
                     handleMemos={handleMemos}
                     handleVenues={handleVenues}
@@ -115,11 +122,22 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             : null;
     const memos = mm ? await mm.data : null;
 
+    const vn =
+        session && session.userid
+            ? await axios.get("http://localhost:3000/api/venue", {
+                  params: {
+                      userid: session.userid,
+                  },
+              })
+            : null;
+    const venues = vn ? await vn.data : null;
+
     return {
         props: {
             session,
             bands: bands && bands.data ? bands.data : [],
             memos: memos && memos.data ? memos.data : [],
+            venues: venues && venues.data ? venues.data : [],
         },
     };
 };
