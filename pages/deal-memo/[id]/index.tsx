@@ -9,8 +9,10 @@ import { useEffect, useState } from "react";
 import { MdArrowBack, MdCheck, MdClose } from "react-icons/md";
 import { BandEditForm } from "../../../components/BandForm";
 import { DealEditForm } from "../../../components/DealMemoForm";
+import { VenueEditForm } from "../../../components/VenueForm";
 import { IBand } from "../../../models/band";
 import { IDealMemo } from "../../../models/deal-memo";
+import { IVenue } from "../../../models/venue";
 import { CompleteDealMemoPageProps } from "../../../types";
 import { goToLastRoute, isPopulated } from "../../../utils/appHandles";
 
@@ -23,15 +25,19 @@ export default function CompleteDealMemoPage({
     memo,
     session,
 }: CompleteDealMemoPageProps) {
-    const [bandData, setBandData] = useState<IBand>({} as IBand);
     const [memoData, setMemoData] = useState<IDealMemo>(memo);
+    const [bandData, setBandData] = useState<IBand>({} as IBand);
+    const [venueData, setVenueData] = useState<IVenue>({} as IVenue);
     const router = useRouter();
 
     useEffect(() => {
         if (isPopulated<IBand>(memo.bandid)) {
             setBandData(memo.bandid);
         }
-    }, [bandData]);
+        if (isPopulated<IVenue>(memo.venueid)) {
+            setVenueData(memo.venueid);
+        }
+    }, [memo, bandData, venueData]);
 
     const handleMemo = async (data: {}) => {
         showNotification({
@@ -74,6 +80,10 @@ export default function CompleteDealMemoPage({
     };
 
     const handleBand = async (data: {}) => {
+        console.log(data);
+    };
+
+    const handleVenue = async (data: {}) => {
         console.log(data);
     };
 
@@ -142,7 +152,38 @@ export default function CompleteDealMemoPage({
                         />
                     </Paper>
                 </Tabs.Tab>
-                <Tabs.Tab label="Venue data"></Tabs.Tab>
+                <Tabs.Tab label="Venue data">
+                    <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
+                        <VenueEditForm
+                            data={{
+                                venue: venueData?.venue,
+                                capacity: venueData?.capacity,
+                                notes: venueData?.notes,
+                                companyName: venueData?.company?.name,
+                                vatNumber: venueData?.company?.vatNumber,
+                                ustNumber: venueData?.company?.ustNumber,
+                                streetNumber:
+                                    venueData?.company?.address?.streetNumber,
+                                street: venueData?.company?.address?.street,
+                                addressSuffix:
+                                    venueData?.company?.address?.addressSuffix,
+                                zipCode: venueData?.company?.address?.zipCode,
+                                city: venueData?.company?.address?.city,
+                                state: venueData?.company?.address?.state,
+                                country: venueData?.company?.address?.country,
+                                countryCode:
+                                    venueData?.company?.address?.countryCode,
+                                email: venueData?.company?.contact?.email,
+                                phone: venueData?.company?.contact?.phone,
+                                mobilePhone:
+                                    venueData?.company?.contact?.mobilePhone,
+                                homepage: venueData?.company?.contact?.homepage,
+                            }}
+                            session={session}
+                            handleVenue={handleVenue}
+                        />
+                    </Paper>
+                </Tabs.Tab>
                 <Tabs.Tab label="Local promoter data"></Tabs.Tab>
                 <Tabs.Tab label="Hotel data"></Tabs.Tab>
             </Tabs>
