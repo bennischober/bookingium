@@ -95,5 +95,6 @@ export const getMemos = async (session: SessionProps["session"]) => {
 
 /** --- DATABASE HANDLE --- **/
 export function isPopulated<T>(obj: T | any): obj is T {
-    return (obj && obj.name && typeof obj.name === 'string');
+    // return (obj && obj.name && typeof obj.name === 'string');
+    return obj !== null && obj !== undefined;
 }
