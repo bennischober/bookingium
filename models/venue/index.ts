@@ -16,9 +16,9 @@ const venueSchema = new mongoose.Schema({
         ustNumber: { type: String },
         address: {
             street: { type: String },
-            streetNumber: { type: String },
+            streetNumber: { type: Number },
             addressSuffix: { type: String },
-            zipCode: { type: String },
+            zipCode: { type: Number },
             city: { type: String },
             state: { type: String },
             country: { type: String },
@@ -49,9 +49,9 @@ export interface IVenue extends Document {
         ustNumber: string;
         address: {
             street: string;
-            streetNumber: string;
+            streetNumber: number;
             addressSuffix: string;
-            zipCode: string;
+            zipCode: number;
             city: string;
             state: string;
             country: string;
