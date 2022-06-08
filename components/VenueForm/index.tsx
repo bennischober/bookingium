@@ -1,13 +1,26 @@
 import { Button, NumberInput, Space, TextInput } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import dayjs from "dayjs";
 import mongoose from "mongoose";
-import {v4 as uuidv4} from "uuid";
-import { VenueFormValues, VenueFormProps } from "../../types";
+import { v4 as uuidv4 } from "uuid";
+import { z } from "zod";
+import {
+    VenueFormValues,
+    VenueFormProps,
+    VenueEditFormProps,
+} from "../../types";
 import { CompanyInput } from "../CompanyInput";
+
+const VenueFormSchema = z.object({
+    venue: z
+        .string()
+        .min(3, { message: "Venue name must be at least 3 characters" }),
+    capacity: z.number().min(1, { message: "Capacity must be at least 1" }),
+});
 
 export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
     const Form = useForm<VenueFormValues>({
+        schema: zodResolver(VenueFormSchema),
         initialValues: {
             venue: "",
             capacity: 0,
@@ -86,8 +99,63 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
             <Space h="xl" />
             <CompanyInput Form={Form} />
             <Button type="submit" fullWidth mt="xl">
-                    Add Venue
-                </Button>
+                Add Venue
+            </Button>
+        </form>
+    );
+}
+
+export function VenueEditForm({
+    handleVenue,
+    session,
+    data,
+}: VenueEditFormProps) {
+    const Form = useForm<VenueFormValues>({
+        schema: zodResolver(VenueFormSchema),
+        initialValues: {
+            venue: data.venue,
+            capacity: data.capacity,
+            notes: data.notes,
+            companyName: data.companyName,
+            vatNumber: data.vatNumber,
+            ustNumber: data.ustNumber,
+            street: data.street,
+            streetNumber: data.streetNumber,
+            addressSuffix: data.addressSuffix,
+            zipCode: data.zipCode,
+            city: data.city,
+            state: data.state,
+            country: data.country,
+            countryCode: data.countryCode,
+            email: data.email,
+            phone: data.phone,
+            mobilePhone: data.mobilePhone,
+            homepage: data.homepage,
+        },
+    });
+
+    const handleSubmit = (values: VenueFormValues) => {
+        console.log(values);
+    };
+
+    return (
+        <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
+            <TextInput
+                label="Venue"
+                {...Form.getInputProps("venue")}
+                required
+            />
+            <NumberInput
+                label="Capacity"
+                {...Form.getInputProps("capacity")}
+                required
+            />
+            <TextInput label="Notes" {...Form.getInputProps("notes")} />
+            <Space h="xl" />
+            <CompanyInput Form={Form} />
+            <Button type="submit" fullWidth mt="xl">
+                Update Venue Data
+            </Button>
         </form>
     );
 }

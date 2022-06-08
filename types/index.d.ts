@@ -153,6 +153,12 @@ export interface VenueFormProps {
 	session: SessionProps["session"];
 }
 
+export interface VenueEditFormProps {
+    handleVenue: (data: {}) => void;
+    session: SessionProps["session"];
+    data: VenueFormValues;
+}
+
 
 /** --- FORM TYPES --- **/
 
