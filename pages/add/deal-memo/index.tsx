@@ -22,8 +22,6 @@ export default function AddDealMemoPage({
     const [loproData, setLoproData] = useState(lopros);
     const [hotelData, setHotelData] = useState(hotels);
 
-    console.log("memos", memos, "bands", bands, "venues", venues, "lopros", lopros, "hotels", hotels);
-
     const router = useRouter();
     useEffect(() => {
         if (router && router.query) {
