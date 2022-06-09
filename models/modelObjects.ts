@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export const OAddress = {
     street: { type: String },
     streetNumber: { type: String },
@@ -22,4 +24,10 @@ export const OCompany= {
     ustNumber: { type: String },
     address: OAddress,
     contact: OContact,
+}
+
+export const ODm = {
+    userid: { type: String, required: true },
+    created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
+    edited: { type: String }
 }
