@@ -27,6 +27,7 @@ import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../SearchOrAdd";
 import { VenueForm } from "../VenueForm";
 import { LoproForm } from "../LoproForm";
+import { HotelForm } from "../HotelForm";
 
 export function DealMemoForm({
     bands,
@@ -45,8 +46,6 @@ export function DealMemoForm({
     const [venueModalOpened, setVenueModalOpened] = useState(false);
     const [loproModalOpened, setLoproModalOpened] = useState(false);
     const [hotelModalOpened, setHotelModalOpened] = useState(false);
-
-    console.log(bands, venues, lopros, hotels);
 
     const dealForm = useForm<DealMemoFormValues>({
         initialValues: {
@@ -365,8 +364,8 @@ export function DealMemoForm({
                 overflow="inside"
                 centered
             >
-                <LoproForm
-                    handleLopro={handleHotels}
+                <HotelForm
+                    handleHotel={handleHotels}
                     close={closeModals}
                     session={session}
                 />
@@ -501,7 +500,7 @@ export function DealEditForm({
             />
             <Space h="xl" />
             <Button type="submit" fullWidth mt="xl">
-                Submit data
+                Update Deal Data
             </Button>
         </form>
     );

@@ -315,7 +315,7 @@ export function BandEditForm({handleBand, session, data}: BandEditFormProps) {
                     </Accordion.Item>
                 </Accordion>
                 <Button type="submit" fullWidth mt="xl">
-                    Save Band
+                    Update Band Data
                 </Button>
             </form>
         </>

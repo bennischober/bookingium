@@ -186,7 +186,7 @@ export function LoproEditForm({handleLopro, session, data}: LoproEditFormProps) 
             <Space h="xl" />
             <CompanyInput Form={Form} />
             <Button type="submit" fullWidth mt="xl">
-                Add Lopro
+                Update Lopro Data
             </Button>
         </form>
     );
