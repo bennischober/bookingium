@@ -122,10 +122,14 @@ export interface DealMemoFormProps {
 	handleVenues: (data: {}) => void;
 	handleLopros: (data: {}) => void;
 	handleHotels: (data: {}) => void;
-	closeForm?: () => void;
 }
 
 export interface DealMemoProps {
+	session: SessionProps["session"];
+	memos: IDealMemo[];
+}
+
+export interface AddDealMemoProps {
 	session: SessionProps["session"];
 	bands: IBand[];
 	memos: IDealMemo[];
