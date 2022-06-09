@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import dayjs from 'dayjs';
+import { ICompany, IDm } from '../modelTypes';
 
 const venueSchema = new mongoose.Schema({
     venueid: {
@@ -43,32 +44,8 @@ export interface IVenue extends Document {
     venue: string;
     capacity: number;
     notes: string;
-    company: {
-        name: string;
-        vatNumber: string;
-        ustNumber: string;
-        address: {
-            street: string;
-            streetNumber: number;
-            addressSuffix: string;
-            zipCode: number;
-            city: string;
-            state: string;
-            country: string;
-            countryCode: string;
-        };
-        contact: {
-            phone: string;
-            mobilePhone: string;
-            email: string;
-            homepage: string;
-        };
-    };
-    dm: {
-        userid: string;
-        created: string;
-        edited: string;
-    };
+    company: ICompany;
+    dm: IDm;
 }
 
 export default mongoose.models.Venue || mongoose.model('Venue', venueSchema);
