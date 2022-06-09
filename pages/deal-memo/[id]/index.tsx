@@ -243,7 +243,7 @@ export default function CompleteDealMemoPage({
                 </Tabs.Tab>
                 <Tabs.Tab label="Hotel data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
-                        {hotelData ? (
+                        {hotelData && Object.keys(hotelData).length > 0 ? (
                             <HotelEditForm
                                 session={session}
                                 handleHotel={handleHotel}
