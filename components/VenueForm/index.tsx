@@ -73,7 +73,6 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
             },
             dm: {
                 userid: session.userid,
-                created: dayjs().toISOString(),
                 edited: dayjs().toISOString(),
             },
         };

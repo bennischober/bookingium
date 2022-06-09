@@ -256,7 +256,6 @@ export function BandEditForm({handleBand, session, data}: BandEditFormProps) {
             members: values.members,
             dm: {
                 userid: session.userid,
-                created: dayjs().toISOString(),
                 edited: dayjs().toISOString(),
             },
         };
