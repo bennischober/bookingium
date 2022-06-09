@@ -171,6 +171,18 @@ export interface LoproEditFormProps {
 	data: LoproFormValues;
 }
 
+export interface HotelFormProps {
+	handleHotel: (data: {}) => void;
+	close?: () => void;
+	session: SessionProps["session"];
+}
+
+export interface HotelEditFormProps {
+	handleHotel: (data: {}) => void;
+	session: SessionProps["session"];
+	data: HotelFormValues;
+}
+
 
 /** --- FORM TYPES --- **/
 
@@ -270,7 +282,7 @@ export interface LoproFormValues extends CompanyInputValues {
 	notes: string;
 }
 
-export interface HotelFormValues extends AddressInputValues, ContactInputValues {
+export interface HotelFormValues extends CompanyInputValues {
 	name: string;
 	notes: string;
 }
