@@ -72,6 +72,7 @@ export default function DealMemoPage({
 
     const handleHotels = async (data: {}) => {
         console.log(data);
+        await axios.post("/api/hotel", { data: data });
     };
 
     const closeForm = () => {
