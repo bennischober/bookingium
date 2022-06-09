@@ -18,8 +18,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'POST':
             try {
-                const venue = await Hotel.create(req.body.data);
-                return res.status(200).json({ success: true, data: venue });
+                const hotel = await Hotel.create(req.body.data);
+                return res.status(200).json({ success: true, data: hotel });
             } catch (error) {
                 return res.status(500).json({ success: false, data: error });
             }

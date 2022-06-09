@@ -18,8 +18,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'POST':
             try {
-                const venue = await Lopro.create(req.body.data);
-                return res.status(200).json({ success: true, data: venue });
+                const lopro = await Lopro.create(req.body.data);
+                return res.status(200).json({ success: true, data: lopro });
             } catch (error) {
                 return res.status(500).json({ success: false, data: error });
             }
