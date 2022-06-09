@@ -1,4 +1,4 @@
-# Core concept
+# Bookingium - Event booking
 
 ## Core functionality
 
@@ -18,6 +18,7 @@
 - Newsletter lists with sending newsletters
 - database collection newsletter (to be precise: 2 collections: emails {array newsletterid, email, name, ?salution} and newsletter => {name, content, newsletterid})
 - input form for newsletter (emails, newsletter data)
+- Address book (like in Outlook) => can save lopros, companies, "normal" people (=> export/import function; think about more functionality for this one)
 
 
 # Data models
@@ -119,8 +120,6 @@ Note: By far the most important
   }
 }
 ```
-
-Note: Before thinking about a schema for these collections, ask again if they have a many:many relation (e.g. a event can only have a single promoter and location)
 
 ## Venue
 ```ts
