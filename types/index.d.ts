@@ -122,7 +122,7 @@ export interface DealMemoFormProps {
 	handleVenues: (data: {}) => void;
 	handleLopros: (data: {}) => void;
 	handleHotels: (data: {}) => void;
-	closeForm: () => void;
+	closeForm?: () => void;
 }
 
 export interface DealMemoProps {
