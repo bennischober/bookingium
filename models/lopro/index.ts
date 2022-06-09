@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import dayjs from 'dayjs';
-import { ICompany, IDm } from '../modelTypes';
+import { ICompany, IDm } from './../modelTypes';
+import { OCompany } from '../modelObjects';
 
 const loproSchema = new mongoose.Schema({
     loproid: {
@@ -13,27 +14,7 @@ const loproSchema = new mongoose.Schema({
     mobilePhone: { type: String },
     email: { type: String, required: true },
     notes: { type: String },
-    company: {
-        name: { type: String },
-        vatNumber: { type: String },
-        ustNumber: { type: String },
-        address: {
-            street: { type: String },
-            streetNumber: { type: String },
-            addressSuffix: { type: String },
-            zipCode: { type: String },
-            city: { type: String },
-            state: { type: String },
-            country: { type: String },
-            countryCode: { type: String },
-        },
-        contact: {
-            phone: { type: String },
-            mobilePhone: { type: String },
-            email: { type: String },
-            homepage: { type: String },
-        },
-    },
+    company: OCompany,
     dm: {
         userid: { type: String, required: true },
         created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
