@@ -39,6 +39,7 @@ export default function CompleteDealMemoPage({
         }
     }, [memo, bandData, venueData]);
 
+    // maybe move this to appHandles
     const handleMemo = async (data: {}) => {
         showNotification({
             id: "load-data",
@@ -155,6 +156,8 @@ export default function CompleteDealMemoPage({
                 <Tabs.Tab label="Venue data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         <VenueEditForm
+                            session={session}
+                            handleVenue={handleVenue}
                             data={{
                                 venue: venueData?.venue,
                                 capacity: venueData?.capacity,
@@ -179,8 +182,6 @@ export default function CompleteDealMemoPage({
                                     venueData?.company?.contact?.mobilePhone,
                                 homepage: venueData?.company?.contact?.homepage,
                             }}
-                            session={session}
-                            handleVenue={handleVenue}
                         />
                     </Paper>
                 </Tabs.Tab>

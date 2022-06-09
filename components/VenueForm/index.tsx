@@ -135,7 +135,39 @@ export function VenueEditForm({
     });
 
     const handleSubmit = (values: VenueFormValues) => {
-        console.log(values);
+        const venueData = {
+            venue: values.venue,
+            capacity: values.capacity,
+            notes: values.notes,
+            company: {
+                name: values.companyName,
+                vatNumber: values.vatNumber,
+                ustNumber: values.ustNumber,
+                address: {
+                    streetNumber: values.streetNumber,
+                    street: values.street,
+                    addressSuffix: values.addressSuffix,
+                    zipCode: values.zipCode,
+                    city: values.city,
+                    state: values.state,
+                    country: values.country,
+                    countryCode: values.countryCode,
+                },
+                contact: {
+                    email: values.email,
+                    phone: values.phone,
+                    mobilePhone: values.mobilePhone,
+                    homepage: values.homepage,
+                },
+            },
+            dm: {
+                userid: session.userid,
+                created: dayjs().toISOString(),
+                edited: dayjs().toISOString(),
+            },
+        };
+
+        handleVenue(venueData);
     };
 
     return (
