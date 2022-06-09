@@ -159,6 +159,18 @@ export interface VenueEditFormProps {
     data: VenueFormValues;
 }
 
+export interface LoproFormProps {
+	handleLopro: (data: {}) => void;
+	close?: () => void;
+	session: SessionProps["session"];
+}
+
+export interface LoproEditFormProps {
+	handleLopro: (data: {}) => void;
+	session: SessionProps["session"];
+	data: LoproFormValues;
+}
+
 
 /** --- FORM TYPES --- **/
 
@@ -252,9 +264,9 @@ export interface VenueFormValues extends CompanyInputValues {
 
 export interface LoproFormValues extends CompanyInputValues {
 	name: string;
-	phone: string;
-	mobilePhone: string;
-	email: string;
+	personPhone: string;
+	personMobilePhone: string;
+	personEmail: string;
 	notes: string;
 }
 
