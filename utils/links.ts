@@ -15,7 +15,6 @@ const links = {
     },
     add: {
         band: "/add/band",
-        dealMemo: "/add/deal-memo",
         hotel: "/add/hotel",
         lopro: "/add/lopro",
         venue: "/add/venue",
@@ -25,6 +24,9 @@ const links = {
         itinerary: "/create/itinerary",
         contract: "/create/contract",
         invoice: "/create/invoice",
+    },
+    lists: {
+        dealMemo: "/deal-memo"
     }
 }
 
@@ -66,4 +68,60 @@ export function getNavbarData() {
             ]
         },
     ];
+}
+
+export function getNavbarParent() {
+    return [
+        { label: "Home", icon: MdHome },
+        { label: "Create", icon: MdPostAdd },
+        { label: "Add", icon: MdPostAdd },
+        { label: "Lists", icon: MdListAlt },
+    ];
+}
+
+export function getNavbarChild() {
+    return (
+        {
+            Home: [{
+                label: "Home",
+                link: "/",
+            }],
+            Create: [{
+                label: "Deal Memo",
+                link: links.create.dealMemo,
+            },
+            {
+                label: "Contract",
+                link: links.create.contract,
+            },
+            {
+                label: "Itinerary",
+                link: links.create.itinerary,
+            },
+            {
+                label: "Invoice",
+                link: links.create.invoice,
+            }],
+            Add: [{
+                label: "Band",
+                link: links.add.band,
+            },
+            {
+                label: "Hotel",
+                link: links.add.hotel,
+            },
+            {
+                label: "Venue",
+                link: links.add.venue,
+            },
+            {
+                label: "Lopro",
+                link: links.add.lopro,
+            }],
+            Lists: [{
+                label: "Deal Memo List",
+                link: links.lists.dealMemo,
+            }],
+        }
+    );
 }

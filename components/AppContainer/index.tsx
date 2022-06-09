@@ -29,12 +29,12 @@ export function AppContainer(props: AppContainerProps) {
             asideOffsetBreakpoint="sm"
             fixed
             navbar={<NavbarComponent hidden={navState} />}
-            header={
-                <HeaderComponent
-                    handleNavigation={handleNavigation}
-                    opened={opened}
-                />
-            }
+            // header={
+            //     <HeaderComponent
+            //         handleNavigation={handleNavigation}
+            //         opened={opened}
+            //     />
+            // }
         >
             {props.children}
             <FooterComponent />
