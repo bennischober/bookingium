@@ -1,4 +1,3 @@
-import React from "react";
 import { Navbar, ScrollArea, createStyles } from "@mantine/core";
 import { LinksGroup } from "../LinksGroup";
 import { getBackgroundColor } from "../../utils/appHandles";
@@ -37,18 +36,7 @@ const useStyles = createStyles((theme) => ({
 export function NavbarComponent(props: NavbarProps) {
     const { classes } = useStyles();
 
-    // data fetch simulation => will be done with get serverside props or so
-    const data = [
-        { label: "Band", link: "/new/band" },
-        { label: "Location", link: "/new/location" },
-        { label: "Promoter", link: "/new/promoter" },
-        { label: "Hotel", link: "/new/hotel" },
-    ];
-
     const links = getNavbarData().map((item, index) => {
-        // if (index === 2) {
-        //     item.links = data;
-        // }
         return <LinksGroup {...item} key={item.label} />;
     });
 
