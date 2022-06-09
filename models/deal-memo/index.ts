@@ -1,9 +1,5 @@
-import mongoose from 'mongoose';
+import mongoose, { Document } from 'mongoose';
 import dayjs from 'dayjs';
-
-
-// Note: all data will be given immediately - add hotelNotes to dealMemo (will be input first and later replaced by real data)
-// Except of hotel. Hotel will be added later
 
 const dealMemoSchema = new mongoose.Schema({
     dealId: {
@@ -30,7 +26,7 @@ const dealMemoSchema = new mongoose.Schema({
     }
 }); // , { collection: 'dealMemo' }
 
-export interface IDealMemo extends mongoose.Document {
+export interface IDealMemo extends Document {
     dealId: string;
     deal: string;
     date: string;
