@@ -5,7 +5,7 @@ import { z } from "zod";
 import { Button, NumberInput, Space, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { CompanyInput } from "../CompanyInput";
-import { LoproFormProps, LoproFormValues } from "../../types";
+import { LoproEditFormProps, LoproFormProps, LoproFormValues } from "../../types";
 
 const LoproFormSchema = z.object({
     name: z.string().min(3, { message: "Name must be at least 3 characters" }),
@@ -80,6 +80,94 @@ export function LoproForm({ handleLopro, close, session }: LoproFormProps) {
         handleLopro(loproData);
         if (close) close();
     };
+
+    return (
+        <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
+            <TextInput label="Name" {...Form.getInputProps("name")} required />
+            <TextInput label="Phone" {...Form.getInputProps("personPhone")} />
+            <TextInput
+                label="Mobile Phone"
+                {...Form.getInputProps("personMobilePhone")}
+            />
+            <TextInput
+                label="Email"
+                {...Form.getInputProps("personEmail")}
+                required
+            />
+            <TextInput label="Notes" {...Form.getInputProps("notes")} />
+            <Space h="xl" />
+            <CompanyInput Form={Form} />
+            <Button type="submit" fullWidth mt="xl">
+                Add Lopro
+            </Button>
+        </form>
+    );
+}
+
+
+export function LoproEditForm({handleLopro, session, data}: LoproEditFormProps) {
+    const Form = useForm<LoproFormValues>({
+        schema: zodResolver(LoproFormSchema),
+        initialValues: {
+            name: data.name,
+            personPhone: data.personPhone,
+            personMobilePhone: data.personMobilePhone,
+            personEmail: data.personEmail,
+            notes: data.notes,
+            companyName: data.companyName,
+            vatNumber: data.vatNumber,
+            ustNumber: data.ustNumber,
+            street: data.street,
+            streetNumber: data.streetNumber,
+            addressSuffix: data.addressSuffix,
+            zipCode: data.zipCode,
+            city: data.city,
+            state: data.state,
+            country: data.country,
+            countryCode: data.countryCode,
+            email: data.email,
+            phone: data.phone,
+            mobilePhone: data.mobilePhone,
+            homepage: data.homepage,
+        },
+    });
+
+    const handleSubmit = (values: LoproFormValues) => {
+        const loproData = {
+            name: values.name,
+            phone: values.personPhone,
+            mobilePhone: values.personMobilePhone,
+            email: values.personEmail,
+            notes: values.notes,
+            company: {
+                name: values.companyName,
+                vatNumber: values.vatNumber,
+                ustNumber: values.ustNumber,
+                address: {
+                    streetNumber: values.streetNumber,
+                    street: values.street,
+                    addressSuffix: values.addressSuffix,
+                    zipCode: values.zipCode,
+                    city: values.city,
+                    state: values.state,
+                    country: values.country,
+                    countryCode: values.countryCode,
+                },
+                contact: {
+                    email: values.email,
+                    phone: values.phone,
+                    mobilePhone: values.mobilePhone,
+                    homepage: values.homepage,
+                },
+            },
+            dm: {
+                userid: session.userid,
+                edited: dayjs().toISOString(),
+            },
+        };
+        handleLopro(loproData);
+    }
+
 
     return (
         <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
