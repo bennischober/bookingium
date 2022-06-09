@@ -26,10 +26,13 @@ import {
 import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../SearchOrAdd";
 import { VenueForm } from "../VenueForm";
+import { LoproForm } from "../LoproForm";
 
 export function DealMemoForm({
     bands,
     venues,
+    lopros,
+    hotels,
     session,
     handleMemos,
     handleBands,
@@ -40,6 +43,8 @@ export function DealMemoForm({
 }: DealMemoFormProps) {
     const [bandModalOpened, setBandModalOpened] = useState(false);
     const [venueModalOpened, setVenueModalOpened] = useState(false);
+    const [loproModalOpened, setLoproModalOpened] = useState(false);
+    const [hotelModalOpened, setHotelModalOpened] = useState(false);
 
     const dealForm = useForm<DealMemoFormValues>({
         initialValues: {
@@ -130,6 +135,10 @@ export function DealMemoForm({
               return val.venue;
           })
         : [];
+
+    const loprosAutoComplete = lopros ? lopros.map((val) => {
+        return val.name;
+    }) : [];
 
     return (
         <>
@@ -264,7 +273,7 @@ export function DealMemoForm({
                         <Space h="xl" />
                         <SearchOrAdd
                             ac={{
-                                data: bandsAutoComplete,
+                                data: loprosAutoComplete,
                                 useForm: dealForm,
                                 required: true,
                                 label: "Choose a local promoter",
@@ -273,7 +282,7 @@ export function DealMemoForm({
                             }}
                             md={{
                                 button: "Add local promoter",
-                                handleOpen: setBandModalOpened,
+                                handleOpen: setLoproModalOpened,
                             }}
                         />
                         <Space h="xl" />
@@ -322,6 +331,20 @@ export function DealMemoForm({
             >
                 <VenueForm
                     handleVenue={handleVenues}
+                    close={closeModals}
+                    session={session}
+                />
+            </Modal>
+            <Modal
+                opened={loproModalOpened}
+                onClose={() => setLoproModalOpened(false)}
+                title="Add a new Lopro"
+                size="xl"
+                overflow="inside"
+                centered
+            >
+                <LoproForm
+                    handleLopro={handleLopros}
                     close={closeModals}
                     session={session}
                 />

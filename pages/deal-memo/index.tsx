@@ -63,6 +63,7 @@ export default function DealMemoPage({
 
     const handleLopros = async (data: {}) => {
         console.log(data);
+        await axios.post("/api/lopro", { data: data });
     };
 
     const handleHotels = async (data: {}) => {
