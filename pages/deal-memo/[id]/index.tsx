@@ -1,4 +1,4 @@
-import { Button, Paper, Space, Tabs, Text, Title } from "@mantine/core";
+import { Button, Center, Paper, Space, Tabs, Text, Title } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -7,8 +7,10 @@ import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MdArrowBack, MdCheck, MdClose } from "react-icons/md";
+import { goToLastRoute, isPopulated } from "../../../utils/appHandles";
 import { BandEditForm } from "../../../components/BandForm";
 import { DealEditForm } from "../../../components/DealMemoForm";
+import { HotelEditForm } from "../../../components/HotelForm";
 import { LoproEditForm } from "../../../components/LoproForm";
 import { VenueEditForm } from "../../../components/VenueForm";
 import { IBand } from "../../../models/band";
@@ -17,7 +19,6 @@ import { IHotel } from "../../../models/hotel";
 import { ILopro } from "../../../models/lopro";
 import { IVenue } from "../../../models/venue";
 import { CompleteDealMemoPageProps } from "../../../types";
-import { goToLastRoute, isPopulated } from "../../../utils/appHandles";
 
 // move interface to types file
 // move jsx stuff to new component, if everything is finished and works properly
@@ -50,7 +51,7 @@ export default function CompleteDealMemoPage({
         }
     }, [memo, bandData, venueData, loproData, hotelData]);
 
-    // maybe move this to appHandles
+    // maybe move this to appHandles?
     const handleMemo = async (data: {}) => {
         showNotification({
             id: "load-data",
@@ -91,6 +92,8 @@ export default function CompleteDealMemoPage({
         });
     };
 
+
+    // Note: For the put action new apis /[id]/index.ts will be needed!
     const handleBand = async (data: {}) => {
         console.log(data);
     };
@@ -238,7 +241,53 @@ export default function CompleteDealMemoPage({
                         />
                     </Paper>
                 </Tabs.Tab>
-                <Tabs.Tab label="Hotel data"></Tabs.Tab>
+                <Tabs.Tab label="Hotel data">
+                    <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
+                        {hotelData ? (
+                            <HotelEditForm
+                                session={session}
+                                handleHotel={handleHotel}
+                                data={{
+                                    name: hotelData?.name,
+                                    notes: hotelData?.notes,
+                                    companyName: loproData?.company?.name,
+                                    vatNumber: loproData?.company?.vatNumber,
+                                    ustNumber: loproData?.company?.ustNumber,
+                                    streetNumber:
+                                        loproData?.company?.address
+                                            ?.streetNumber,
+                                    street: loproData?.company?.address?.street,
+                                    addressSuffix:
+                                        loproData?.company?.address
+                                            ?.addressSuffix,
+                                    zipCode:
+                                        loproData?.company?.address?.zipCode,
+                                    city: loproData?.company?.address?.city,
+                                    state: loproData?.company?.address?.state,
+                                    country:
+                                        loproData?.company?.address?.country,
+                                    countryCode:
+                                        loproData?.company?.address
+                                            ?.countryCode,
+                                    email: loproData?.company?.contact?.email,
+                                    phone: loproData?.company?.contact?.phone,
+                                    mobilePhone:
+                                        loproData?.company?.contact
+                                            ?.mobilePhone,
+                                    homepage:
+                                        loproData?.company?.contact?.homepage,
+                                }}
+                            />
+                        ) : (
+                            // Idea: goto hotel add form with params of deal and add new hotel.
+                            // If this is done, go back to this specific deal
+                            // Note: Add fromPath!
+                            <Center>
+                                <Button>Add Hotel Data</Button>
+                            </Center>
+                        )}
+                    </Paper>
+                </Tabs.Tab>
             </Tabs>
         </>
     );
