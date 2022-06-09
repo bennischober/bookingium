@@ -121,6 +121,8 @@ export function DealMemoForm({
     const closeModals = () => {
         setBandModalOpened(false);
         setVenueModalOpened(false);
+        setLoproModalOpened(false);
+        setHotelModalOpened(false);
     };
 
     // useMemo?
@@ -136,7 +138,11 @@ export function DealMemoForm({
           })
         : [];
 
-    const loprosAutoComplete = lopros ? lopros.map((val) => {
+    const loprosAutoComplete = lopros ? lopros?.map((val) => {
+        return val.name;
+    }) : [];
+
+    const hotelsAutoComplete = hotels ? hotels?.map((val) => {
         return val.name;
     }) : [];
 
@@ -288,7 +294,7 @@ export function DealMemoForm({
                         <Space h="xl" />
                         <SearchOrAdd
                             ac={{
-                                data: bandsAutoComplete,
+                                data: hotelsAutoComplete,
                                 useForm: dealForm,
                                 required: false,
                                 label: "Choose a hotel",
@@ -297,7 +303,7 @@ export function DealMemoForm({
                             }}
                             md={{
                                 button: "Add hotel",
-                                handleOpen: setBandModalOpened,
+                                handleOpen: setHotelModalOpened,
                             }}
                         />
                         <Space h="xl" />
