@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import {
+    Box,
     Button,
     Container,
     Group,
@@ -28,6 +29,10 @@ import { SearchOrAdd } from "../SearchOrAdd";
 import { VenueForm } from "../VenueForm";
 import { LoproForm } from "../LoproForm";
 import { HotelForm } from "../HotelForm";
+import { IVenue } from "../../models/venue";
+import { ILopro } from "../../models/lopro";
+import { IHotel } from "../../models/hotel";
+import { getValueAtKey } from "../../utils/appHandles";
 
 export function DealMemoForm({
     bands,
@@ -40,7 +45,6 @@ export function DealMemoForm({
     handleVenues,
     handleLopros,
     handleHotels,
-    closeForm,
 }: DealMemoFormProps) {
     const [bandModalOpened, setBandModalOpened] = useState(false);
     const [venueModalOpened, setVenueModalOpened] = useState(false);
@@ -94,11 +98,41 @@ export function DealMemoForm({
             return;
         }
 
+        let venue = {} as IVenue;
+        venues?.forEach((val) => {
+            if (val.venue === values.venue) {
+                venue = val;
+            }
+        });
+
+        if (!venue) {
+            console.log("venue not found, aborting save action!");
+            return;
+        }
+
+        let lopro = {} as ILopro;
+        lopros?.forEach((val) => {
+            if (val.name === values.lopro) {
+                lopro = val;
+            }
+        });
+        if (!lopro) {
+            console.log("lopro not found, aborting save action!");
+            return;
+        }
+
+        let hotel = hotels
+            ? getValueAtKey(hotels, "name", values.hotel)
+            : ({} as IHotel);
+
         const memoData = {
             _id: new mongoose.Types.ObjectId(),
             dealId: uuidv4(),
             deal: values.deal,
             bandid: band._id,
+            venueid: venue._id,
+            loproid: lopro._id,
+            hotelid: hotel ? hotel._id : null,
             date: values.date,
             fee: values.fee,
             ticketPriceVVK: values.ticketPriceVVK,
@@ -114,8 +148,7 @@ export function DealMemoForm({
         };
 
         handleMemos(memoData);
-
-        if (closeForm) closeForm();
+        
         dealForm.reset();
     };
 
@@ -139,72 +172,64 @@ export function DealMemoForm({
           })
         : [];
 
-    const loprosAutoComplete = lopros ? lopros?.map((val) => {
-        return val.name;
-    }) : [];
+    const loprosAutoComplete = lopros
+        ? lopros?.map((val) => {
+              return val.name;
+          })
+        : [];
 
-    const hotelsAutoComplete = hotels ? hotels?.map((val) => {
-        return val.name;
-    }) : [];
+    const hotelsAutoComplete = hotels
+        ? hotels?.map((val) => {
+              return val.name;
+          })
+        : [];
 
     return (
         <>
-            <Container size="xs">
-                <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
-                    <form
-                        onSubmit={dealForm.onSubmit((values) =>
-                            onDealSubmit(values)
-                        )}
-                    >
-                        <SearchOrAdd
-                            ac={{
-                                data: bandsAutoComplete,
-                                useForm: dealForm,
-                                required: true,
-                                label: "Choose a band",
-                                placeholder: "Band name",
-                                inputProps: "band",
-                            }}
-                            md={{
-                                button: "Add band",
-                                handleOpen: setBandModalOpened,
-                            }}
-                        />
-                        <Space h="xl" />
-                        <Textarea
-                            label="Deal"
-                            placeholder="Deal information"
-                            {...dealForm.getInputProps("deal")}
-                            autosize
-                            minRows={3}
-                            required
-                        />
-                        <Space h="xl" />
-                        <DatePicker
-                            id="mantine-2wgfg6a6v"
-                            label="Date"
-                            defaultValue={dayjs().toDate()}
-                            {...dealForm.getInputProps("date")}
-                            required
-                        />
-                        <Space h="xl" />
-                        <NumberInput
-                            label="Fee"
-                            icon="€"
-                            {...dealForm.getInputProps("fee")}
-                            min={0}
-                            stepHoldDelay={500}
-                            stepHoldInterval={(t) =>
-                                Math.max(1000 / t ** 2, 25)
-                            }
-                            required
-                        />
-                        <Space h="xl" />
-                        <Group grow>
+            <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
+                <form
+                    onSubmit={dealForm.onSubmit((values) =>
+                        onDealSubmit(values)
+                    )}
+                >
+                    <Group grow align="top">
+                        <Box>
+                            <SearchOrAdd
+                                ac={{
+                                    data: bandsAutoComplete,
+                                    useForm: dealForm,
+                                    required: true,
+                                    label: "Choose a band",
+                                    placeholder: "Band name",
+                                    inputProps: "band",
+                                }}
+                                md={{
+                                    button: "Add band",
+                                    handleOpen: setBandModalOpened,
+                                }}
+                            />
+                            <Space h="xl" />
+                            <Textarea
+                                label="Deal"
+                                placeholder="Deal information"
+                                {...dealForm.getInputProps("deal")}
+                                autosize
+                                minRows={3}
+                                required
+                            />
+                            <Space h="xl" />
+                            <DatePicker
+                                id="mantine-2wgfg6a6v"
+                                label="Date"
+                                defaultValue={dayjs().toDate()}
+                                {...dealForm.getInputProps("date")}
+                                required
+                            />
+                            <Space h="xl" />
                             <NumberInput
-                                label="Ticked VVK Price"
+                                label="Fee"
                                 icon="€"
-                                {...dealForm.getInputProps("ticketPriceVVK")}
+                                {...dealForm.getInputProps("fee")}
                                 min={0}
                                 stepHoldDelay={500}
                                 stepHoldInterval={(t) =>
@@ -212,10 +237,37 @@ export function DealMemoForm({
                                 }
                                 required
                             />
+                            <Space h="xl" />
+                            <Group grow>
+                                <NumberInput
+                                    label="Ticked VVK Price"
+                                    icon="€"
+                                    {...dealForm.getInputProps(
+                                        "ticketPriceVVK"
+                                    )}
+                                    min={0}
+                                    stepHoldDelay={500}
+                                    stepHoldInterval={(t) =>
+                                        Math.max(1000 / t ** 2, 25)
+                                    }
+                                    required
+                                />
+                                <NumberInput
+                                    label="Ticket AK Price"
+                                    icon="€"
+                                    {...dealForm.getInputProps("ticketPriceAK")}
+                                    min={0}
+                                    stepHoldDelay={500}
+                                    stepHoldInterval={(t) =>
+                                        Math.max(1000 / t ** 2, 25)
+                                    }
+                                    required
+                                />
+                            </Group>
+                            <Space h="xl" />
                             <NumberInput
-                                label="Ticket AK Price"
-                                icon="€"
-                                {...dealForm.getInputProps("ticketPriceAK")}
+                                label="Posters"
+                                {...dealForm.getInputProps("posters")}
                                 min={0}
                                 stepHoldDelay={500}
                                 stepHoldInterval={(t) =>
@@ -223,97 +275,88 @@ export function DealMemoForm({
                                 }
                                 required
                             />
-                        </Group>
-                        <Space h="xl" />
-                        <NumberInput
-                            label="Posters"
-                            {...dealForm.getInputProps("posters")}
-                            min={0}
-                            stepHoldDelay={500}
-                            stepHoldInterval={(t) =>
-                                Math.max(1000 / t ** 2, 25)
-                            }
-                            required
-                        />
-                        <Space h="xl" />
-                        <Select
-                            label="Status"
-                            {...dealForm.getInputProps("status")}
-                            data={[
-                                {
-                                    value: "pending",
-                                    label: "Pending",
-                                },
-                                {
-                                    value: "accepted",
-                                    label: "Accepted",
-                                },
-                                {
-                                    value: "rejected",
-                                    label: "Rejected",
-                                },
-                            ]}
-                            required
-                        />
-                        <Space h="xl" />
-                        <Textarea
-                            label="Notes"
-                            {...dealForm.getInputProps("notes")}
-                            autosize
-                            minRows={3}
-                        />
-                        <Space h="xl" />
-                        <SearchOrAdd
-                            ac={{
-                                data: venuesAutoComplete,
-                                useForm: dealForm,
-                                required: true,
-                                label: "Choose a venue",
-                                placeholder: "Venue name",
-                                inputProps: "venue",
-                            }}
-                            md={{
-                                button: "Add venue",
-                                handleOpen: setVenueModalOpened,
-                            }}
-                        />
-                        <Space h="xl" />
-                        <SearchOrAdd
-                            ac={{
-                                data: loprosAutoComplete,
-                                useForm: dealForm,
-                                required: true,
-                                label: "Choose a local promoter",
-                                placeholder: "lopro name",
-                                inputProps: "lopro",
-                            }}
-                            md={{
-                                button: "Add local promoter",
-                                handleOpen: setLoproModalOpened,
-                            }}
-                        />
-                        <Space h="xl" />
-                        <SearchOrAdd
-                            ac={{
-                                data: hotelsAutoComplete,
-                                useForm: dealForm,
-                                required: false,
-                                label: "Choose a hotel",
-                                placeholder: "Hotel name",
-                                inputProps: "hotel",
-                            }}
-                            md={{
-                                button: "Add hotel",
-                                handleOpen: setHotelModalOpened,
-                            }}
-                        />
-                        <Space h="xl" />
-                        <Button type="submit" fullWidth mt="xl">
-                            Submit data
-                        </Button>
-                    </form>
-                </Paper>
-            </Container>
+                            <Space h="xl" />
+                            <Select
+                                label="Status"
+                                {...dealForm.getInputProps("status")}
+                                data={[
+                                    {
+                                        value: "pending",
+                                        label: "Pending",
+                                    },
+                                    {
+                                        value: "accepted",
+                                        label: "Accepted",
+                                    },
+                                    {
+                                        value: "rejected",
+                                        label: "Rejected",
+                                    },
+                                ]}
+                                required
+                            />
+                            <Space h="xl" />
+                            <Textarea
+                                label="Notes"
+                                {...dealForm.getInputProps("notes")}
+                                autosize
+                                minRows={3}
+                            />
+                            <Space h="xl" />
+                        </Box>
+                        <Box>
+                            <SearchOrAdd
+                                ac={{
+                                    data: venuesAutoComplete,
+                                    useForm: dealForm,
+                                    required: true,
+                                    label: "Choose a venue",
+                                    placeholder: "Venue name",
+                                    inputProps: "venue",
+                                }}
+                                md={{
+                                    button: "Add venue",
+                                    handleOpen: setVenueModalOpened,
+                                }}
+                            />
+                            <Space h="xl" />
+                            <SearchOrAdd
+                                ac={{
+                                    data: loprosAutoComplete,
+                                    useForm: dealForm,
+                                    required: true,
+                                    label: "Choose a local promoter",
+                                    placeholder: "lopro name",
+                                    inputProps: "lopro",
+                                }}
+                                md={{
+                                    button: "Add local promoter",
+                                    handleOpen: setLoproModalOpened,
+                                }}
+                            />
+                            <Space h="xl" />
+                            <SearchOrAdd
+                                ac={{
+                                    data: hotelsAutoComplete,
+                                    useForm: dealForm,
+                                    required: false,
+                                    label: "Choose a hotel",
+                                    placeholder: "Hotel name",
+                                    inputProps: "hotel",
+                                }}
+                                md={{
+                                    button: "Add hotel",
+                                    handleOpen: setHotelModalOpened,
+                                }}
+                            />
+                        </Box>
+                    </Group>
+                    <Space h="xl" />
+                    <Button type="submit" fullWidth mt="xl">
+                        Submit data
+                    </Button>
+                </form>
+            </Paper>
             <Modal
                 opened={bandModalOpened}
                 onClose={() => setBandModalOpened(false)}
