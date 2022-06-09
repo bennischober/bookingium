@@ -232,7 +232,7 @@ Note: By far the most important
 - Mobile apps (Android/iOS) using [Capacitor](https://plazagonzalo.medium.com/how-to-convert-your-next-js-application-to-android-and-ios-in-5-clicks-bd8d5fac690c)?
 
 # References
-- [PDF generation](https://pdfme.com/docs/getting-started)
+- [PDF generation](https://pdfme.com/docs/getting-started) | [react-pdf (currently not working for react 18)][https://github.com/diegomura/react-pdf] | [jsPDF](https://github.com/parallax/jsPDF) | [pdf-lib](https://github.com/Hopding/pdf-lib)
 - [Newsletter with Nodemailer](https://nodemailer.com/about/)
 - [Deployment](https://reactjsexample.com/how-to-deploy-nextjs-database-app-with-docker-multi-container/)
 - Maps: [main](https://www.npmjs.com/package/leaflet) with [react components](https://www.npmjs.com/package/react-leaflet) and [search](https://www.npmjs.com/package/leaflet-search) | [Creating routes](https://www.qed42.com/insights/coe/javascript/navigation-leaflet-maps) 
