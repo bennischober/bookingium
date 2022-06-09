@@ -78,7 +78,9 @@ export default function DealMemoPage({
         <PageTemplate title="Deal Memos">
             <Center>
                 <Button onClick={() => setAddMemoOpened((o) => !o)}>
-                    {addMemoOpened ? "Close Deal Memo Form" : "Open Deal Memo Form"}
+                    {addMemoOpened
+                        ? "Close Deal Memo Form"
+                        : "Open Deal Memo Form"}
                 </Button>
             </Center>
             <Space h="xl" />
@@ -133,12 +135,36 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             : null;
     const venues = vn ? await vn.data : null;
 
+    const lp =
+        session && session.userid
+            ? await axios.get("http://localhost:3000/api/lopro", {
+                  params: {
+                      userid: session.userid,
+                  },
+              })
+            : null;
+
+    const lopros = lp ? await lp.data : null;
+
+    const ht =
+        session && session.userid
+            ? await axios.get("http://localhost:3000/api/hotel", {
+                  params: {
+                      userid: session.userid,
+                  },
+              })
+            : null;
+
+    const hotels = ht ? await ht.data : null;
+
     return {
         props: {
             session,
             bands: bands && bands.data ? bands.data : [],
             memos: memos && memos.data ? memos.data : [],
             venues: venues && venues.data ? venues.data : [],
+            lopros: lopros && lopros.data ? lopros.data : [],
+            hotels: hotels && hotels.data ? hotels.data : [],
         },
     };
 };
