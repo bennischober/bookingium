@@ -9,9 +9,12 @@ import { useEffect, useState } from "react";
 import { MdArrowBack, MdCheck, MdClose } from "react-icons/md";
 import { BandEditForm } from "../../../components/BandForm";
 import { DealEditForm } from "../../../components/DealMemoForm";
+import { LoproEditForm } from "../../../components/LoproForm";
 import { VenueEditForm } from "../../../components/VenueForm";
 import { IBand } from "../../../models/band";
 import { IDealMemo } from "../../../models/deal-memo";
+import { IHotel } from "../../../models/hotel";
+import { ILopro } from "../../../models/lopro";
 import { IVenue } from "../../../models/venue";
 import { CompleteDealMemoPageProps } from "../../../types";
 import { goToLastRoute, isPopulated } from "../../../utils/appHandles";
@@ -28,6 +31,8 @@ export default function CompleteDealMemoPage({
     const [memoData, setMemoData] = useState<IDealMemo>(memo);
     const [bandData, setBandData] = useState<IBand>({} as IBand);
     const [venueData, setVenueData] = useState<IVenue>({} as IVenue);
+    const [loproData, setLoproData] = useState<ILopro>({} as ILopro);
+    const [hotelData, setHotelData] = useState<IHotel>({} as IHotel);
     const router = useRouter();
 
     useEffect(() => {
@@ -37,7 +42,13 @@ export default function CompleteDealMemoPage({
         if (isPopulated<IVenue>(memo.venueid)) {
             setVenueData(memo.venueid);
         }
-    }, [memo, bandData, venueData]);
+        if (isPopulated<ILopro>(memo.loproid)) {
+            setLoproData(memo.loproid);
+        }
+        if (isPopulated<IHotel>(memo.hotelid)) {
+            setHotelData(memo.hotelid);
+        }
+    }, [memo, bandData, venueData, loproData, hotelData]);
 
     // maybe move this to appHandles
     const handleMemo = async (data: {}) => {
@@ -85,6 +96,14 @@ export default function CompleteDealMemoPage({
     };
 
     const handleVenue = async (data: {}) => {
+        console.log(data);
+    };
+
+    const handleLopro = async (data: {}) => {
+        console.log(data);
+    };
+
+    const handleHotel = async (data: {}) => {
         console.log(data);
     };
 
@@ -185,7 +204,40 @@ export default function CompleteDealMemoPage({
                         />
                     </Paper>
                 </Tabs.Tab>
-                <Tabs.Tab label="Local promoter data"></Tabs.Tab>
+                <Tabs.Tab label="Local promoter data">
+                    <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
+                        <LoproEditForm
+                            session={session}
+                            handleLopro={handleLopro}
+                            data={{
+                                name: loproData?.name,
+                                personPhone: loproData?.phone,
+                                personMobilePhone: loproData?.mobilePhone,
+                                personEmail: loproData?.email,
+                                notes: loproData?.notes,
+                                companyName: loproData?.company?.name,
+                                vatNumber: loproData?.company?.vatNumber,
+                                ustNumber: loproData?.company?.ustNumber,
+                                streetNumber:
+                                    loproData?.company?.address?.streetNumber,
+                                street: loproData?.company?.address?.street,
+                                addressSuffix:
+                                    loproData?.company?.address?.addressSuffix,
+                                zipCode: loproData?.company?.address?.zipCode,
+                                city: loproData?.company?.address?.city,
+                                state: loproData?.company?.address?.state,
+                                country: loproData?.company?.address?.country,
+                                countryCode:
+                                    loproData?.company?.address?.countryCode,
+                                email: loproData?.company?.contact?.email,
+                                phone: loproData?.company?.contact?.phone,
+                                mobilePhone:
+                                    loproData?.company?.contact?.mobilePhone,
+                                homepage: loproData?.company?.contact?.homepage,
+                            }}
+                        />
+                    </Paper>
+                </Tabs.Tab>
                 <Tabs.Tab label="Hotel data"></Tabs.Tab>
             </Tabs>
         </>

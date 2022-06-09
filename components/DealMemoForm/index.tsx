@@ -46,6 +46,8 @@ export function DealMemoForm({
     const [loproModalOpened, setLoproModalOpened] = useState(false);
     const [hotelModalOpened, setHotelModalOpened] = useState(false);
 
+    console.log(bands, venues, lopros, hotels);
+
     const dealForm = useForm<DealMemoFormValues>({
         initialValues: {
             band: "",
@@ -351,6 +353,20 @@ export function DealMemoForm({
             >
                 <LoproForm
                     handleLopro={handleLopros}
+                    close={closeModals}
+                    session={session}
+                />
+            </Modal>
+            <Modal
+                opened={hotelModalOpened}
+                onClose={() => setHotelModalOpened(false)}
+                title="Add a new Hotel"
+                size="xl"
+                overflow="inside"
+                centered
+            >
+                <LoproForm
+                    handleLopro={handleHotels}
                     close={closeModals}
                     session={session}
                 />

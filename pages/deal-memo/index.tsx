@@ -18,11 +18,15 @@ export default function DealMemoPage({
     bands,
     memos,
     venues,
+    lopros,
+    hotels,
 }: DealMemoProps) {
     // fetched data
     const [bandsData, setBandsData] = useState(bands);
     const [memosData, setMemosData] = useState(memos);
     const [venueData, setVenueData] = useState(venues);
+    const [loproData, setLoproData] = useState(lopros);
+    const [hotelData, setHotelData] = useState(hotels);
 
     // other state
     const [addMemoOpened, setAddMemoOpened] = useState(false);
@@ -89,6 +93,8 @@ export default function DealMemoPage({
                     session={session}
                     bands={bandsData}
                     venues={venueData}
+                    lopros={loproData}
+                    hotels={hotelData}
                     handleBands={handleBands}
                     handleMemos={handleMemos}
                     handleVenues={handleVenues}
