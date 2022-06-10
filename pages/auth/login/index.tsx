@@ -7,8 +7,8 @@ import { signIn, getSession } from "next-auth/react";
 import { Container, Title, Text, Anchor, Alert, Space } from "@mantine/core";
 import { useDocumentTitle, useToggle } from "@mantine/hooks";
 import { IoAlertCircleOutline } from "react-icons/io5";
-import LoginComponent from "../../../components/Login";
-import { ForgotPassword } from "../../../components/ForgotPassword";
+import LoginComponent from "../../../components/Auth/Login";
+import { ForgotPassword } from "../../../components/Auth/ForgotPassword";
 import { SessionProps } from "../../../types";
 import { getLastRoute } from "../../../utils/appHandles";
 

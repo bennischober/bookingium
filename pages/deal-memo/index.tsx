@@ -3,8 +3,8 @@ import { GetServerSideProps } from "next";
 import { useRouter } from "next/router";
 import { getSession } from "next-auth/react";
 import axios from "axios";
-import { PageTemplate } from "../../components/PageTemplate";
-import { DealMemoList } from "../../components/DealMemoList";
+import { PageTemplate } from "../../components/Layout/PageTemplate";
+import { DealMemoList } from "../../components/Lists/DealMemoList";
 import { handleSession } from "../../utils/appHandles";
 import { DealMemoProps } from "../../types";
 

@@ -13,8 +13,8 @@ import { useRouter } from "next/router";
 import { signIn, useSession } from "next-auth/react";
 import axios from "axios";
 import bcrypt from "bcryptjs";
-import { PageTemplate } from "../../../components/PageTemplate";
-import { RegisterComponent } from "../../../components/Register";
+import { PageTemplate } from "../../../components/Layout/PageTemplate";
+import { RegisterComponent } from "../../../components/Auth/Register";
 import { RegisterHandleData } from "../../../types";
 
 export default function RegisterPage() {

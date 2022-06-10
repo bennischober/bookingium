@@ -3,7 +3,7 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { DealMemoForm } from "../../../components/DealMemoForm";
+import { DealMemoForm } from "../../../components/Forms/DealMemoForm";
 import { AddDealMemoProps } from "../../../types";
 import { getBands, getMemos, handleSession } from "../../../utils/appHandles";
 

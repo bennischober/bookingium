@@ -12,7 +12,7 @@ import {
     getLocalStorageItem,
     setLocalStorageItem,
 } from "../utils/browserHandle";
-import { AppContainer } from "../components/AppContainer";
+import { AppContainer } from "../components/Layout/AppContainer";
 import { SessionProvider } from "next-auth/react";
 
 export default function App({ Component, pageProps, ...appPropps }: AppProps) {
