@@ -22,7 +22,7 @@
     "@mantine/spotlight": "^4.2.4",
     "@pdfme/generator": "^1.0.12",
     "@pdfme/ui": "^1.0.12",
-    "@tanstack/react-table": "^8.0.0-alpha.87",
+    "@tanstack/react-table": "^8.0.0-beta.9",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.2",
