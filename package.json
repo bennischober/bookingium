@@ -17,7 +17,7 @@
     "@mantine/modals": "^4.2.4",
     "@mantine/next": "^4.2.4",
     "@mantine/notifications": "^4.2.4",
-    "@mantine/prism": "^4.2.4",
+    "@mantine/prism": "^4.2.10",
     "@mantine/rte": "^4.2.4",
     "@mantine/spotlight": "^4.2.4",
     "@pdfme/generator": "^1.0.13",
