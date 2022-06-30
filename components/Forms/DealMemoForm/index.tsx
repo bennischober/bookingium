@@ -235,6 +235,7 @@ export function DealMemoForm({
                                 stepHoldInterval={(t) =>
                                     Math.max(1000 / t ** 2, 25)
                                 }
+                                precision={2}
                                 required
                             />
                             <Space h="xl" />
@@ -250,6 +251,7 @@ export function DealMemoForm({
                                     stepHoldInterval={(t) =>
                                         Math.max(1000 / t ** 2, 25)
                                     }
+                                    precision={2}
                                     required
                                 />
                                 <NumberInput
@@ -261,6 +263,7 @@ export function DealMemoForm({
                                     stepHoldInterval={(t) =>
                                         Math.max(1000 / t ** 2, 25)
                                     }
+                                    precision={2}
                                     required
                                 />
                             </Group>
@@ -482,6 +485,7 @@ export function DealEditForm({
                 min={0}
                 stepHoldDelay={500}
                 stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+                precision={2}
                 required
             />
             <Space h="xl" />
@@ -493,6 +497,7 @@ export function DealEditForm({
                     min={0}
                     stepHoldDelay={500}
                     stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+                    precision={2}
                     required
                 />
                 <NumberInput
@@ -502,6 +507,7 @@ export function DealEditForm({
                     min={0}
                     stepHoldDelay={500}
                     stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+                    precision={2}
                     required
                 />
             </Group>
