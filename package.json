@@ -19,7 +19,7 @@
     "@mantine/notifications": "^4.2.12",
     "@mantine/prism": "^4.2.12",
     "@mantine/rte": "^4.2.12",
-    "@mantine/spotlight": "^4.2.11",
+    "@mantine/spotlight": "^4.2.12",
     "@pdfme/generator": "^1.0.14",
     "@pdfme/ui": "^1.0.14",
     "@tanstack/react-table": "^8.1.3",
