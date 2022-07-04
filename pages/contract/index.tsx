@@ -1,4 +1,4 @@
-import { Group, Text, useMantineTheme, MantineTheme } from "@mantine/core";
+import { Group, Text, useMantineTheme, MantineTheme, Button } from "@mantine/core";
 import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { Dropzone, DropzoneStatus, PDF_MIME_TYPE } from "@mantine/dropzone";
 import { useState } from "react";
@@ -34,7 +34,7 @@ function ImageUploadIcon({
     return <MdPhotoSizeSelectActual {...props} />;
 }
 
-export const dropzoneChildren = (
+const dropzoneChildren = (
     status: DropzoneStatus,
     theme: MantineTheme
 ) => {
@@ -64,12 +64,12 @@ export const dropzoneChildren = (
 };
 
 export default function ContractPage() {
-    const [pdfData, setPdfData] = useState<ArrayBuffer>();
+    const [pdfData, setPdfData] = useState<Uint8Array>();
+    const theme = useMantineTheme();
 
     const handleUpload = async (files: File[]) => {
         const file = files[0];
         const data = await file.arrayBuffer();
-        setPdfData(data);
         console.log(data);
 
         const pdfDoc = await PDFDocument.load(data);
@@ -95,25 +95,34 @@ export default function ContractPage() {
 
         // Serialize the PDFDocument to bytes (a Uint8Array)
         const pdfBytes = await pdfDoc.save();
-
-        const blob = new Blob([pdfBytes], { type: "application/pdf" });
-        // https://stackoverflow.com/questions/71309058/property-showsavefilepicker-does-not-exist-on-type-window-typeof-globalthis
-        const handler = await window.showSaveFilePicker({
-            types: [
-                {
-                    description: "PDF Document",
-                    accept: { "application/pdf": ".pdf" },
-                },
-            ],
-        });
-        const fileStream = await handler.createWritable();
-    
-        await fileStream.write(blob);
-        await fileStream.close();
+        setPdfData(pdfBytes);
     };
 
-    const theme = useMantineTheme();
+    const handleDownload = async () => {
+        // three different options here:
+        // 1. download the file directly (https://stackoverflow.com/questions/63048857/using-native-file-system-api-to-save-file-to-a-specific-location-without-user-in) / download the file via a blob (https://stackoverflow.com/questions/5100569/how-to-download-a-file-from-an-html5-canvas)
+        // 2. open the file in new tab and let the user download
+        const blob = new Blob([pdfData!], { type: "application/pdf" });
+        const url = URL.createObjectURL(blob);
+        window.open(url);
+        // 3. open native file api and let the user decide a location to save the file => note: if the user doesnt accept the download, an error will be thrown
+        // const blob = new Blob([pdfBytes], { type: "application/pdf" });
+        // const handler = await window.showSaveFilePicker({
+        //     types: [
+        //         {
+        //             description: "PDF Document",
+        //             accept: { "application/pdf": ".pdf" },
+        //         },
+        //     ],
+        // });
+        // const fileStream = await handler.createWritable();
+    
+        // await fileStream.write(blob);
+        // await fileStream.close();
+    }
+
     return (
+        <>
         <Dropzone
             onDrop={(files) => handleUpload(files)}
             onReject={(files) => console.log("rejected files", files)}
@@ -122,5 +131,7 @@ export default function ContractPage() {
         >
             {(status) => dropzoneChildren(status, theme)}
         </Dropzone>
+        <Button onClick={() => handleDownload()}>Download</Button>
+        </>
     );
 }
