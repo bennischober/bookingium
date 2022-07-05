@@ -29,3 +29,10 @@ export interface IDm {
     created: string;
     edited: string;
 }
+
+export interface IContactPerson {
+    name: string;
+    role: string;
+    email: string;
+    phone: string;
+}
