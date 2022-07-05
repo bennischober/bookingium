@@ -55,8 +55,8 @@ export interface UserButtonProps {
 }
 
 // or type to any?
-export interface InputComponentProps<T> {
-	Form: UseFormReturnType<T>;
+export interface InputComponentProps {
+	Form: UseFormReturnType;
 }
 
 export interface BandFormProps {

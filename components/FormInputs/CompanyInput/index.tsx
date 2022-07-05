@@ -10,7 +10,7 @@ import ContactInput from "../ContactInput";
  * - ustNumber
  * - AddressInput, ContactInput props
  */
-export function CompanyInput({ Form }: InputComponentProps<any>) {
+export function CompanyInput({ Form }: InputComponentProps) {
     return (
         <>
             <Accordion>
