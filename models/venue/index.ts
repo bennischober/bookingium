@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 import dayjs from 'dayjs';
-import { ICompany, IDm } from '../modelTypes';
+import { ICompany, IDm, IContactPerson } from '../modelTypes';
 
 const venueSchema = new mongoose.Schema({
     venueid: {
@@ -32,6 +32,12 @@ const venueSchema = new mongoose.Schema({
             homepage: { type: String },
         },
     },
+    contactPerson: [{
+        name: { type: String },
+        role: { type: String },
+        email: { type: String },
+        phone: { type: String },
+    }],
     dm: {
         userid: { type: String, required: true },
         created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
@@ -45,6 +51,7 @@ export interface IVenue extends Document {
     capacity: number;
     notes: string;
     company: ICompany;
+    contactPerson: IContactPerson[];
     dm: IDm;
 }
 

@@ -203,6 +203,7 @@ export default function CompleteDealMemoPage({
                                 mobilePhone:
                                     venueData?.company?.contact?.mobilePhone,
                                 homepage: venueData?.company?.contact?.homepage,
+                                contactPerson: venueData?.contactPerson,
                             }}
                         />
                     </Paper>

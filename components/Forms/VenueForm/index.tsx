@@ -1,5 +1,5 @@
-import { Button, NumberInput, Space, TextInput } from "@mantine/core";
-import { useForm, zodResolver } from "@mantine/form";
+import { Box, Button, NumberInput, Space, Text, TextInput } from "@mantine/core";
+import { formList, useForm, zodResolver } from "@mantine/form";
 import dayjs from "dayjs";
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
@@ -10,6 +10,7 @@ import {
     VenueEditFormProps,
 } from "../../../types";
 import { CompanyInput } from "../../FormInputs/CompanyInput";
+import ContactPersonInput from "../../FormInputs/ContactPersonInput";
 
 const VenueFormSchema = z.object({
     venue: z
@@ -40,6 +41,7 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
             phone: "",
             mobilePhone: "",
             homepage: "",
+            contactPerson: formList([{name: "", role: "", email: "", phone: ""}]),
         },
     });
 
@@ -71,6 +73,7 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
                     homepage: values.homepage,
                 },
             },
+            contactPerson: values.contactPerson,
             dm: {
                 userid: session.userid,
                 edited: dayjs().toISOString(),
@@ -97,6 +100,7 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
             <TextInput label="Notes" {...Form.getInputProps("notes")} />
             <Space h="xl" />
             <CompanyInput Form={Form} />
+            <ContactPersonInput Form={Form} />
             <Button type="submit" fullWidth mt="xl">
                 Add Venue
             </Button>
@@ -130,6 +134,7 @@ export function VenueEditForm({
             phone: data.phone,
             mobilePhone: data.mobilePhone,
             homepage: data.homepage,
+            contactPerson: formList(data.contactPerson),
         },
     });
 
@@ -159,6 +164,7 @@ export function VenueEditForm({
                     homepage: values.homepage,
                 },
             },
+            contactPerson: values.contactPerson,
             dm: {
                 userid: session.userid,
                 created: dayjs().toISOString(),
@@ -184,6 +190,7 @@ export function VenueEditForm({
             <TextInput label="Notes" {...Form.getInputProps("notes")} />
             <Space h="xl" />
             <CompanyInput Form={Form} />
+            <ContactPersonInput Form={Form} />
             <Button type="submit" fullWidth mt="xl">
                 Update Venue Data
             </Button>

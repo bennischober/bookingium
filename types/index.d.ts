@@ -275,6 +275,12 @@ export interface DealEditFormValues {
 export interface VenueFormValues extends CompanyInputValues {
 	venue: string;
 	capacity: number;
+	contactPerson: {
+		name: string;
+		role: string;
+		email: string;
+		phone: string;
+	}[];
 	notes: string;
 }
 
