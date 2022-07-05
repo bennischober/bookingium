@@ -5,7 +5,7 @@ import { InputComponentProps } from "../../../types";
 // Note: This is no standalone component, this needs to be paired with a functional form component!
 
 // Person: {Form.getListInputProps("contactPerson", index, "name").value !== "" ? Form.getListInputProps("contactPerson", index, "name").value : index + 1}
-export default function ContactPersonInput({ Form }: InputComponentProps<any>) {
+export default function ContactPersonInput({ Form }: InputComponentProps) {
     const contactPersons = Form.values.contactPerson.map(
         (_: any, index: any) => (
             <Box key={index}>

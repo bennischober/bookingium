@@ -2,7 +2,7 @@ import { NumberInput, TextInput } from "@mantine/core";
 import { InputComponentProps } from "../../../types";
 
 // Note: This is no standalone component, this needs to be paired with a functional form component!
-export default function AddressInput({ Form }: InputComponentProps<any>) {
+export default function AddressInput({ Form }: InputComponentProps) {
     // Future ideas: Add search bar to search for address an get data from api (you enter street, number, city and country, etc. will be filled automatically)
     return (
         <>
