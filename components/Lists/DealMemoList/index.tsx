@@ -3,7 +3,7 @@ import { Paper, ScrollArea, Text } from "@mantine/core";
 import { useRouter } from "next/router";
 import { DealMemoListProps, DealMemoListValues } from "../../../types";
 import { DataGrid } from "../../Grid/DataGrid";
-import { createTable } from "@tanstack/react-table";
+import { createTable, useReactTable, ColumnDef } from "@tanstack/react-table";
 import { changeRoute, isPopulated } from "../../../utils/appHandles";
 import dayjs from "dayjs";
 import { IBand } from "../../../models/band";
@@ -27,12 +27,22 @@ export function DealMemoList({ memos }: DealMemoListProps) {
         changeRoute(router, `/deal-memo/${dealId}`, { from: router.pathname });
     };
 
-    let table = createTable().setRowType<DealMemoListValues>();
+    interface Test {
+        dealId: string;
+        band: string;
+        deal: string;
+        date: string;
+        fee: number;
+        status: string;
+    }
 
-    const columns = useMemo(
+    const columns = useMemo<ColumnDef<Test>[]>(
         () => [
-            table.createDataColumn("dealId", {
-                cell: (info) => (
+            {
+                id: "dealId",
+                header: "dealId",
+                accessorKey: "dealId",
+                cell: info => (
                     <Text
                         underline
                         variant="link"
@@ -43,32 +53,47 @@ export function DealMemoList({ memos }: DealMemoListProps) {
                     </Text>
                 ),
                 footer: (props) => props.column.id,
-            }),
-            table.createDataColumn("band", {
+            },
+            {
+                id: "band",
+                header: "band",
+                accessorKey: "band",
+                cell: (props) => props.getValue(),
+                footer: (props) => props.column.id,
+            },
+            {
+                id: "date",
+                header: "date",
+                accessorKey: "date",
+                cell: (props) => dayjs(props.getValue()).format("DD.MM.YYYY"),
+                footer: (props) => props.column.id,
+            },
+            {
+                id: "deal",
+                header: "deal",
+                accessorKey: "deal",
+                cell: (props) => props.getValue(),
+                footer: (props) => props.column.id,
+            },
+            {
+                id: "fee",
+                header: "fee",
+                accessorKey: "fee",
+                cell: (props) => props.getValue(),
+                footer: (props) => props.column.id,
+            },
+            {
+                id: "status",
+                header: "status",
+                accessorKey: "status",
                 cell: (info) => info.getValue(),
                 footer: (props) => props.column.id,
-            }),
-            table.createDataColumn("date", {
-                cell: (info) => dayjs(info.getValue()).format("DD.MM.YYYY"),
-                footer: (props) => props.column.id,
-            }),
-            table.createDataColumn("deal", {
-                cell: (info) => info.getValue(),
-                footer: (props) => props.column.id,
-            }),
-            table.createDataColumn("fee", {
-                cell: (info) => info.getValue(),
-                footer: (props) => props.column.id,
-            }),
-            table.createDataColumn("status", {
-                cell: (info) => info.getValue(),
-                footer: (props) => props.column.id,
-            }),
+            },
         ],
         []
-    );
+      )
 
-    const rows = memos.map((memo, index) => ({
+    const rows: Test[] = memos.map((memo, index) => ({
         dealId: memo.dealId,
         band:
             bandData[index] && bandData[index].name ? bandData[index].name : "",

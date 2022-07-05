@@ -1,10 +1,10 @@
 import { createStyles, Group, Table } from "@mantine/core";
 import {
-    createTable,
+    flexRender,
     getCoreRowModel,
     getSortedRowModel,
     SortingState,
-    useTableInstance,
+    useReactTable,
 } from "@tanstack/react-table";
 import { useState } from "react";
 import {
@@ -60,9 +60,7 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
     );
     const { classes } = useStyles();
 
-    let table = createTable().setRowType<any>();
-
-    const useTable = useTableInstance(table, {
+    const table = useReactTable({
         data,
         columns,
         state: {
@@ -81,6 +79,10 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
         setLocalStorageItem("memo-data-grid", JSON.stringify(settings));
     };
 
+    if(typeof window !== 'undefined') {
+        console.log(data);
+    }
+
     return (
         <>
             <DataGridHeader title={title} changeSettings={onChangeSettings} />
@@ -93,7 +95,7 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
                 className={classes.tableContainer}
             >
                 <thead>
-                    {useTable.getHeaderGroups().map((headerGroup) => (
+                    {table.getHeaderGroups().map((headerGroup) => (
                         <tr key={headerGroup.id}>
                             {headerGroup.headers.map((header) => {
                                 return (
@@ -116,7 +118,11 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
                                                     noWrap
                                                     position={"apart"}
                                                 >
-                                                    {header.renderHeader()}
+                                                    {flexRender(
+                                                        header.column.columnDef
+                                                            .footer,
+                                                        header.getContext()
+                                                    )}
                                                     {header.column.getIsSorted() ? (
                                                         <AscIcon
                                                             className={
@@ -143,7 +149,7 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
                     ))}
                 </thead>
                 <tbody>
-                    {useTable
+                    {table
                         .getRowModel()
                         .rows.slice(0, 10)
                         .map((row) => {
@@ -152,7 +158,10 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
                                     {row.getVisibleCells().map((cell) => {
                                         return (
                                             <td key={cell.id}>
-                                                {cell.renderCell()}
+                                                {flexRender(
+                                                    cell.column.columnDef.cell,
+                                                    cell.getContext()
+                                                )}
                                             </td>
                                         );
                                     })}
