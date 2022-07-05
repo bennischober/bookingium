@@ -29,7 +29,7 @@ const schema = z.object({
 });
 
 export function BandForm({ handleBands, close, session }: BandFormProps) {
-    const bandForm = useForm<BandFormValues>({
+    const bandForm = useForm({
         schema: zodResolver(schema),
         initialValues: {
             bandName: "",
@@ -179,7 +179,7 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
 }
 
 export function BandEditForm({handleBand, session, data}: BandEditFormProps) {
-    const bandForm = useForm<BandFormValues>({
+    const bandForm = useForm({
         schema: zodResolver(schema),
         initialValues: {
             bandName: data.bandName,
@@ -208,7 +208,6 @@ export function BandEditForm({handleBand, session, data}: BandEditFormProps) {
             <Text>Member {index + 1}</Text>
             <TextInput
                 label="Name"
-                // so this throws an typescript error, might need to fix this
                 {...bandForm.getListInputProps("members", index, "name")}
             />
             <TextInput
