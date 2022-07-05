@@ -79,10 +79,6 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
         setLocalStorageItem("memo-data-grid", JSON.stringify(settings));
     };
 
-    if(typeof window !== 'undefined') {
-        console.log(data);
-    }
-
     return (
         <>
             <DataGridHeader title={title} changeSettings={onChangeSettings} />
