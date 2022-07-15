@@ -21,6 +21,7 @@ export async function connect() {
         const db = await mongoose.connect(mongoUrl, mongoOptions);
         connection.isConnected = db.connections[0].readyState;
     } catch (error) {
+        // this might need a rework!
         throw new MongooseError(error as string);
     }
 }
