@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  app:
+    image: docker-nextjs-dev
+    container_name: app-nextjs-dev
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - ./:/app
+    command: npm run dev
+    # https://stackoverflow.com/questions/24319662/from-inside-of-a-docker-container-how-do-i-connect-to-the-localhost-of-the-mach
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
