@@ -1,5 +1,10 @@
 FROM node:18-alpine
 
+# rework this dockerfile => check if COPY . . can be used instead of COPY . ./app and if EXPOSE can be removed! => also add a command for this:
+# app-nextjs-dev | warn  - Attempted to load @next/swc-linux-x64-gnu, but it was not installed
+# app-nextjs-dev | warn  - Attempted to load @next/swc-linux-x64-gnux32, but it was not installed
+# app-nextjs-dev | warn  - Attempted to load @next/swc-linux-x64-musl, but it was not installed
+
 RUN mkdir -p /app
 
 WORKDIR /app

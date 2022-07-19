@@ -11,11 +11,18 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'GET':
             if (!userid) return res.status(403).json({ success: true, data: { message: "Access not granted!" } });
             try {
+                // register schema/model if its not already registered
+                require('../../../models/band');
+
                 // send populated data => needed in deal memo list
                 const dt = await DealMemo.find({ 'dm.userid': userid }).populate('bandid').exec();
                 return res.status(200).json({ success: true, data: dt });
             } catch (error) {
-                return res.status(500).json({ success: true, data: error });
+                // for better error handling
+                if(error instanceof Error) {
+                    return res.status(404).json({ success: false, data: error.message, userid: userid });
+                }
+                return res.status(404).json({ success: false, data: error, userid: userid });
             }
         case 'POST':
             try {
