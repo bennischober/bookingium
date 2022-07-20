@@ -18,6 +18,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (method) {
         case 'GET':
             try {
+                // register schema/model if its not already registered
+                require('../../../models/band');
+
                 // get specific item
                 // Note: if populate('foreignDoc') id does not exist, it returns null => no error is thrown!
                 const dealMemo = await DealMemo.findOne({ dealId: id }).populate('bandid').populate('venueid').populate('loproid').populate('hotelid').exec();
