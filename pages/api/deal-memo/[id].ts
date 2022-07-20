@@ -20,6 +20,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             try {
                 // register schema/model if its not already registered
                 require('../../../models/band');
+                require('../../../models/venue');
+                require('../../../models/lopro');
+                require('../../../models/hotel');
 
                 // get specific item
                 // Note: if populate('foreignDoc') id does not exist, it returns null => no error is thrown!
@@ -29,6 +32,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 }
                 return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
+                // for better error handling
+                if (error instanceof Error) {
+                    return res.status(404).json({ success: false, data: error.message });
+                }
                 return res.status(500).json({ success: false, error: error });
             }
         case 'PUT':
