@@ -4,6 +4,7 @@ RUN mkdir -p /app
 WORKDIR /app
 
 COPY package.json package-lock.json ./
+RUN npm i @next/swc-linux-x64-gnu
 RUN npm install
 
 COPY . /app

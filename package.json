@@ -20,7 +20,6 @@
     "@mantine/prism": "^4.2.12",
     "@mantine/rte": "^4.2.12",
     "@mantine/spotlight": "^4.2.12",
-    "@next/swc-linux-x64-gnu": "^12.2.2",
     "@tanstack/react-table": "^8.2.6",
     "@tanstack/table-core": "^8.2.6",
     "axios": "^0.27.2",
