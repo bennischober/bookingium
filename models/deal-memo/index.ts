@@ -20,7 +20,7 @@ const dealMemoSchema = new mongoose.Schema({
     loproid: { type: mongoose.Schema.Types.ObjectId, ref: 'Lopro' }, // equals promoter
     hotelid: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' },
     dm: {
-        userid: { type: String, required: true },
+        userid: { type: String, required: true, index: true },
         created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
         edited: { type: String }
     }
