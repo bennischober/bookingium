@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from '../../../lib/mongodb';
 import DealMemo from '../../../models/deal-memo';
+import { handleAPIError, throwAPIError } from "../../../utils/appHandles";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const {
@@ -13,7 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // also secure this endpoint with a userid!
 
     // id of the deal memo is required, only progress if available
-    if (!id) return res.status(400).json({ success: false, data: { error: "Bad request. Some parameters are missing!" } });
+    if (!id) return throwAPIError(res, "Bad request. Some parameters are missing!", 400);
 
     switch (method) {
         case 'GET':
@@ -32,11 +33,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 }
                 return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
-                // for better error handling
-                if (error instanceof Error) {
-                    return res.status(404).json({ success: false, data: error.message });
-                }
-                return res.status(500).json({ success: false, error: error });
+                return handleAPIError(res, error);
             }
         case 'PUT':
             try {
@@ -46,25 +43,25 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     runValidators: true,
                 });
                 if (!dealMemo) {
-                    return res.status(404).json({ success: false, error: { "message": "No deal memo found!" } });
+                    return throwAPIError(res, "No deal memo found!", 404);
                 }
                 return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
-                return res.status(500).json({ success: false, error: error });
+                return handleAPIError(res, error);
             }
         case 'DELETE':
             try {
                 // delete specific item
                 const dealMemo = await DealMemo.findByIdAndDelete(id);
                 if (!dealMemo) {
-                    return res.status(404).json({ success: false, error: { "message": "No deal memo found!" } });
+                    return throwAPIError(res, "No deal memo found!", 404);
                 }
                 return res.status(200).json({ success: true, data: {} });
             }
             catch (error) {
-                return res.status(500).json({ success: false, error: error });
+                return handleAPIError(res, error);
             }
         default:
-            return res.status(400).json({ success: false, error: { "message": "HTTP Method not found!" } });
+            return throwAPIError(res, "HTTP Method not found!", 400);
     }
 }
