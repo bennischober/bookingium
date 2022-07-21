@@ -225,13 +225,32 @@ Note: By far the most important
 }
 ```
 
+# Testing
+
+- [NextJS basics for testing](https://nextjs.org/docs/testing#playwright)
+- [Basic tests with cypress](https://www.npmjs.com/package/cypress)
+- [UI tests with storybook](https://www.npmjs.com/package/@storybook/cli)
+- [API tests with hoppscotch](https://hoppscotch.io/de/)
+- [Upcoming/advanced tests with playwright](https://www.npmjs.com/package/playwright)
+
+## Test run of deal memo data grid
+
+- Test basic features with cypress
+- Test e.g. datagrid with storybook (=> db data is required => use mock data for basic data grid testing)
+- Test functionality of e.g. deal-memo api with hoppscotch
+- (Advanced: test different browsers with playwright)
+
+Cypress and Storybook tests could be automatically executed in Docker build.
+
 
 # Upcoming Features
+
 - Multi user with company signin: many users can edit stuff simultaneously
 - Desktop standalone application using [Tauri](https://github.com/tauri-apps/tauri)
 - Mobile apps (Android/iOS) using [Capacitor](https://plazagonzalo.medium.com/how-to-convert-your-next-js-application-to-android-and-ios-in-5-clicks-bd8d5fac690c)?
 
 # References
+
 - [PDF generation](https://pdfme.com/docs/getting-started) | [react-pdf (currently not working for react 18)](https://github.com/diegomura/react-pdf) | [jsPDF](https://github.com/parallax/jsPDF) | [pdf-lib](https://github.com/Hopding/pdf-lib) | [Relaxed pdf](https://github.com/RelaxedJS/ReLaXed)
 - [Newsletter with Nodemailer](https://nodemailer.com/about/)
 - [Deployment](https://reactjsexample.com/how-to-deploy-nextjs-database-app-with-docker-multi-container/)
