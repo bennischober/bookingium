@@ -1,5 +1,5 @@
-import { Box, Button, NumberInput, Space, Text, TextInput } from "@mantine/core";
-import { formList, useForm, zodResolver } from "@mantine/form";
+import { Button, NumberInput, Space, Text, TextInput } from "@mantine/core";
+import { useForm, zodResolver } from "@mantine/form";
 import dayjs from "dayjs";
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
@@ -21,7 +21,7 @@ const VenueFormSchema = z.object({
 
 export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
     const Form = useForm<VenueFormValues>({
-        schema: zodResolver(VenueFormSchema),
+        validate: zodResolver(VenueFormSchema),
         initialValues: {
             venue: "",
             capacity: 0,
@@ -41,7 +41,7 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
             phone: "",
             mobilePhone: "",
             homepage: "",
-            contactPerson: formList([{name: "", role: "", email: "", phone: ""}]),
+            contactPerson: [{name: "", role: "", email: "", phone: ""}],
         },
     });
 
@@ -114,7 +114,7 @@ export function VenueEditForm({
     data,
 }: VenueEditFormProps) {
     const Form = useForm<VenueFormValues>({
-        schema: zodResolver(VenueFormSchema),
+        validate: zodResolver(VenueFormSchema),
         initialValues: {
             venue: data.venue,
             capacity: data.capacity,
@@ -134,7 +134,7 @@ export function VenueEditForm({
             phone: data.phone,
             mobilePhone: data.mobilePhone,
             homepage: data.homepage,
-            contactPerson: formList(data.contactPerson),
+            contactPerson: data.contactPerson,
         },
     });
 

@@ -8,9 +8,13 @@ import {
     Textarea,
     TextInput,
 } from "@mantine/core";
-import { formList, useForm, zodResolver } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import { MdOutlineAdd } from "react-icons/md";
-import { BandEditFormProps, BandFormProps, BandFormValues } from "../../../types";
+import {
+    BandEditFormProps,
+    BandFormProps,
+    BandFormValues,
+} from "../../../types";
 import AddressInput from "../../FormInputs/AddressInput";
 import ContactInput from "../../FormInputs/ContactInput";
 import mongoose from "mongoose";
@@ -30,7 +34,7 @@ const schema = z.object({
 
 export function BandForm({ handleBands, close, session }: BandFormProps) {
     const bandForm = useForm({
-        schema: zodResolver(schema),
+        validate: zodResolver(schema),
         initialValues: {
             bandName: "",
             notes: "",
@@ -49,7 +53,7 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
             phone: "",
             mobilePhone: "",
             homepage: "",
-            members: formList([{ name: "", role: "", email: "", phone: "" }]),
+            members: [{ name: "", role: "", email: "", phone: "" }],
         },
     });
 
@@ -59,19 +63,19 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
             <TextInput
                 label="Name"
                 // so this throws an typescript error, might need to fix this
-                {...bandForm.getListInputProps("members", index, "name")}
+                {...bandForm.getInputProps("members.name")}
             />
             <TextInput
                 label="Role"
-                {...bandForm.getListInputProps("members", index, "role")}
+                {...bandForm.getInputProps("members.role")}
             />
             <TextInput
                 label="Email"
-                {...bandForm.getListInputProps("members", index, "email")}
+                {...bandForm.getInputProps("members.email")}
             />
             <TextInput
                 label="Phone"
-                {...bandForm.getListInputProps("members", index, "phone")}
+                {...bandForm.getInputProps("members.phone")}
             />
             <Space h="xl" />
         </Box>
@@ -112,7 +116,7 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
             },
         };
 
-        if(handleBands) handleBands(bandData);
+        if (handleBands) handleBands(bandData);
 
         if (close) close();
 
@@ -145,29 +149,40 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
                     {...bandForm.getInputProps("ustNumber")}
                 />
                 <Space h="xl" />
-                <Accordion>
-                    <Accordion.Item label="Company Address">
-                        <AddressInput Form={bandForm} />
+                <Accordion defaultValue="company-address">
+                    <Accordion.Item value="company-address">
+                        <Accordion.Control>Company Address</Accordion.Control>
+                        <Accordion.Panel>
+                            <AddressInput Form={bandForm} />
+                        </Accordion.Panel>
                     </Accordion.Item>
-                    <Accordion.Item label="Company Contact">
-                        <ContactInput Form={bandForm} />
+                    <Accordion.Item value="company-contact">
+                        <Accordion.Control>Company Contact</Accordion.Control>
+                        <Accordion.Panel>
+                            <ContactInput Form={bandForm} />
+                        </Accordion.Panel>
                     </Accordion.Item>
-                    <Accordion.Item label="Band Members">
-                        {members}
-                        <Space h="xl" />
-                        <Button
-                            leftIcon={<MdOutlineAdd />}
-                            onClick={() =>
-                                bandForm.addListItem("members", {
-                                    name: "",
-                                    role: "",
-                                    email: "",
-                                    phone: "",
-                                })
-                            }
-                        >
-                            Add band member
-                        </Button>
+                    <Accordion.Item value="band-members">
+                        <Accordion.Control>Band Members</Accordion.Control>
+                        <Accordion.Panel>
+                            <>
+                                {members}
+                                <Space h="xl" />
+                                <Button
+                                    leftIcon={<MdOutlineAdd />}
+                                    onClick={() =>
+                                        bandForm.insertListItem("members", {
+                                            name: "",
+                                            role: "",
+                                            email: "",
+                                            phone: "",
+                                        })
+                                    }
+                                >
+                                    Add band member
+                                </Button>
+                            </>
+                        </Accordion.Panel>
                     </Accordion.Item>
                 </Accordion>
                 <Button type="submit" fullWidth mt="xl">
@@ -178,9 +193,9 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
     );
 }
 
-export function BandEditForm({handleBand, session, data}: BandEditFormProps) {
+export function BandEditForm({ handleBand, session, data }: BandEditFormProps) {
     const bandForm = useForm({
-        schema: zodResolver(schema),
+        validate: zodResolver(schema),
         initialValues: {
             bandName: data.bandName,
             notes: data.notes,
@@ -199,28 +214,30 @@ export function BandEditForm({handleBand, session, data}: BandEditFormProps) {
             phone: data.phone,
             mobilePhone: data.mobilePhone,
             homepage: data.homepage,
-            members: formList(data.members),
+            members: data.members,
         },
     });
 
-    const members = bandForm.values.members.map((_, index) => (
+    console.log(data, "is ssr? " + typeof window === 'undefined');
+
+    const members = bandForm.values.members?.map((_, index) => (
         <Box key={index}>
             <Text>Member {index + 1}</Text>
             <TextInput
                 label="Name"
-                {...bandForm.getListInputProps("members", index, "name")}
+                {...bandForm.getInputProps("members.name")}
             />
             <TextInput
                 label="Role"
-                {...bandForm.getListInputProps("members", index, "role")}
+                {...bandForm.getInputProps("members.role")}
             />
             <TextInput
                 label="Email"
-                {...bandForm.getListInputProps("members", index, "email")}
+                {...bandForm.getInputProps("members.email")}
             />
             <TextInput
                 label="Phone"
-                {...bandForm.getListInputProps("members", index, "phone")}
+                {...bandForm.getInputProps("members.phone")}
             />
             <Space h="xl" />
         </Box>
@@ -289,28 +306,37 @@ export function BandEditForm({handleBand, session, data}: BandEditFormProps) {
                 />
                 <Space h="xl" />
                 <Accordion>
-                    <Accordion.Item label="Company Address">
-                        <AddressInput Form={bandForm} />
+                    <Accordion.Item value="company-address">
+                        <Accordion.Control>Company Address</Accordion.Control>
+                        <Accordion.Panel>
+                            <AddressInput Form={bandForm} />
+                        </Accordion.Panel>
                     </Accordion.Item>
-                    <Accordion.Item label="Company Contact">
+                    <Accordion.Item value="company-contact">
+                        <Accordion.Control>Company Contact</Accordion.Control>
                         <ContactInput Form={bandForm} />
                     </Accordion.Item>
-                    <Accordion.Item label="Band Members">
-                        {members}
-                        <Space h="xl" />
-                        <Button
-                            leftIcon={<MdOutlineAdd />}
-                            onClick={() =>
-                                bandForm.addListItem("members", {
-                                    name: "",
-                                    role: "",
-                                    email: "",
-                                    phone: "",
-                                })
-                            }
-                        >
-                            Add band member
-                        </Button>
+                    <Accordion.Item value="band-members">
+                        <Accordion.Control>Band Members</Accordion.Control>
+                        <Accordion.Panel>
+                            <>
+                                {members}
+                                <Space h="xl" />
+                                <Button
+                                    leftIcon={<MdOutlineAdd />}
+                                    onClick={() =>
+                                        bandForm.insertListItem("members", {
+                                            name: "",
+                                            role: "",
+                                            email: "",
+                                            phone: "",
+                                        })
+                                    }
+                                >
+                                    Add band member
+                                </Button>
+                            </>
+                        </Accordion.Panel>
                     </Accordion.Item>
                 </Accordion>
                 <Button type="submit" fullWidth mt="xl">

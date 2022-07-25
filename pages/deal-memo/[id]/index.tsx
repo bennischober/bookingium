@@ -123,7 +123,14 @@ export default function CompleteDealMemoPage({
             <Title>Deal: {memoData.dealId}</Title>
             <Space h="xl" />
             <Tabs>
-                <Tabs.Tab label="Deal data">
+                <Tabs.List>
+                    <Tabs.Tab value="deal-data">Deal data</Tabs.Tab>
+                    <Tabs.Tab value="band-data">Band data</Tabs.Tab>
+                    <Tabs.Tab value="venue-data">Venue data</Tabs.Tab>
+                    <Tabs.Tab value="lopro-data">Local promoter data</Tabs.Tab>
+                    <Tabs.Tab value="hotel-data">Hotel data</Tabs.Tab>
+                </Tabs.List>
+                <Tabs.Panel value="deal-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         <DealEditForm
                             handleMemos={handleMemo}
@@ -142,8 +149,8 @@ export default function CompleteDealMemoPage({
                             created={memoData.dm.created}
                         />
                     </Paper>
-                </Tabs.Tab>
-                <Tabs.Tab label="Band data">
+                </Tabs.Panel>
+                <Tabs.Panel value="band-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         <BandEditForm
                             session={session}
@@ -174,8 +181,8 @@ export default function CompleteDealMemoPage({
                             }}
                         />
                     </Paper>
-                </Tabs.Tab>
-                <Tabs.Tab label="Venue data">
+                </Tabs.Panel>
+                <Tabs.Panel value="venue-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         <VenueEditForm
                             session={session}
@@ -207,8 +214,8 @@ export default function CompleteDealMemoPage({
                             }}
                         />
                     </Paper>
-                </Tabs.Tab>
-                <Tabs.Tab label="Local promoter data">
+                </Tabs.Panel>
+                <Tabs.Panel value="lopro-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         <LoproEditForm
                             session={session}
@@ -241,8 +248,8 @@ export default function CompleteDealMemoPage({
                             }}
                         />
                     </Paper>
-                </Tabs.Tab>
-                <Tabs.Tab label="Hotel data">
+                </Tabs.Panel>
+                <Tabs.Panel value="hotel-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         {hotelData && Object.keys(hotelData).length > 0 ? (
                             <HotelEditForm
@@ -288,7 +295,7 @@ export default function CompleteDealMemoPage({
                             </Center>
                         )}
                     </Paper>
-                </Tabs.Tab>
+                </Tabs.Panel>
             </Tabs>
         </>
     );
