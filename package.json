@@ -12,7 +12,7 @@
     "@mantine/core": "^4.2.12",
     "@mantine/dates": "^4.2.12",
     "@mantine/dropzone": "^4.2.12",
-    "@mantine/form": "^4.2.12",
+    "@mantine/form": "^5.0.0",
     "@mantine/hooks": "^4.2.11",
     "@mantine/modals": "^4.2.12",
     "@mantine/next": "^5.0.0",
