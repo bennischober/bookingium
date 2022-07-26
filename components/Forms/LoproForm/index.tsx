@@ -106,6 +106,8 @@ export function LoproForm({ handleLopro, close, session }: LoproFormProps) {
 
 
 export function LoproEditForm({handleLopro, session, data}: LoproEditFormProps) {
+    if(!data || !data.name) return <></>;
+
     const Form = useForm<LoproFormValues>({
         validate: zodResolver(LoproFormSchema),
         initialValues: {
@@ -168,10 +170,9 @@ export function LoproEditForm({handleLopro, session, data}: LoproEditFormProps) 
         handleLopro(loproData);
     }
 
-
     return (
         <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-            <TextInput label="Name" {...Form.getInputProps("name")} required />
+            <TextInput label="Name" {...Form.getInputProps('name')} required />
             <TextInput label="Phone" {...Form.getInputProps("personPhone")} />
             <TextInput
                 label="Mobile Phone"

@@ -109,17 +109,6 @@ export default function CompleteDealMemoPage({
         console.log(data);
     };
 
-    console.log(
-        "memoData: ",
-        memoData,
-        "bandData: ",
-        bandData,
-        "venueData: ",
-        venueData,
-        "loproData: ",
-        loproData
-    );
-
     return (
         <>
             <Button
@@ -162,8 +151,7 @@ export default function CompleteDealMemoPage({
                 </Tabs.Panel>
                 <Tabs.Panel value="band-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
-                        {bandData ? (
-                            <BandEditForm
+                    <BandEditForm
                                 session={session}
                                 handleBand={handleBand}
                                 data={{
@@ -196,7 +184,6 @@ export default function CompleteDealMemoPage({
                                     members: bandData?.members,
                                 }}
                             />
-                        ) : null}
                     </Paper>
                 </Tabs.Panel>
                 <Tabs.Panel value="venue-data">

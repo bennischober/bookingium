@@ -113,6 +113,8 @@ export function VenueEditForm({
     session,
     data,
 }: VenueEditFormProps) {
+    if(!data || !data.contactPerson) return <></>;
+
     const Form = useForm<VenueFormValues>({
         validate: zodResolver(VenueFormSchema),
         initialValues: {

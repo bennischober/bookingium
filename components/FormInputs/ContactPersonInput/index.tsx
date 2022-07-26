@@ -6,26 +6,28 @@ import { InputComponentProps } from "../../../types";
 
 // Person: {Form.getListInputProps("contactPerson", index, "name").value !== "" ? Form.getListInputProps("contactPerson", index, "name").value : index + 1}
 export default function ContactPersonInput({ Form }: InputComponentProps) {
-    const contactPersons = Form.values.contactPerson?.map(
+    if(!Form.values.contactPerson) return <></>;
+    
+    const contactPersons = Form.values.contactPerson.map(
         (_: any, index: any) => (
             <Box key={index}>
                 <Text>Person: {index + 1}</Text>
                 <TextInput
                     label="Name"
                     // so this throws an typescript error, might need to fix this
-                    {...Form.getInputProps("contactPerson.name")}
+                    {...Form.getInputProps(`contactPerson.${index}.name`)}
                 />
                 <TextInput
                     label="Role"
-                    {...Form.getInputProps("contactPerson.role")}
+                    {...Form.getInputProps(`contactPerson.${index}.role`)}
                 />
                 <TextInput
                     label="Email"
-                    {...Form.getInputProps("contactPerson.email")}
+                    {...Form.getInputProps(`contactPerson.${index}.email`)}
                 />
                 <TextInput
                     label="Phone"
-                    {...Form.getInputProps("contactPerson..phone")}
+                    {...Form.getInputProps(`contactPerson.${index}.phone`)}
                 />
                 <Space h="xl" />
             </Box>

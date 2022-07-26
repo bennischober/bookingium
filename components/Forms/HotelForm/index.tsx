@@ -87,6 +87,8 @@ export function HotelForm({ handleHotel, close, session }: HotelFormProps) {
 
 
 export function HotelEditForm({ handleHotel, session, data }: HotelEditFormProps) {
+    if(!data || !data.name) return <></>;
+
     const Form = useForm<HotelFormValues>({
         validate: zodResolver(HotelFormSchema),
         initialValues: {
