@@ -45,11 +45,10 @@ export function handleSession(router: NextRouter, session: SessionProps["session
 }
 
 /*---- ERROR HANDLE ----*/
-// maybe create error class: https://www.typescriptlang.org/docs/handbook/2/classes.html
 export function throwAPIError(res: NextApiResponse, error: string, status?: number) {
     try {
         throw new Error(error);
-    } catch(err) {
+    } catch (err) {
         handleAPIError(res, err, status);
     }
 }

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from '../../../lib/mongodb';
 import DealMemo from '../../../models/deal-memo';
-import { handleAPIError, throwAPIError } from "../../../utils/appHandles";
+import { ApiError } from '../../../types/errors';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const {
@@ -14,7 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // also secure this endpoint with a userid!
 
     // id of the deal memo is required, only progress if available
-    if (!id) return throwAPIError(res, "Bad request. Some parameters are missing!", 400);
+    if (!id) return new ApiError(res).throwSpecific('missing_request_parameters');
 
     switch (method) {
         case 'GET':
@@ -29,11 +29,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 // Note: if populate('foreignDoc') id does not exist, it returns null => no error is thrown!
                 const dealMemo = await DealMemo.findOne({ dealId: id }).populate('bandid').populate('venueid').populate('loproid').populate('hotelid').exec();
                 if (!dealMemo) {
-                    return res.status(404).json({ success: false, data: { error: `No data found for the id ${id}!` } });
+                    return new ApiError(res, 404, `No data found for the id ${id}!`).throw();
                 }
                 return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
-                return handleAPIError(res, error);
+                return new ApiError(res, 500).handle(error);
             }
         case 'PUT':
             try {
@@ -43,25 +43,25 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     runValidators: true,
                 });
                 if (!dealMemo) {
-                    return throwAPIError(res, "No deal memo found!", 404);
+                    return new ApiError(res).throwSpecific('no_data_found');
                 }
                 return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
-                return handleAPIError(res, error);
+                return new ApiError(res, 500).handle(error);
             }
         case 'DELETE':
             try {
                 // delete specific item
                 const dealMemo = await DealMemo.findByIdAndDelete(id);
                 if (!dealMemo) {
-                    return throwAPIError(res, "No deal memo found!", 404);
+                    return new ApiError(res).throwSpecific('no_data_found');
                 }
                 return res.status(200).json({ success: true, data: {} });
             }
             catch (error) {
-                return handleAPIError(res, error);
+                return new ApiError(res, 500).handle(error);
             }
         default:
-            return throwAPIError(res, "HTTP Method not found!", 400);
+            return new ApiError(res).throwSpecific('http_method_not_found');
     }
 }
