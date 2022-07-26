@@ -13,6 +13,7 @@ import {
     setLocalStorageItem,
 } from "../utils/browserHandle";
 import { AppContainer } from "../components/Layout/AppContainer";
+import { RouterTransition } from "../components/Layout/RouterTransition";
 import { SessionProvider } from "next-auth/react";
 
 export default function App({ Component, pageProps, ...appPropps }: AppProps) {
@@ -72,6 +73,7 @@ export default function App({ Component, pageProps, ...appPropps }: AppProps) {
                             colorScheme: colorScheme,
                         }}
                     >
+                        <RouterTransition />
                         <NotificationsProvider>
                             {getPageContent()}
                         </NotificationsProvider>
@@ -81,4 +83,3 @@ export default function App({ Component, pageProps, ...appPropps }: AppProps) {
         </>
     );
 }
-
