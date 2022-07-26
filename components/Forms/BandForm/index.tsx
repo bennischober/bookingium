@@ -62,20 +62,19 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
             <Text>Member {index + 1}</Text>
             <TextInput
                 label="Name"
-                // so this throws an typescript error, might need to fix this
-                {...bandForm.getInputProps("members.name")}
+                {...bandForm.getInputProps(`members.${index}.name`)}
             />
             <TextInput
                 label="Role"
-                {...bandForm.getInputProps("members.role")}
+                {...bandForm.getInputProps(`members.${index}.role`)}
             />
             <TextInput
                 label="Email"
-                {...bandForm.getInputProps("members.email")}
+                {...bandForm.getInputProps(`members.${index}.email`)}
             />
             <TextInput
                 label="Phone"
-                {...bandForm.getInputProps("members.phone")}
+                {...bandForm.getInputProps(`members.${index}.phone`)}
             />
             <Space h="xl" />
         </Box>
@@ -194,6 +193,9 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
 }
 
 export function BandEditForm({ handleBand, session, data }: BandEditFormProps) {
+    // early out, if data || data.members is not set => might happen at first render attempt
+    if (!data || !data.members) return <></>;
+
     const bandForm = useForm({
         validate: zodResolver(schema),
         initialValues: {
@@ -218,26 +220,24 @@ export function BandEditForm({ handleBand, session, data }: BandEditFormProps) {
         },
     });
 
-    console.log(data, "is ssr? " + typeof window === 'undefined');
-
-    const members = bandForm.values.members?.map((_, index) => (
+    const members = bandForm.values.members.map((_, index) => (
         <Box key={index}>
             <Text>Member {index + 1}</Text>
             <TextInput
                 label="Name"
-                {...bandForm.getInputProps("members.name")}
+                {...bandForm.getInputProps(`members.${index}.name`)}
             />
             <TextInput
                 label="Role"
-                {...bandForm.getInputProps("members.role")}
+                {...bandForm.getInputProps(`members.${index}.role`)}
             />
             <TextInput
                 label="Email"
-                {...bandForm.getInputProps("members.email")}
+                {...bandForm.getInputProps(`members.${index}.email`)}
             />
             <TextInput
                 label="Phone"
-                {...bandForm.getInputProps("members.phone")}
+                {...bandForm.getInputProps(`members.${index}.phone`)}
             />
             <Space h="xl" />
         </Box>
@@ -314,7 +314,9 @@ export function BandEditForm({ handleBand, session, data }: BandEditFormProps) {
                     </Accordion.Item>
                     <Accordion.Item value="company-contact">
                         <Accordion.Control>Company Contact</Accordion.Control>
-                        <ContactInput Form={bandForm} />
+                        <Accordion.Panel>
+                            <ContactInput Form={bandForm} />
+                        </Accordion.Panel>
                     </Accordion.Item>
                     <Accordion.Item value="band-members">
                         <Accordion.Control>Band Members</Accordion.Control>

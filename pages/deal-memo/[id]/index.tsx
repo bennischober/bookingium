@@ -92,7 +92,6 @@ export default function CompleteDealMemoPage({
         });
     };
 
-
     // Note: For the put action new apis /[id]/index.ts will be needed!
     const handleBand = async (data: {}) => {
         console.log(data);
@@ -110,6 +109,17 @@ export default function CompleteDealMemoPage({
         console.log(data);
     };
 
+    console.log(
+        "memoData: ",
+        memoData,
+        "bandData: ",
+        bandData,
+        "venueData: ",
+        venueData,
+        "loproData: ",
+        loproData
+    );
+
     return (
         <>
             <Button
@@ -122,7 +132,7 @@ export default function CompleteDealMemoPage({
             <Space h="xl" />
             <Title>Deal: {memoData.dealId}</Title>
             <Space h="xl" />
-            <Tabs>
+            <Tabs defaultValue="deal-data">
                 <Tabs.List>
                     <Tabs.Tab value="deal-data">Deal data</Tabs.Tab>
                     <Tabs.Tab value="band-data">Band data</Tabs.Tab>
@@ -152,34 +162,41 @@ export default function CompleteDealMemoPage({
                 </Tabs.Panel>
                 <Tabs.Panel value="band-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
-                        <BandEditForm
-                            session={session}
-                            handleBand={handleBand}
-                            data={{
-                                bandName: bandData?.name,
-                                notes: bandData?.notes,
-                                companyName: bandData?.company?.name,
-                                vatNumber: bandData?.company?.vatNumber,
-                                ustNumber: bandData?.company?.ustNumber,
-                                streetNumber:
-                                    bandData?.company?.address?.streetNumber,
-                                street: bandData?.company?.address?.street,
-                                addressSuffix:
-                                    bandData?.company?.address?.addressSuffix,
-                                zipCode: bandData?.company?.address?.zipCode,
-                                city: bandData?.company?.address?.city,
-                                state: bandData?.company?.address?.state,
-                                country: bandData?.company?.address?.country,
-                                countryCode:
-                                    bandData?.company?.address?.countryCode,
-                                email: bandData?.company?.contact?.email,
-                                phone: bandData?.company?.contact?.phone,
-                                mobilePhone:
-                                    bandData.company?.contact?.mobilePhone,
-                                homepage: bandData?.company?.contact?.homepage,
-                                members: bandData?.members,
-                            }}
-                        />
+                        {bandData ? (
+                            <BandEditForm
+                                session={session}
+                                handleBand={handleBand}
+                                data={{
+                                    bandName: bandData?.name,
+                                    notes: bandData?.notes,
+                                    companyName: bandData?.company?.name,
+                                    vatNumber: bandData?.company?.vatNumber,
+                                    ustNumber: bandData?.company?.ustNumber,
+                                    streetNumber:
+                                        bandData?.company?.address
+                                            ?.streetNumber,
+                                    street: bandData?.company?.address?.street,
+                                    addressSuffix:
+                                        bandData?.company?.address
+                                            ?.addressSuffix,
+                                    zipCode:
+                                        bandData?.company?.address?.zipCode,
+                                    city: bandData?.company?.address?.city,
+                                    state: bandData?.company?.address?.state,
+                                    country:
+                                        bandData?.company?.address?.country,
+                                    countryCode:
+                                        bandData?.company?.address?.countryCode,
+                                    email: bandData?.company?.contact?.email,
+                                    phone: bandData?.company?.contact?.phone,
+                                    mobilePhone:
+                                        bandData.company?.contact?.mobilePhone,
+                                    homepage:
+                                        bandData?.company?.contact?.homepage,
+                                    members: bandData?.members,
+                                }}
+                            />
+                        ) : null}
                     </Paper>
                 </Tabs.Panel>
                 <Tabs.Panel value="venue-data">
