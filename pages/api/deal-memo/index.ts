@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     switch (method) {
         case 'GET':
-            if (!userid) return new ApiError(res, 403, "Access not granted!").throw();
+            if (!userid) return new ApiError(res).throwSpecific('access_denied');
             try {
                 // register schema/model if its not already registered
                 require('../../../models/band');
@@ -26,9 +26,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 const dealMemo = await DealMemo.create(req.body.data); // create new db entry
                 return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
-                return new ApiError(res, 500).handle("Not implemented yet!");
+                return new ApiError(res, 500).handle(error);
             }
         default:
-            return new ApiError(res, 400, "HTTP Method not found!").throw();
+            return new ApiError(res).throwSpecific('http_method_not_found');
     }
 }

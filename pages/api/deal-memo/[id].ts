@@ -14,7 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // also secure this endpoint with a userid!
 
     // id of the deal memo is required, only progress if available
-    if (!id) return new ApiError(res, 400, "Bad request. Some parameters are missing!").throw();
+    if (!id) return new ApiError(res).throwSpecific('missing_request_parameters');
 
     switch (method) {
         case 'GET':
@@ -43,7 +43,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                     runValidators: true,
                 });
                 if (!dealMemo) {
-                    return new ApiError(res, 404, "No deal memo found!").throw();
+                    return new ApiError(res).throwSpecific('no_data_found');
                 }
                 return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
@@ -54,7 +54,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 // delete specific item
                 const dealMemo = await DealMemo.findByIdAndDelete(id);
                 if (!dealMemo) {
-                    return new ApiError(res, 404, "No deal memo found!").throw();
+                    return new ApiError(res).throwSpecific('no_data_found');
                 }
                 return res.status(200).json({ success: true, data: {} });
             }
@@ -62,6 +62,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 return new ApiError(res, 500).handle(error);
             }
         default:
-            return new ApiError(res, 400, "HTTP Method not found!").throw();
+            return new ApiError(res).throwSpecific('http_method_not_found');
     }
 }

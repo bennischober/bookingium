@@ -44,6 +44,8 @@ export class AppErrorHandler extends AppErrorBase {
     }
 }
 
+export type ApiErrorType = "access_denied" | "http_method_not_found" | "unknown_error" | "no_data_found" | "missing_request_parameters" | "data_conflict" | "access_not_authorized";
+
 export class ApiError extends AppErrorBase {
     private _res: NextApiResponse;
     private _status: number;
@@ -66,6 +68,29 @@ export class ApiError extends AppErrorBase {
         this._res = res;
         this._status = status ?? 404;
         this._msg = message ?? "Unknown API error occurred!";
+    }
+
+    // pre generated errors
+    // attach with data?
+    public throwSpecific(type: ApiErrorType, msg?: string) {
+        switch (type) {
+            case "access_denied":
+                return this.throw(403, msg ?? "Access denied!");
+            case "http_method_not_found":
+                return this.throw(400, msg ?? "HTTP Method not found!");
+            case "unknown_error":
+                return this.throw(500, msg ?? "Unknown error!");
+            case "no_data_found":
+                return this.throw(404, msg ?? "Data not found!");
+            case "missing_request_parameters":
+                return this.throw(400, msg ?? "Missing HTTTP request parameters!");
+            case "data_conflict":
+                return this.throw(409, msg ?? "Data already exists!");
+            case "access_not_authorized":
+                return this.throw(401, msg ?? "Access not authorized!");
+            default:
+                return this.throw(500, "Unknown error!");
+        }
     }
 
     // throw function with overloads

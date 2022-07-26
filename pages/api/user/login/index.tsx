@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from "next";
 import bcrypt from "bcryptjs";
 import { connect } from "../../../../lib/mongodb";
 import { User } from "../../../../models/user";
+import { ApiError } from "../../../../types/errors";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { method, body } = req;
@@ -17,22 +18,24 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case "POST":
             try {
                 const user = await User.findOne({ email: registerData.email });
-                if (!user)
-                    return res
-                        .status(404)
-                        .json({ success: false, error: "User not found" });
-                if (!bcrypt.compareSync(registerData.password, user.password))
-                    return res
-                        .status(401)
-                        .json({ success: false, error: "Password incorrect" });
+                if (!user) {
+                    return new ApiError(res).throwSpecific(
+                        "no_data_found",
+                        "User not found!"
+                    );
+                }
+                if (!bcrypt.compareSync(registerData.password, user.password)) {
+                    return new ApiError(res).throwSpecific(
+                        "access_not_authorized",
+                        "Wrong login credentials!"
+                    );
+                }
 
-                res.status(200).json({ success: true, user: user });
+                return res.status(200).json({ success: true, user: user });
             } catch (err) {
-                res.status(500).json({ success: false, error: err });
+                return new ApiError(res, 500).handle(err);
             }
-            break;
-
         default:
-            break;
+            return new ApiError(res).throwSpecific("http_method_not_found");
     }
 };
