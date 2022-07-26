@@ -2,7 +2,7 @@ import { v4 as uuidv4 } from "uuid";
 import dayjs from "dayjs";
 import mongoose from "mongoose";
 import { z } from "zod";
-import { Button, NumberInput, Space, TextInput } from "@mantine/core";
+import { Button, Space, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { CompanyInput } from "../../FormInputs/CompanyInput";
 import { LoproEditFormProps, LoproFormProps, LoproFormValues } from "../../../types";
@@ -16,7 +16,7 @@ const LoproFormSchema = z.object({
 
 export function LoproForm({ handleLopro, close, session }: LoproFormProps) {
     const Form = useForm<LoproFormValues>({
-        schema: zodResolver(LoproFormSchema),
+        validate: zodResolver(LoproFormSchema),
         initialValues: {
             name: "",
             personPhone: "",
@@ -106,8 +106,10 @@ export function LoproForm({ handleLopro, close, session }: LoproFormProps) {
 
 
 export function LoproEditForm({handleLopro, session, data}: LoproEditFormProps) {
+    if(!data || !data.name) return <></>;
+
     const Form = useForm<LoproFormValues>({
-        schema: zodResolver(LoproFormSchema),
+        validate: zodResolver(LoproFormSchema),
         initialValues: {
             name: data.name,
             personPhone: data.personPhone,
@@ -168,10 +170,9 @@ export function LoproEditForm({handleLopro, session, data}: LoproEditFormProps) 
         handleLopro(loproData);
     }
 
-
     return (
         <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-            <TextInput label="Name" {...Form.getInputProps("name")} required />
+            <TextInput label="Name" {...Form.getInputProps('name')} required />
             <TextInput label="Phone" {...Form.getInputProps("personPhone")} />
             <TextInput
                 label="Mobile Phone"

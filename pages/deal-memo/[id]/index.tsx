@@ -92,7 +92,6 @@ export default function CompleteDealMemoPage({
         });
     };
 
-
     // Note: For the put action new apis /[id]/index.ts will be needed!
     const handleBand = async (data: {}) => {
         console.log(data);
@@ -122,8 +121,15 @@ export default function CompleteDealMemoPage({
             <Space h="xl" />
             <Title>Deal: {memoData.dealId}</Title>
             <Space h="xl" />
-            <Tabs>
-                <Tabs.Tab label="Deal data">
+            <Tabs defaultValue="deal-data">
+                <Tabs.List>
+                    <Tabs.Tab value="deal-data">Deal data</Tabs.Tab>
+                    <Tabs.Tab value="band-data">Band data</Tabs.Tab>
+                    <Tabs.Tab value="venue-data">Venue data</Tabs.Tab>
+                    <Tabs.Tab value="lopro-data">Local promoter data</Tabs.Tab>
+                    <Tabs.Tab value="hotel-data">Hotel data</Tabs.Tab>
+                </Tabs.List>
+                <Tabs.Panel value="deal-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         <DealEditForm
                             handleMemos={handleMemo}
@@ -142,40 +148,45 @@ export default function CompleteDealMemoPage({
                             created={memoData.dm.created}
                         />
                     </Paper>
-                </Tabs.Tab>
-                <Tabs.Tab label="Band data">
+                </Tabs.Panel>
+                <Tabs.Panel value="band-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
-                        <BandEditForm
-                            session={session}
-                            handleBand={handleBand}
-                            data={{
-                                bandName: bandData?.name,
-                                notes: bandData?.notes,
-                                companyName: bandData?.company?.name,
-                                vatNumber: bandData?.company?.vatNumber,
-                                ustNumber: bandData?.company?.ustNumber,
-                                streetNumber:
-                                    bandData?.company?.address?.streetNumber,
-                                street: bandData?.company?.address?.street,
-                                addressSuffix:
-                                    bandData?.company?.address?.addressSuffix,
-                                zipCode: bandData?.company?.address?.zipCode,
-                                city: bandData?.company?.address?.city,
-                                state: bandData?.company?.address?.state,
-                                country: bandData?.company?.address?.country,
-                                countryCode:
-                                    bandData?.company?.address?.countryCode,
-                                email: bandData?.company?.contact?.email,
-                                phone: bandData?.company?.contact?.phone,
-                                mobilePhone:
-                                    bandData.company?.contact?.mobilePhone,
-                                homepage: bandData?.company?.contact?.homepage,
-                                members: bandData?.members,
-                            }}
-                        />
+                    <BandEditForm
+                                session={session}
+                                handleBand={handleBand}
+                                data={{
+                                    bandName: bandData?.name,
+                                    notes: bandData?.notes,
+                                    companyName: bandData?.company?.name,
+                                    vatNumber: bandData?.company?.vatNumber,
+                                    ustNumber: bandData?.company?.ustNumber,
+                                    streetNumber:
+                                        bandData?.company?.address
+                                            ?.streetNumber,
+                                    street: bandData?.company?.address?.street,
+                                    addressSuffix:
+                                        bandData?.company?.address
+                                            ?.addressSuffix,
+                                    zipCode:
+                                        bandData?.company?.address?.zipCode,
+                                    city: bandData?.company?.address?.city,
+                                    state: bandData?.company?.address?.state,
+                                    country:
+                                        bandData?.company?.address?.country,
+                                    countryCode:
+                                        bandData?.company?.address?.countryCode,
+                                    email: bandData?.company?.contact?.email,
+                                    phone: bandData?.company?.contact?.phone,
+                                    mobilePhone:
+                                        bandData.company?.contact?.mobilePhone,
+                                    homepage:
+                                        bandData?.company?.contact?.homepage,
+                                    members: bandData?.members,
+                                }}
+                            />
                     </Paper>
-                </Tabs.Tab>
-                <Tabs.Tab label="Venue data">
+                </Tabs.Panel>
+                <Tabs.Panel value="venue-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         <VenueEditForm
                             session={session}
@@ -207,8 +218,8 @@ export default function CompleteDealMemoPage({
                             }}
                         />
                     </Paper>
-                </Tabs.Tab>
-                <Tabs.Tab label="Local promoter data">
+                </Tabs.Panel>
+                <Tabs.Panel value="lopro-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         <LoproEditForm
                             session={session}
@@ -241,8 +252,8 @@ export default function CompleteDealMemoPage({
                             }}
                         />
                     </Paper>
-                </Tabs.Tab>
-                <Tabs.Tab label="Hotel data">
+                </Tabs.Panel>
+                <Tabs.Panel value="hotel-data">
                     <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
                         {hotelData && Object.keys(hotelData).length > 0 ? (
                             <HotelEditForm
@@ -288,7 +299,7 @@ export default function CompleteDealMemoPage({
                             </Center>
                         )}
                     </Paper>
-                </Tabs.Tab>
+                </Tabs.Panel>
             </Tabs>
         </>
     );

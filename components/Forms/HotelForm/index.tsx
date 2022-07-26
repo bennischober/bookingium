@@ -13,7 +13,7 @@ const HotelFormSchema = z.object({
 
 export function HotelForm({ handleHotel, close, session }: HotelFormProps) {
     const Form = useForm<HotelFormValues>({
-        schema: zodResolver(HotelFormSchema),
+        validate: zodResolver(HotelFormSchema),
         initialValues: {
             name: "",
             notes: "",
@@ -87,8 +87,10 @@ export function HotelForm({ handleHotel, close, session }: HotelFormProps) {
 
 
 export function HotelEditForm({ handleHotel, session, data }: HotelEditFormProps) {
+    if(!data || !data.name) return <></>;
+
     const Form = useForm<HotelFormValues>({
-        schema: zodResolver(HotelFormSchema),
+        validate: zodResolver(HotelFormSchema),
         initialValues: {
             name: data.name,
             notes: data.notes,

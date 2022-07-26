@@ -1,67 +1,9 @@
-import { Group, Text, useMantineTheme, MantineTheme, Button } from "@mantine/core";
+import { Group, Text, Button, useMantineTheme } from "@mantine/core";
 import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";
-import { Dropzone, DropzoneStatus, PDF_MIME_TYPE } from "@mantine/dropzone";
+import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { useState } from "react";
-import { IconType } from "react-icons";
-import {
-    MdClose,
-    MdOutlineFileUpload,
-    MdPhotoSizeSelectActual,
-} from "react-icons/md";
-
-function getIconColor(status: DropzoneStatus, theme: MantineTheme) {
-    return status.accepted
-        ? theme.colors[theme.primaryColor][theme.colorScheme === "dark" ? 4 : 6]
-        : status.rejected
-        ? theme.colors.red[theme.colorScheme === "dark" ? 4 : 6]
-        : theme.colorScheme === "dark"
-        ? theme.colors.dark[0]
-        : theme.colors.gray[7];
-}
-
-function ImageUploadIcon({
-    status,
-    ...props
-}: React.ComponentProps<IconType> & { status: DropzoneStatus }) {
-    if (status.accepted) {
-        return <MdOutlineFileUpload {...props} />;
-    }
-
-    if (status.rejected) {
-        return <MdClose {...props} />;
-    }
-
-    return <MdPhotoSizeSelectActual {...props} />;
-}
-
-const dropzoneChildren = (
-    status: DropzoneStatus,
-    theme: MantineTheme
-) => {
-    return (
-        <Group
-            position="center"
-            spacing="xl"
-            style={{ minHeight: 220, pointerEvents: "none" }}
-        >
-            <ImageUploadIcon
-                status={status}
-                style={{ color: getIconColor(status, theme) }}
-                size={80}
-            />
-
-            <div>
-                <Text size="xl" inline>
-                    Drag images here or click to select files
-                </Text>
-                <Text size="sm" color="dimmed" inline mt={7}>
-                    Attach as many files as you like, each file should not
-                    exceed 5mb
-                </Text>
-            </div>
-        </Group>
-    );
-};
+import { MdClose, MdOutlineCloudUpload } from "react-icons/md";
+import { BsFileEarmarkPdf } from "react-icons/bs";
 
 export default function ContractPage() {
     const [pdfData, setPdfData] = useState<Uint8Array>();
@@ -116,22 +58,61 @@ export default function ContractPage() {
         //     ],
         // });
         // const fileStream = await handler.createWritable();
-    
+
         // await fileStream.write(blob);
         // await fileStream.close();
-    }
+    };
 
     return (
         <>
-        <Dropzone
-            onDrop={(files) => handleUpload(files)}
-            onReject={(files) => console.log("rejected files", files)}
-            maxSize={3 * 1024 ** 2}
-            multiple={false}
-        >
-            {(status) => dropzoneChildren(status, theme)}
-        </Dropzone>
-        <Button onClick={() => handleDownload()}>Download</Button>
+            <Dropzone
+                onDrop={(file) => handleUpload(file)}
+                radius="md"
+                accept={[MIME_TYPES.pdf]}
+                maxSize={30 * 1024 ** 2}
+                multiple={false}
+            >
+                <Group
+                    position="center"
+                    spacing="xl"
+                    style={{ minHeight: 220, pointerEvents: "none" }}
+                >
+                    <Dropzone.Accept>
+                        <MdOutlineCloudUpload
+                            size={50}
+                            color={
+                                theme.colors[theme.primaryColor][
+                                    theme.colorScheme === "dark" ? 4 : 6
+                                ]
+                            }
+                        />
+                    </Dropzone.Accept>
+                    <Dropzone.Reject>
+                        <MdClose
+                            size={50}
+                            color={
+                                theme.colors.red[
+                                    theme.colorScheme === "dark" ? 4 : 6
+                                ]
+                            }
+                        />
+                    </Dropzone.Reject>
+                    <Dropzone.Idle>
+                        <BsFileEarmarkPdf size={50} />
+                    </Dropzone.Idle>
+
+                    <div>
+                        <Text size="xl" inline>
+                            Drag PDF files here or click to select files
+                        </Text>
+                        <Text size="sm" color="dimmed" inline mt={7}>
+                            Upload a single contract, the file should not exceed
+                            5mb!
+                        </Text>
+                    </div>
+                </Group>
+            </Dropzone>
+            <Button onClick={() => handleDownload()}>Download</Button>
         </>
     );
 }
