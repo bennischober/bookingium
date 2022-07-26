@@ -42,14 +42,14 @@ export function DealMemoList({ memos }: DealMemoListProps) {
                 id: "dealId",
                 header: "dealId",
                 accessorKey: "dealId",
-                cell: info => (
+                cell: (info) => (
                     <Text
                         underline
                         variant="link"
                         style={{ cursor: "pointer", fontSize: "inherit" }}
-                        onClick={() => handleDealClick(info.getValue())}
+                        onClick={() => handleDealClick(info.getValue() as string)}
                     >
-                        {info.getValue()}
+                        <>{info.getValue()}</>
                     </Text>
                 ),
                 footer: (props) => props.column.id,
@@ -65,7 +65,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
                 id: "date",
                 header: "date",
                 accessorKey: "date",
-                cell: (props) => dayjs(props.getValue()).format("DD.MM.YYYY"),
+                cell: (props) => dayjs(props.getValue() as string).format("DD.MM.YYYY"),
                 footer: (props) => props.column.id,
             },
             {
@@ -91,7 +91,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
             },
         ],
         []
-      )
+    );
 
     const rows: Test[] = memos.map((memo, index) => ({
         dealId: memo.dealId,
