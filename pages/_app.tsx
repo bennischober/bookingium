@@ -73,7 +73,7 @@ export default function App({ Component, pageProps, ...appPropps }: AppProps) {
                             colorScheme: colorScheme,
                         }}
                     >
-                        <RouterTransition />
+                        {/* <RouterTransition /> */}
                         <NotificationsProvider>
                             {getPageContent()}
                         </NotificationsProvider>
