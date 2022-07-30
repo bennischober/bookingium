@@ -13,11 +13,12 @@ export function PageTemplate({
         "Mantine is a next-gen platform for managing your projects.";
     const contentFallback = content || "";
     const faviconFallback = favicon || "/favicon.ico";
+    const completeTitle = typeof window !== 'undefined' ? title + ` - ${window.location.host}` : title;
 
     return (
         <>
             <Head>
-                <title>{title}</title>
+                <title>{completeTitle}</title>
                 <meta name={descriptionFallback} content={contentFallback} />
                 <meta
                     name="viewport"
