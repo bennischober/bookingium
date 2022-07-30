@@ -4,6 +4,7 @@ import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { DealMemoForm } from "../../../components/Forms/DealMemoForm";
+import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { AddDealMemoProps } from "../../../types";
 import { getBands, getMemos, handleSession } from "../../../utils/appHandles";
 
@@ -67,18 +68,20 @@ export default function AddDealMemoPage({
     };
 
     return (
-        <DealMemoForm
-            session={session}
-            bands={bandsData}
-            venues={venueData}
-            lopros={loproData}
-            hotels={hotelData}
-            handleBands={handleBands}
-            handleMemos={handleMemos}
-            handleVenues={handleVenues}
-            handleLopros={handleLopros}
-            handleHotels={handleHotels}
-        />
+        <PageTemplate title={"Create a Deal Memo"}>
+            <DealMemoForm
+                session={session}
+                bands={bandsData}
+                venues={venueData}
+                lopros={loproData}
+                hotels={hotelData}
+                handleBands={handleBands}
+                handleMemos={handleMemos}
+                handleVenues={handleVenues}
+                handleLopros={handleLopros}
+                handleHotels={handleHotels}
+            />
+        </PageTemplate>
     );
 }
 
