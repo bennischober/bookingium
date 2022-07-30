@@ -3,6 +3,7 @@ import {
     Accordion,
     Box,
     Button,
+    Group,
     Space,
     Text,
     Textarea,
@@ -20,6 +21,7 @@ import ContactInput from "../../FormInputs/ContactInput";
 import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import dayjs from "dayjs";
+import { BandMemberInput } from "../../FormInputs/BandMemberInput";
 
 const schema = z.object({
     bandName: z
@@ -59,23 +61,7 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
 
     const members = bandForm.values.members.map((_, index) => (
         <Box key={index}>
-            <Text>Member {index + 1}</Text>
-            <TextInput
-                label="Name"
-                {...bandForm.getInputProps(`members.${index}.name`)}
-            />
-            <TextInput
-                label="Role"
-                {...bandForm.getInputProps(`members.${index}.role`)}
-            />
-            <TextInput
-                label="Email"
-                {...bandForm.getInputProps(`members.${index}.email`)}
-            />
-            <TextInput
-                label="Phone"
-                {...bandForm.getInputProps(`members.${index}.phone`)}
-            />
+            <BandMemberInput Form={bandForm} index={index} />
             <Space h="xl" />
         </Box>
     ));
@@ -139,16 +125,19 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
                     {...bandForm.getInputProps("companyName")}
                     required
                 />
-                <TextInput
-                    label="VAT Number"
-                    {...bandForm.getInputProps("vatNumber")}
-                />
-                <TextInput
-                    label="UST Number"
-                    {...bandForm.getInputProps("ustNumber")}
-                />
                 <Space h="xl" />
-                <Accordion defaultValue="company-address">
+                <Group grow>
+                    <TextInput
+                        label="VAT Number"
+                        {...bandForm.getInputProps("vatNumber")}
+                    />
+                    <TextInput
+                        label="UST Number"
+                        {...bandForm.getInputProps("ustNumber")}
+                    />
+                </Group>
+                <Space h="xl" />
+                <Accordion>
                     <Accordion.Item value="company-address">
                         <Accordion.Control>Company Address</Accordion.Control>
                         <Accordion.Panel>
@@ -168,6 +157,7 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
                                 {members}
                                 <Space h="xl" />
                                 <Button
+                                    variant="default"
                                     leftIcon={<MdOutlineAdd />}
                                     onClick={() =>
                                         bandForm.insertListItem("members", {
@@ -222,23 +212,7 @@ export function BandEditForm({ handleBand, session, data }: BandEditFormProps) {
 
     const members = bandForm.values.members.map((_, index) => (
         <Box key={index}>
-            <Text>Member {index + 1}</Text>
-            <TextInput
-                label="Name"
-                {...bandForm.getInputProps(`members.${index}.name`)}
-            />
-            <TextInput
-                label="Role"
-                {...bandForm.getInputProps(`members.${index}.role`)}
-            />
-            <TextInput
-                label="Email"
-                {...bandForm.getInputProps(`members.${index}.email`)}
-            />
-            <TextInput
-                label="Phone"
-                {...bandForm.getInputProps(`members.${index}.phone`)}
-            />
+            <BandMemberInput Form={bandForm} index={index} />
             <Space h="xl" />
         </Box>
     ));
@@ -296,14 +270,17 @@ export function BandEditForm({ handleBand, session, data }: BandEditFormProps) {
                     {...bandForm.getInputProps("companyName")}
                     required
                 />
-                <TextInput
-                    label="VAT Number"
-                    {...bandForm.getInputProps("vatNumber")}
-                />
-                <TextInput
-                    label="UST Number"
-                    {...bandForm.getInputProps("ustNumber")}
-                />
+                <Space h="xl" />
+                <Group grow>
+                    <TextInput
+                        label="VAT Number"
+                        {...bandForm.getInputProps("vatNumber")}
+                    />
+                    <TextInput
+                        label="UST Number"
+                        {...bandForm.getInputProps("ustNumber")}
+                    />
+                </Group>
                 <Space h="xl" />
                 <Accordion>
                     <Accordion.Item value="company-address">
@@ -325,6 +302,7 @@ export function BandEditForm({ handleBand, session, data }: BandEditFormProps) {
                                 {members}
                                 <Space h="xl" />
                                 <Button
+                                    variant="default"
                                     leftIcon={<MdOutlineAdd />}
                                     onClick={() =>
                                         bandForm.insertListItem("members", {

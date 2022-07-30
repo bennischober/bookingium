@@ -1,5 +1,5 @@
 import { MantineNumberSize } from "@mantine/core";
-import { UseFormReturnType } from "@mantine/form/lib/use-form";
+import { UseFormReturnType } from "@mantine/form/lib/types";
 import { Session } from "next-auth";
 import { IconBase } from "react-icons/lib";
 import { IBand } from "../models/band";
@@ -19,6 +19,12 @@ export interface PageTemplateProps {
 
 export interface AppContainerProps {
 	children: React.ReactNode;
+}
+
+export interface FormContainerProps {
+    children: React.ReactNode;
+    center?: boolean;
+    sx?: {};
 }
 
 export interface HeaderProps {
@@ -57,6 +63,10 @@ export interface UserButtonProps {
 // or type to any?
 export interface InputComponentProps {
 	Form: UseFormReturnType;
+}
+
+export interface BandMemberInputProps extends InputComponentProps {
+	index: number;
 }
 
 export interface BandFormProps {

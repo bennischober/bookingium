@@ -1,4 +1,12 @@
-import { Accordion, Box, Button, Space, Text, TextInput } from "@mantine/core";
+import {
+    Accordion,
+    Box,
+    Button,
+    Group,
+    Space,
+    Text,
+    TextInput,
+} from "@mantine/core";
 import { MdOutlineAdd } from "react-icons/md";
 import { InputComponentProps } from "../../../types";
 
@@ -6,29 +14,33 @@ import { InputComponentProps } from "../../../types";
 
 // Person: {Form.getListInputProps("contactPerson", index, "name").value !== "" ? Form.getListInputProps("contactPerson", index, "name").value : index + 1}
 export default function ContactPersonInput({ Form }: InputComponentProps) {
-    if(!Form.values.contactPerson) return <></>;
-    
+    if (!Form.values.contactPerson) return <></>;
+
     const contactPersons = Form.values.contactPerson.map(
         (_: any, index: any) => (
             <Box key={index}>
                 <Text>Person: {index + 1}</Text>
-                <TextInput
-                    label="Name"
-                    // so this throws an typescript error, might need to fix this
-                    {...Form.getInputProps(`contactPerson.${index}.name`)}
-                />
-                <TextInput
-                    label="Role"
-                    {...Form.getInputProps(`contactPerson.${index}.role`)}
-                />
-                <TextInput
-                    label="Email"
-                    {...Form.getInputProps(`contactPerson.${index}.email`)}
-                />
-                <TextInput
-                    label="Phone"
-                    {...Form.getInputProps(`contactPerson.${index}.phone`)}
-                />
+                <Group grow>
+                    <TextInput
+                        label="Name"
+                        {...Form.getInputProps(`contactPerson.${index}.name`)}
+                    />
+                    <TextInput
+                        label="Role"
+                        {...Form.getInputProps(`contactPerson.${index}.role`)}
+                    />
+                </Group>
+                <Space h="xl" />
+                <Group grow>
+                    <TextInput
+                        label="Email"
+                        {...Form.getInputProps(`contactPerson.${index}.email`)}
+                    />
+                    <TextInput
+                        label="Phone"
+                        {...Form.getInputProps(`contactPerson.${index}.phone`)}
+                    />
+                </Group>
                 <Space h="xl" />
             </Box>
         )
@@ -42,6 +54,7 @@ export default function ContactPersonInput({ Form }: InputComponentProps) {
                     <>
                         {contactPersons}
                         <Button
+                            variant="default"
                             leftIcon={<MdOutlineAdd />}
                             onClick={() =>
                                 Form.addListItem("contactPerson", {

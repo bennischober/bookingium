@@ -19,6 +19,7 @@ import { IHotel } from "../../../models/hotel";
 import { ILopro } from "../../../models/lopro";
 import { IVenue } from "../../../models/venue";
 import { CompleteDealMemoPageProps } from "../../../types";
+import { FormContainer } from "../../../components/Layout/FormContainer";
 
 // move interface to types file
 // move jsx stuff to new component, if everything is finished and works properly
@@ -130,7 +131,7 @@ export default function CompleteDealMemoPage({
                     <Tabs.Tab value="hotel-data">Hotel data</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value="deal-data">
-                    <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
+                    <FormContainer>
                         <DealEditForm
                             handleMemos={handleMemo}
                             session={session}
@@ -147,47 +148,42 @@ export default function CompleteDealMemoPage({
                             bandName={bandData.name}
                             created={memoData.dm.created}
                         />
-                    </Paper>
+                    </FormContainer>
                 </Tabs.Panel>
                 <Tabs.Panel value="band-data">
-                    <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
-                    <BandEditForm
-                                session={session}
-                                handleBand={handleBand}
-                                data={{
-                                    bandName: bandData?.name,
-                                    notes: bandData?.notes,
-                                    companyName: bandData?.company?.name,
-                                    vatNumber: bandData?.company?.vatNumber,
-                                    ustNumber: bandData?.company?.ustNumber,
-                                    streetNumber:
-                                        bandData?.company?.address
-                                            ?.streetNumber,
-                                    street: bandData?.company?.address?.street,
-                                    addressSuffix:
-                                        bandData?.company?.address
-                                            ?.addressSuffix,
-                                    zipCode:
-                                        bandData?.company?.address?.zipCode,
-                                    city: bandData?.company?.address?.city,
-                                    state: bandData?.company?.address?.state,
-                                    country:
-                                        bandData?.company?.address?.country,
-                                    countryCode:
-                                        bandData?.company?.address?.countryCode,
-                                    email: bandData?.company?.contact?.email,
-                                    phone: bandData?.company?.contact?.phone,
-                                    mobilePhone:
-                                        bandData.company?.contact?.mobilePhone,
-                                    homepage:
-                                        bandData?.company?.contact?.homepage,
-                                    members: bandData?.members,
-                                }}
-                            />
-                    </Paper>
+                    <FormContainer>
+                        <BandEditForm
+                            session={session}
+                            handleBand={handleBand}
+                            data={{
+                                bandName: bandData?.name,
+                                notes: bandData?.notes,
+                                companyName: bandData?.company?.name,
+                                vatNumber: bandData?.company?.vatNumber,
+                                ustNumber: bandData?.company?.ustNumber,
+                                streetNumber:
+                                    bandData?.company?.address?.streetNumber,
+                                street: bandData?.company?.address?.street,
+                                addressSuffix:
+                                    bandData?.company?.address?.addressSuffix,
+                                zipCode: bandData?.company?.address?.zipCode,
+                                city: bandData?.company?.address?.city,
+                                state: bandData?.company?.address?.state,
+                                country: bandData?.company?.address?.country,
+                                countryCode:
+                                    bandData?.company?.address?.countryCode,
+                                email: bandData?.company?.contact?.email,
+                                phone: bandData?.company?.contact?.phone,
+                                mobilePhone:
+                                    bandData.company?.contact?.mobilePhone,
+                                homepage: bandData?.company?.contact?.homepage,
+                                members: bandData?.members,
+                            }}
+                        />
+                    </FormContainer>
                 </Tabs.Panel>
                 <Tabs.Panel value="venue-data">
-                    <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
+                    <FormContainer>
                         <VenueEditForm
                             session={session}
                             handleVenue={handleVenue}
@@ -217,10 +213,10 @@ export default function CompleteDealMemoPage({
                                 contactPerson: venueData?.contactPerson,
                             }}
                         />
-                    </Paper>
+                    </FormContainer>
                 </Tabs.Panel>
                 <Tabs.Panel value="lopro-data">
-                    <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
+                    <FormContainer>
                         <LoproEditForm
                             session={session}
                             handleLopro={handleLopro}
@@ -251,10 +247,10 @@ export default function CompleteDealMemoPage({
                                 homepage: loproData?.company?.contact?.homepage,
                             }}
                         />
-                    </Paper>
+                    </FormContainer>
                 </Tabs.Panel>
                 <Tabs.Panel value="hotel-data">
-                    <Paper withBorder shadow="md" p={30} mt={30} radius="xs">
+                    <FormContainer>
                         {hotelData && Object.keys(hotelData).length > 0 ? (
                             <HotelEditForm
                                 session={session}
@@ -298,7 +294,7 @@ export default function CompleteDealMemoPage({
                                 <Button>Add Hotel Data</Button>
                             </Center>
                         )}
-                    </Paper>
+                    </FormContainer>
                 </Tabs.Panel>
             </Tabs>
         </>
