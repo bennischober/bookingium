@@ -1,4 +1,4 @@
-import { Button, NumberInput, Space, Text, TextInput } from "@mantine/core";
+import { Button, NumberInput, Space, Text, Textarea, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import dayjs from "dayjs";
 import mongoose from "mongoose";
@@ -189,7 +189,7 @@ export function VenueEditForm({
                 {...Form.getInputProps("capacity")}
                 required
             />
-            <TextInput label="Notes" {...Form.getInputProps("notes")} />
+            <Textarea label="Notes" {...Form.getInputProps("notes")} />
             <Space h="xl" />
             <CompanyInput Form={Form} />
             <ContactPersonInput Form={Form} />
