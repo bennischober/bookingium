@@ -65,6 +65,10 @@ export interface InputComponentProps {
 	Form: UseFormReturnType;
 }
 
+export interface BandMemberInputProps extends InputComponentProps {
+	index: number;
+}
+
 export interface BandFormProps {
 	handleBands?: (data: {}) => void;
 	close?: () => void;
