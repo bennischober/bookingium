@@ -20,7 +20,7 @@
     "@mantine/nprogress": "^5.0.2",
     "@mantine/prism": "^5.0.0",
     "@mantine/rte": "^5.0.2",
-    "@mantine/spotlight": "^5.0.0",
+    "@mantine/spotlight": "^5.0.2",
     "@tanstack/react-table": "^8.5.2",
     "@tanstack/table-core": "^8.5.2",
     "axios": "^0.27.2",
