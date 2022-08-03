@@ -16,6 +16,10 @@ export default function DealMemoPage({
     const [memosData, setMemosData] = useState(memos);
 
     const router = useRouter();
+
+    // could be moved to a separate hook!
+    // check session and move to login, if session invalid
+    // parameters: current path
     useEffect(() => {
         if (router && router.query) {
             handleSession(router, session, "/auth/login", {
