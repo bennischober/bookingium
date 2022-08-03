@@ -3,7 +3,6 @@ import { NextRouter } from "next/router";
 import dayjs from 'dayjs';
 import { SessionProps } from "../types";
 import axios from "axios";
-import { NextApiResponse } from "next";
 
 // handle theme, language, and other app settings
 
@@ -43,27 +42,6 @@ export function handleSession(router: NextRouter, session: SessionProps["session
         });
     }
 }
-
-/*---- ERROR HANDLE ----*/
-export function throwAPIError(res: NextApiResponse, error: string, status?: number) {
-    try {
-        throw new Error(error);
-    } catch (err) {
-        handleAPIError(res, err, status);
-    }
-}
-
-export function handleAPIError(res: NextApiResponse, error: unknown, status?: number) {
-    const code = status || 500;
-    if (error instanceof Error) {
-        return res.status(code).json({ success: false, error: error.message, trace: error.stack });
-    }
-    if (typeof error === "string") {
-        return res.status(code).json({ success: false, error: error });
-    }
-    return res.status(code).json({ success: false, error: "Unknown error!" });
-}
-
 
 /*--- OTHER HANDLE ---*/
 
