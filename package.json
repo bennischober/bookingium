@@ -22,7 +22,7 @@
     "@mantine/rte": "^5.0.2",
     "@mantine/spotlight": "^5.0.2",
     "@tanstack/react-table": "^8.5.2",
-    "@tanstack/table-core": "^8.5.2",
+    "@tanstack/table-core": "^8.5.5",
     "axios": "^0.27.2",
     "bcryptjs": "^2.4.3",
     "dayjs": "^1.11.4",
