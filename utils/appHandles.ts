@@ -23,6 +23,13 @@ export function getLastRoute(router: NextRouter): string {
     return router.query.from === undefined ? "/" : router.query.from;
 }
 
+export function getDynamicRoute(query: string, router: NextRouter): string {
+    const r = router.pathname.replace(`[${query}]`, "");
+    const q = router.query[query] ?? "";
+    if(q === typeof Array) return r + q[q.length - 1]; // use first or last?
+    return r + q;
+}
+
 export function goToLastRoute(router: NextRouter) {
     router.push(getLastRoute(router));
 }
@@ -34,6 +41,7 @@ export function changeRoute(router: NextRouter, pathname: string, query: { from?
     });
 }
 
+// rename this function! => check valid session?
 export function handleSession(router: NextRouter, session: SessionProps["session"], pathname: string, query: { from: string }) {
     if ((session && session.status === "unathorized") || !session) {
         router.push({
