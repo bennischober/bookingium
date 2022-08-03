@@ -42,10 +42,10 @@ export function changeRoute(router: NextRouter, pathname: string, query: { from?
 }
 
 // rename this function! => check valid session?
-export function handleSession(router: NextRouter, session: SessionProps["session"], pathname: string, query: { from: string }) {
+export function handleSession(router: NextRouter, session: SessionProps["session"], toPath: string, query?: { from: string }) {
     if ((session && session.status === "unathorized") || !session) {
         router.push({
-            pathname: pathname,
+            pathname: toPath,
             query
         });
     }
