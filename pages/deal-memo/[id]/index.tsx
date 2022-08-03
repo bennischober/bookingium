@@ -1,4 +1,4 @@
-import { Button, Center, Paper, Space, Tabs, Text, Title } from "@mantine/core";
+import { Button, Center, Space, Tabs, Text, Title } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -7,7 +7,7 @@ import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MdArrowBack, MdCheck, MdClose } from "react-icons/md";
-import { goToLastRoute, isPopulated } from "../../../utils/appHandles";
+import { isPopulated } from "../../../utils/appHandles";
 import { BandEditForm } from "../../../components/Forms/BandForm";
 import { DealEditForm } from "../../../components/Forms/DealMemoForm";
 import { HotelEditForm } from "../../../components/Forms/HotelForm";
@@ -115,12 +115,26 @@ export default function CompleteDealMemoPage({
             <Button
                 leftIcon={<MdArrowBack />}
                 variant="subtle"
-                onClick={() => goToLastRoute(router)}
+                onClick={() => {
+                    router.back();
+                }}
             >
                 <Text>Go back</Text>
             </Button>
             <Space h="xl" />
             <Title>Deal: {memoData.dealId}</Title>
+            <Space h="xl" />
+            <Button
+                variant="default"
+                onClick={() => {
+                    router.push({
+                        pathname: "/contract",
+                        query: { id: memoData.dealId },
+                    });
+                }}
+            >
+                Create contract
+            </Button>
             <Space h="xl" />
             <Tabs defaultValue="deal-data">
                 <Tabs.List>

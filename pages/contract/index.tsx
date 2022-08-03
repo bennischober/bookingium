@@ -2,12 +2,16 @@ import { Group, Text, Button, useMantineTheme } from "@mantine/core";
 import { degrees, PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { Dropzone, MIME_TYPES } from "@mantine/dropzone";
 import { useState } from "react";
-import { MdClose, MdOutlineCloudUpload } from "react-icons/md";
+import { MdArrowBack, MdClose, MdOutlineCloudUpload } from "react-icons/md";
 import { BsFileEarmarkPdf } from "react-icons/bs";
+import { useRouter } from "next/router";
 
 export default function ContractPage() {
     const [pdfData, setPdfData] = useState<Uint8Array>();
     const theme = useMantineTheme();
+
+    const router = useRouter();
+    console.log(router.query);
 
     const handleUpload = async (files: File[]) => {
         const file = files[0];
@@ -65,6 +69,15 @@ export default function ContractPage() {
 
     return (
         <>
+            <Button
+                leftIcon={<MdArrowBack />}
+                variant="subtle"
+                onClick={() => {
+                    router.back();
+                }}
+            >
+                <Text>Go back</Text>
+            </Button>
             <Dropzone
                 onDrop={(file) => handleUpload(file)}
                 radius="md"
