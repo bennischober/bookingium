@@ -13,7 +13,7 @@ import { SessionProps } from "../../../types";
 import { getLastRoute } from "../../../utils/appHandles";
 
 export default function LoginPage({ session }: SessionProps) {
-    const [isPasswordForgotten, setIsPasswordForgotten] = useToggle(false, [
+    const [isPasswordForgotten, setIsPasswordForgotten] = useToggle([
         false,
         true,
     ]);
