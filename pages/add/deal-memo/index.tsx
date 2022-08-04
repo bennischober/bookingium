@@ -1,12 +1,11 @@
 import axios from "axios";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { DealMemoForm } from "../../../components/Forms/DealMemoForm";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { AddDealMemoProps } from "../../../types";
-import { getBands, getMemos, handleSession } from "../../../utils/appHandles";
+import { getBands, getMemos } from "../../../utils/appHandles";
 
 export default function AddDealMemoPage({
     session,
@@ -22,15 +21,6 @@ export default function AddDealMemoPage({
     const [venueData, setVenueData] = useState(venues);
     const [loproData, setLoproData] = useState(lopros);
     const [hotelData, setHotelData] = useState(hotels);
-
-    const router = useRouter();
-    useEffect(() => {
-        if (router && router.query) {
-            handleSession(router, session, "/auth/login", {
-                from: router.pathname,
-            });
-        }
-    }, [router, session]);
 
     const handleMemos = async (data: {}) => {
         // post memo data
