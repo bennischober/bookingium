@@ -20,6 +20,8 @@ export function PageTemplate({
     const faviconFallback = favicon || "/favicon.ico";
     const completeTitle = isClient ? title + ` - ${window.location.host}` : title;
 
+    // session could also be passed as parameter to this component
+    // session can then be passed to hook => server-side session validation
     if(useValidation) useSessionValidation();
 
     return (
