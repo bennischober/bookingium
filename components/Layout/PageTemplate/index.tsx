@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useClientCheck, useSessionValidation } from "../../../hooks";
 import { PageTemplateProps } from "../../../types";
 
 export function PageTemplate({
@@ -6,14 +7,20 @@ export function PageTemplate({
     description,
     content,
     favicon,
+    useAuth,
     children,
 }: PageTemplateProps) {
+    const isClient = useClientCheck();
+    const useValidation = useAuth ?? true; // sets default value to true
+
     const descriptionFallback =
         description ||
         "Mantine is a next-gen platform for managing your projects.";
     const contentFallback = content || "";
     const faviconFallback = favicon || "/favicon.ico";
-    const completeTitle = typeof window !== 'undefined' ? title + ` - ${window.location.host}` : title;
+    const completeTitle = isClient ? title + ` - ${window.location.host}` : title;
+
+    if(useValidation) useSessionValidation();
 
     return (
         <>
