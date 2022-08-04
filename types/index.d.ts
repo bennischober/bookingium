@@ -14,6 +14,7 @@ export interface PageTemplateProps {
 	description?: string;
 	content?: string;
 	favicon?: string;
+	useAuth?: boolean;
 	children: React.ReactNode;
 }
 

@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
 import { Paper, ScrollArea, Text } from "@mantine/core";
 import { useRouter } from "next/router";
-import { DealMemoListProps, DealMemoListValues } from "../../../types";
+import { DealMemoListProps } from "../../../types";
 import { DataGrid } from "../../Grid/DataGrid";
-import { createTable, useReactTable, ColumnDef } from "@tanstack/react-table";
-import { changeRoute, isPopulated } from "../../../utils/appHandles";
+import { ColumnDef } from "@tanstack/react-table";
+import { isPopulated } from "../../../utils/appHandles";
 import dayjs from "dayjs";
 import { IBand } from "../../../models/band";
 
@@ -24,7 +24,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
     }, [memos]);
 
     const handleDealClick = (dealId: string) => {
-        changeRoute(router, `/deal-memo/${dealId}`, { from: router.pathname });
+        router.push(`/deal-memo/${dealId}`);
     };
 
     interface Test {
