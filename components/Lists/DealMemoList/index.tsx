@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Paper, ScrollArea, Text } from "@mantine/core";
 import { useRouter } from "next/router";
-import { DealMemoListProps } from "../../../types";
+import { DealMemoListProps, DealMemoListValues } from "../../../types";
 import { DataGrid } from "../../Grid/DataGrid";
 import { ColumnDef } from "@tanstack/react-table";
 import { isPopulated } from "../../../utils/appHandles";
@@ -27,16 +27,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
         router.push(`/deal-memo/${dealId}`);
     };
 
-    interface Test {
-        dealId: string;
-        band: string;
-        deal: string;
-        date: string;
-        fee: number;
-        status: string;
-    }
-
-    const columns = useMemo<ColumnDef<Test>[]>(
+    const columns = useMemo<ColumnDef<DealMemoListValues>[]>(
         () => [
             {
                 id: "dealId",
@@ -93,7 +84,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
         []
     );
 
-    const rows: Test[] = memos.map((memo, index) => ({
+    const rows: DealMemoListValues[] = memos.map((memo, index) => ({
         dealId: memo.dealId,
         band:
             bandData[index] && bandData[index].name ? bandData[index].name : "",
