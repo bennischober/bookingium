@@ -54,6 +54,7 @@ export function getNavbarData() {
         {
             label: "Lists", icon: MdListAlt, links: [
                 { label: "Deal Memo List", icon: MdListAlt, link: "/deal-memo" },
+                { label: "Band List", icon: MdListAlt, link: "/band" },
             ]
         },
         {

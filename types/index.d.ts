@@ -324,3 +324,11 @@ export interface DealMemoListValues {
 	fee: number;
 	status: string;
 }
+
+export interface BandListValues {
+	bandId: string;
+	name: string;
+	// genre: string;
+	website: string;
+	country: string;
+}
