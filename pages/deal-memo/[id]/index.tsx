@@ -21,6 +21,7 @@ import { IVenue } from "../../../models/venue";
 import { CompleteDealMemoPageProps } from "../../../types";
 import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
+import { BackButton } from "../../../components/LayoutElements/BackButton";
 
 // move interface to types file
 // move jsx stuff to new component, if everything is finished and works properly
@@ -114,15 +115,7 @@ export default function CompleteDealMemoPage({
     return (
         <>
             <PageTemplate title={`Deal Memo of ${bandData.name}`}>
-                <Button
-                    leftIcon={<MdArrowBack />}
-                    variant="subtle"
-                    onClick={() => {
-                        router.back();
-                    }}
-                >
-                    <Text>Go back</Text>
-                </Button>
+                <BackButton />
                 <Space h="xl" />
                 <Title>Deal: {memoData.dealId}</Title>
                 <Space h="xl" />
