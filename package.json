@@ -18,7 +18,7 @@
     "@mantine/next": "^5.1.0",
     "@mantine/notifications": "^5.1.1",
     "@mantine/nprogress": "^5.1.0",
-    "@mantine/prism": "^5.1.0",
+    "@mantine/prism": "^5.1.1",
     "@mantine/rte": "^5.1.0",
     "@mantine/spotlight": "^5.1.0",
     "@tanstack/react-table": "^8.5.11",
