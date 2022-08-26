@@ -243,6 +243,11 @@ Note: By far the most important
 Cypress and Storybook tests could be automatically executed in Docker build.
 
 
+## Security
+
+- Data encryption with [MongoDB](https://www.mongodb.com/docs/manual/core/csfle/fundamentals/manual-encryption/#std-label-csfle-fundamentals-manual-encryption). Check, if this is needed
+
+
 # Upcoming Features
 
 - Multi user with company signin: many users can edit stuff simultaneously
@@ -256,3 +261,5 @@ Cypress and Storybook tests could be automatically executed in Docker build.
 - [Deployment](https://reactjsexample.com/how-to-deploy-nextjs-database-app-with-docker-multi-container/)
 - Maps: [main](https://www.npmjs.com/package/leaflet) with [react components](https://www.npmjs.com/package/react-leaflet) and [search](https://www.npmjs.com/package/leaflet-search) | [Creating routes](https://www.qed42.com/insights/coe/javascript/navigation-leaflet-maps) 
 - Calendar: [react-big-calendar](https://www.npmjs.com/package/react-big-calendar), [fullcalendar](https://www.npmjs.com/package/fullcalendar), [tui-calendar](https://www.npmjs.com/package/tui-calendar) 
+
+
