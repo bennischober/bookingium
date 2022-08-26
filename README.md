@@ -263,3 +263,13 @@ Cypress and Storybook tests could be automatically executed in Docker build.
 - Calendar: [react-big-calendar](https://www.npmjs.com/package/react-big-calendar), [fullcalendar](https://www.npmjs.com/package/fullcalendar), [tui-calendar](https://www.npmjs.com/package/tui-calendar) 
 
 
+## Technology used
+
+| Part | Technology |
+|------|-----------|
+| Core | [NextJS](https://github.com/vercel/next.js/), [React](https://github.com/facebook/react/) |
+| UI | [Mantine](https://github.com/mantinedev/mantine/), [React-Table](https://github.com/TanStack/table) |
+| Database | [mongodb](https://github.com/mongodb/mongo), [mongoose](https://github.com/Automattic/mongoose) |
+| Security | [bcrypt](https://github.com/dcodeIO/bcrypt.js), [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken), [next-auth](https://github.com/nextauthjs/next-auth) |
+| API | [axios](https://github.com/axios/axios) |
+| Other | [dayjs](https://github.com/iamkun/dayjs), [nodemailer](https://github.com/nodemailer/nodemailer), [pdf-lib](https://github.com/Hopding/pdf-lib), [uuid](https://github.com/uuidjs/uuid), [zod](https://github.com/colinhacks/zod) |
