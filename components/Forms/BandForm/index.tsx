@@ -20,6 +20,7 @@ import ContactInput from "../../FormInputs/ContactInput";
 import { v4 as uuidv4 } from "uuid";
 import dayjs from "dayjs";
 import { BandMemberInput } from "../../FormInputs/BandMemberInput";
+import { useUnsavedWarn } from "../../../hooks";
 
 const schema = z.object({
     bandName: z
@@ -105,6 +106,8 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
         bandForm.reset();
     };
 
+    const [prompt] = useUnsavedWarn(bandForm);
+
     return (
         <>
             <form
@@ -175,6 +178,7 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
                     Add Band
                 </Button>
             </form>
+            {prompt}
         </>
     );
 }
@@ -250,6 +254,8 @@ export function BandEditForm({ handleBand, session, data }: BandEditFormProps) {
         handleBand(bandData);
     };
 
+    const [prompt] = useUnsavedWarn(bandForm);
+
     return (
         <>
             <form
@@ -320,6 +326,7 @@ export function BandEditForm({ handleBand, session, data }: BandEditFormProps) {
                     Update Band Data
                 </Button>
             </form>
+            {prompt}
         </>
     );
 }

@@ -4,7 +4,12 @@ import { v4 as uuidv4 } from "uuid";
 import { Button, Space, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { CompanyInput } from "../../FormInputs/CompanyInput";
-import { HotelEditFormProps, HotelFormProps, HotelFormValues } from "../../../types";
+import {
+    HotelEditFormProps,
+    HotelFormProps,
+    HotelFormValues,
+} from "../../../types";
+import { useUnsavedWarn } from "../../../hooks";
 
 const HotelFormSchema = z.object({
     name: z.string().min(3, { message: "Name must be at least 3 characters" }),
@@ -70,22 +75,34 @@ export function HotelForm({ handleHotel, close, session }: HotelFormProps) {
         if (close) close();
     };
 
+    const [prompt] = useUnsavedWarn(Form);
+
     return (
-        <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-            <TextInput label="Name" {...Form.getInputProps("name")} required />
-            <TextInput label="Notes" {...Form.getInputProps("notes")} />
-            <Space h="xl" />
-            <CompanyInput Form={Form} />
-            <Button type="submit" fullWidth mt="xl">
-                Add Hotel
-            </Button>
-        </form>
+        <>
+            <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                    label="Name"
+                    {...Form.getInputProps("name")}
+                    required
+                />
+                <TextInput label="Notes" {...Form.getInputProps("notes")} />
+                <Space h="xl" />
+                <CompanyInput Form={Form} />
+                <Button type="submit" fullWidth mt="xl">
+                    Add Hotel
+                </Button>
+            </form>
+            {prompt}
+        </>
     );
 }
 
-
-export function HotelEditForm({ handleHotel, session, data }: HotelEditFormProps) {
-    if(!data || !data.name) return <></>;
+export function HotelEditForm({
+    handleHotel,
+    session,
+    data,
+}: HotelEditFormProps) {
+    if (!data || !data.name) return <></>;
 
     const Form = useForm<HotelFormValues>({
         validate: zodResolver(HotelFormSchema),
@@ -143,15 +160,24 @@ export function HotelEditForm({ handleHotel, session, data }: HotelEditFormProps
         handleHotel(hotelData);
     };
 
+    const [prompt] = useUnsavedWarn(Form);
+
     return (
-        <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-            <TextInput label="Name" {...Form.getInputProps("name")} required />
-            <TextInput label="Notes" {...Form.getInputProps("notes")} />
-            <Space h="xl" />
-            <CompanyInput Form={Form} />
-            <Button type="submit" fullWidth mt="xl">
-                Update Hotel Data
-            </Button>
-        </form>
+        <>
+            <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                    label="Name"
+                    {...Form.getInputProps("name")}
+                    required
+                />
+                <TextInput label="Notes" {...Form.getInputProps("notes")} />
+                <Space h="xl" />
+                <CompanyInput Form={Form} />
+                <Button type="submit" fullWidth mt="xl">
+                    Update Hotel Data
+                </Button>
+            </form>
+            {prompt}
+        </>
     );
 }
