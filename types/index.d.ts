@@ -162,6 +162,11 @@ export interface CompleteDealMemoPageProps {
 	memo: IDealMemo;
 }
 
+export interface SpecificBandPageProps {
+	session: SessionProps["session"];
+	band: IBand;	
+}
+
 export interface DealEditFormProps {
 	handleMemos: (data: {}) => void;
 	session: SessionProps["session"];
