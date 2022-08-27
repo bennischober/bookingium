@@ -26,7 +26,7 @@ export function getLastRoute(router: NextRouter): string {
 export function getDynamicRoute(query: string, router: NextRouter): string {
     const r = router.pathname.replace(`[${query}]`, "");
     const q = router.query[query] ?? "";
-    if(q === typeof Array) return r + q[q.length - 1]; // use first or last?
+    if (q === typeof Array) return r + q[q.length - 1]; // use first or last?
     return r + q;
 }
 
@@ -100,6 +100,15 @@ export const getMemos = async (session: SessionProps["session"]) => {
     const memos = await res.data.data;
     return memos;
 };
+
+export const serverSideFetch = async (url: string, params?: {}) => {
+    const u = url.includes("localhost") ? url : `http://localhost:3000${url}`;
+    const fetch = await axios.get(u, {
+        params: params,
+    });
+    if (fetch.status !== 200) return [];
+    return fetch.data.data;
+}
 
 /** --- DATABASE HANDLE --- **/
 export function isPopulated<T>(obj: T | any): obj is T {
