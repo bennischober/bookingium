@@ -22,6 +22,7 @@ import { CompleteDealMemoPageProps } from "../../../types";
 import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { BackButton } from "../../../components/LayoutElements/BackButton";
+import { SpecificPageHeader } from "../../../components/Layout/SpecificPageHeader";
 
 // move interface to types file
 // move jsx stuff to new component, if everything is finished and works properly
@@ -116,22 +117,28 @@ export default function CompleteDealMemoPage({
     return (
         <>
             <PageTemplate title={`Deal Memo of ${bandData.name}`}>
-                <BackButton />
-                <Space h="xl" />
-                <Title>Deal: {memoData.dealId}</Title>
-                <Space h="xl" />
-                <Button
-                    variant="default"
-                    onClick={() => {
-                        router.push({
-                            pathname: "/contract",
-                            query: { id: memoData.dealId },
-                        });
-                    }}
-                >
-                    Create contract
-                </Button>
-                <Space h="xl" />
+                <SpecificPageHeader
+                    title={bandData?.name}
+                    titleName={"Band"}
+                    subTitle={`Date: ${dayjs(memoData.date).format(
+                        "DD.MM.YYYY"
+                    )} | Venue: ${venueData?.venue} | Lopro: ${
+                        loproData?.name
+                    }`}
+                    other={
+                        <Button
+                            variant="default"
+                            onClick={() => {
+                                router.push({
+                                    pathname: "/contract",
+                                    query: { id: memoData.dealId },
+                                });
+                            }}
+                        >
+                            Create contract
+                        </Button>
+                    }
+                />
                 <Tabs defaultValue="deal-data">
                     <Tabs.List>
                         <Tabs.Tab value="deal-data">Deal data</Tabs.Tab>

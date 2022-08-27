@@ -25,7 +25,7 @@ export default function SpecificBandPage({
         <PageTemplate title="Specific Band">
             <SpecificPageHeader
                 title={band.name}
-                titleName={"Band name"}
+                titleName={"Band"}
                 subTitle={"Genre: Rock"}
             />
             <Tabs defaultValue="band-data">
