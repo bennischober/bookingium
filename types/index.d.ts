@@ -113,6 +113,14 @@ export interface ControlledSliderProps {
 	onChangeEnd?: (value: number) => void;
 }
 
+export interface SpecificPageHeaderProps {
+    title: string;
+    titleName: string;
+    subTitle?: string;
+    other?: React.ReactElement;
+    useBackButton?: boolean;
+}
+
 /** --- SSR PAGE PROPS --- **/
 export interface SessionProps extends Session {
 	session: {
