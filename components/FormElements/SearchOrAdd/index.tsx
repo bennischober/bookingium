@@ -1,21 +1,8 @@
 import { Autocomplete, Button, Group, Tooltip } from "@mantine/core";
-import { UseFormReturnType } from "@mantine/form/lib/types";
 import { MdOutlineAdd } from "react-icons/md";
+import { SearchOrAddProps } from "../../../types";
 
-export interface SearchOrAddProps {
-    ac: {
-        data: string[];
-        useForm: UseFormReturnType<any>;
-        required?: boolean;
-        label: string;
-        placeholder: string;
-        inputProps: string;
-    };
-    md: {
-        button: string;
-        handleOpen: (state: boolean) => void;
-    };
-}
+// make global styles file => for maxWidth e.g.
 
 export function SearchOrAdd({ ac, md }: SearchOrAddProps) {
     return (
@@ -31,6 +18,7 @@ export function SearchOrAdd({ ac, md }: SearchOrAddProps) {
                     <Button
                         variant="default"
                         onClick={() => md.handleOpen(true)}
+                        style={{maxWidth: 56}}
                     >
                         <MdOutlineAdd />
                     </Button>
