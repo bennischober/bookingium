@@ -6,8 +6,8 @@ import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import { MdArrowBack, MdCheck, MdClose } from "react-icons/md";
-import { isPopulated } from "../../../utils/appHandles";
+import { MdCheck, MdClose } from "react-icons/md";
+import { isPopulated, serverSideFetch } from "../../../utils/appHandles";
 import { BandEditForm } from "../../../components/Forms/BandForm";
 import { DealEditForm } from "../../../components/Forms/DealMemoForm";
 import { HotelEditForm } from "../../../components/Forms/HotelForm";
@@ -68,7 +68,8 @@ export default function CompleteDealMemoPage({
 
         const res = await axios.put(
             `http://localhost:3000/api/deal-memo/${memo._id}`,
-            { data: data }
+            { data: data },
+            { params: { userid: session.userid } }
         );
 
         if (res.status === 200) {
@@ -344,7 +345,15 @@ export default function CompleteDealMemoPage({
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession({ req: ctx.req });
     const id = ctx.query.id;
-    const res = await axios.get(`http://localhost:3000/api/deal-memo/${id}`);
-    const data = await res.data;
-    return { props: { session: session, memo: data.data } };
+
+    const data = await serverSideFetch(`/api/deal-memo/${id}`, {
+        userid: session?.userid,
+    });
+
+    return {
+        props: {
+            session: session,
+            memo: data,
+        },
+    };
 };

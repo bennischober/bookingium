@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import axios from "axios";
 import { PageTemplate } from "../../components/Layout/PageTemplate";
 import { DealMemoList } from "../../components/Lists/DealMemoList";
 import { DealMemoProps } from "../../types";
+import { serverSideFetch } from "../../utils/appHandles";
 
 export default function DealMemoPage({
     session,
@@ -22,20 +22,13 @@ export default function DealMemoPage({
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession({ req: ctx.req });
-    const mm =
-        session && session.userid
-            ? await axios.get("http://localhost:3000/api/deal-memo", {
-                  params: {
-                      userid: session.userid,
-                  },
-              })
-            : null;
-    const memos = mm ? await mm.data : null;
+
+    const memos = await serverSideFetch("/api/deal-memo", { userid: session?.userid });
 
     return {
         props: {
             session,
-            memos: memos && memos.data ? memos.data : [],
+            memos: memos,
         },
     };
 };
