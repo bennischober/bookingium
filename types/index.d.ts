@@ -113,6 +113,14 @@ export interface ControlledSliderProps {
 	onChangeEnd?: (value: number) => void;
 }
 
+export interface SpecificPageHeaderProps {
+    title: string;
+    titleName: string;
+    subTitle?: string;
+    other?: React.ReactElement;
+    useBackButton?: boolean;
+}
+
 /** --- SSR PAGE PROPS --- **/
 export interface SessionProps extends Session {
 	session: {
@@ -152,6 +160,11 @@ export interface AddDealMemoProps {
 export interface CompleteDealMemoPageProps {
 	session: SessionProps["session"];
 	memo: IDealMemo;
+}
+
+export interface SpecificBandPageProps {
+	session: SessionProps["session"];
+	band: IBand;	
 }
 
 export interface DealEditFormProps {
@@ -323,4 +336,12 @@ export interface DealMemoListValues {
 	date: string;
 	fee: number;
 	status: string;
+}
+
+export interface BandListValues {
+	bandId: string;
+	name: string;
+	// genre: string;
+	website: string;
+	country: string;
 }
