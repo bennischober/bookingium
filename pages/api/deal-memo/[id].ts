@@ -5,16 +5,15 @@ import { ApiError } from '../../../types/errors';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const {
-        query: { id },
+        query: { id, userid },
         method
     } = req;
 
     await connect();
 
-    // also secure this endpoint with a userid!
-
     // id of the deal memo is required, only progress if available
     if (!id) return new ApiError(res).throwSpecific('missing_request_parameters');
+    if (!userid) return new ApiError(res).throwSpecific('access_denied');
 
     switch (method) {
         case 'GET':
