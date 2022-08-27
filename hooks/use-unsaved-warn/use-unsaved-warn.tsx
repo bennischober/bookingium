@@ -6,8 +6,8 @@ import { Prompt } from "../../components/Interactables/Prompt";
 // Also add on Tab/Browser close?
 // optionally add some text, what form is dirty (e.g. think of layouts with multiple forms)
 
-export function useUnsavedWarn(
-    form: UseFormReturnType<any>,
+export function useUnsavedWarn<T>(
+    form: UseFormReturnType<T>,
     title?: string,
     message?: string,
     confirmText?: string,
