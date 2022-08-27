@@ -1,23 +1,17 @@
 import { useState } from "react";
 import dayjs from "dayjs";
-import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import {
     Box,
     Button,
     Center,
-    Container,
     Divider,
     Group,
     Modal,
-    NumberInput,
     Paper,
-    Select,
     Space,
-    Textarea,
     Title,
 } from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import { IBand } from "../../../models/band";
 import {
@@ -129,7 +123,6 @@ export function DealMemoForm({
             : ({} as IHotel);
 
         const memoData = {
-            _id: new mongoose.Types.ObjectId(),
             dealId: uuidv4(),
             deal: values.deal,
             bandid: band._id,

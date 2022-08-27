@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-import mongoose from "mongoose";
 import { z } from "zod";
 import { v4 as uuidv4 } from "uuid";
 import { Button, Space, TextInput } from "@mantine/core";
@@ -37,7 +36,6 @@ export function HotelForm({ handleHotel, close, session }: HotelFormProps) {
 
     const handleSubmit = (values: HotelFormValues) => {
         const hotelData = {
-            _id: new mongoose.Types.ObjectId(),
             hotelid: uuidv4(),
             name: values.name,
             notes: values.notes,

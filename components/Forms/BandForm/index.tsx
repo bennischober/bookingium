@@ -5,7 +5,6 @@ import {
     Button,
     Group,
     Space,
-    Text,
     Textarea,
     TextInput,
 } from "@mantine/core";
@@ -18,7 +17,6 @@ import {
 } from "../../../types";
 import AddressInput from "../../FormInputs/AddressInput";
 import ContactInput from "../../FormInputs/ContactInput";
-import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import dayjs from "dayjs";
 import { BandMemberInput } from "../../FormInputs/BandMemberInput";
@@ -68,7 +66,6 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
 
     const handleSubmit = async (values: BandFormValues) => {
         const bandData = {
-            _id: new mongoose.Types.ObjectId(),
             bandid: uuidv4(),
             name: values.bandName,
             notes: values.notes,

@@ -3,7 +3,6 @@ import { v4 as uuidv4 } from "uuid";
 import type { NextApiRequest, NextApiResponse } from "next";
 import { connect } from "../../../../lib/mongodb";
 import { User } from "../../../../models/user";
-import mongoose from "mongoose";
 import { ApiError } from "../../../../types/errors";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -12,7 +11,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     // check for  body.name, body.email, body.password and return, if not present?
     
     const registerData = {
-        _id: new mongoose.Types.ObjectId(),
         userid: uuidv4(),
         name: body.name,
         email: body.email,
