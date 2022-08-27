@@ -1,8 +1,16 @@
-import { Button, NumberInput, Space, Text, Textarea, TextInput } from "@mantine/core";
+import {
+    Button,
+    NumberInput,
+    Space,
+    Text,
+    Textarea,
+    TextInput,
+} from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import dayjs from "dayjs";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
+import { useUnsavedWarn } from "../../../hooks";
 import {
     VenueFormValues,
     VenueFormProps,
@@ -40,7 +48,7 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
             phone: "",
             mobilePhone: "",
             homepage: "",
-            contactPerson: [{name: "", role: "", email: "", phone: ""}],
+            contactPerson: [{ name: "", role: "", email: "", phone: "" }],
         },
     });
 
@@ -83,26 +91,31 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
         if (close) close();
     };
 
+    const [prompt] = useUnsavedWarn(Form);
+
     return (
-        <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-            <TextInput
-                label="Venue"
-                {...Form.getInputProps("venue")}
-                required
-            />
-            <NumberInput
-                label="Capacity"
-                {...Form.getInputProps("capacity")}
-                required
-            />
-            <TextInput label="Notes" {...Form.getInputProps("notes")} />
-            <Space h="xl" />
-            <CompanyInput Form={Form} />
-            <ContactPersonInput Form={Form} />
-            <Button type="submit" fullWidth mt="xl">
-                Add Venue
-            </Button>
-        </form>
+        <>
+            <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                    label="Venue"
+                    {...Form.getInputProps("venue")}
+                    required
+                />
+                <NumberInput
+                    label="Capacity"
+                    {...Form.getInputProps("capacity")}
+                    required
+                />
+                <TextInput label="Notes" {...Form.getInputProps("notes")} />
+                <Space h="xl" />
+                <CompanyInput Form={Form} />
+                <ContactPersonInput Form={Form} />
+                <Button type="submit" fullWidth mt="xl">
+                    Add Venue
+                </Button>
+            </form>
+            {prompt}
+        </>
     );
 }
 
@@ -111,7 +124,7 @@ export function VenueEditForm({
     session,
     data,
 }: VenueEditFormProps) {
-    if(!data || !data.contactPerson) return <></>;
+    if (!data || !data.contactPerson) return <></>;
 
     const Form = useForm<VenueFormValues>({
         validate: zodResolver(VenueFormSchema),
@@ -175,25 +188,30 @@ export function VenueEditForm({
         handleVenue(venueData);
     };
 
+    const [prompt] = useUnsavedWarn(Form);
+
     return (
-        <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-            <TextInput
-                label="Venue"
-                {...Form.getInputProps("venue")}
-                required
-            />
-            <NumberInput
-                label="Capacity"
-                {...Form.getInputProps("capacity")}
-                required
-            />
-            <Textarea label="Notes" {...Form.getInputProps("notes")} />
-            <Space h="xl" />
-            <CompanyInput Form={Form} />
-            <ContactPersonInput Form={Form} />
-            <Button type="submit" fullWidth mt="xl">
-                Update Venue Data
-            </Button>
-        </form>
+        <>
+            <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                    label="Venue"
+                    {...Form.getInputProps("venue")}
+                    required
+                />
+                <NumberInput
+                    label="Capacity"
+                    {...Form.getInputProps("capacity")}
+                    required
+                />
+                <Textarea label="Notes" {...Form.getInputProps("notes")} />
+                <Space h="xl" />
+                <CompanyInput Form={Form} />
+                <ContactPersonInput Form={Form} />
+                <Button type="submit" fullWidth mt="xl">
+                    Update Venue Data
+                </Button>
+            </form>
+            {prompt}
+        </>
     );
 }

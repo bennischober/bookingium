@@ -30,6 +30,7 @@ import { ILopro } from "../../../models/lopro";
 import { IHotel } from "../../../models/hotel";
 import { getValueAtKey } from "../../../utils/appHandles";
 import { DealInput } from "../../FormInputs/DealInput";
+import { useUnsavedWarn } from "../../../hooks";
 
 export function DealMemoForm({
     bands,
@@ -179,6 +180,8 @@ export function DealMemoForm({
               return val.name;
           })
         : [];
+
+    const [prompt] = useUnsavedWarn(dealForm);
 
     return (
         <>
@@ -335,6 +338,7 @@ export function DealMemoForm({
                     session={session}
                 />
             </Modal>
+            {prompt}
         </>
     );
 }
@@ -376,15 +380,20 @@ export function DealEditForm({
         handleMemos(memoData);
     };
 
+    const [prompt] = useUnsavedWarn(Form);
+
     return (
-        <form onSubmit={Form.onSubmit((values) => onDealSubmit(values))}>
-            <Title order={2}>Band name: {bandName}</Title>
-            <Space h="xl" />
-            <DealInput Form={Form} />
-            <Space h="xl" />
-            <Button type="submit" fullWidth mt="xl">
-                Update Deal Data
-            </Button>
-        </form>
+        <>
+            <form onSubmit={Form.onSubmit((values) => onDealSubmit(values))}>
+                <Title order={2}>Band name: {bandName}</Title>
+                <Space h="xl" />
+                <DealInput Form={Form} />
+                <Space h="xl" />
+                <Button type="submit" fullWidth mt="xl">
+                    Update Deal Data
+                </Button>
+            </form>
+            {prompt}
+        </>
     );
 }

@@ -4,7 +4,12 @@ import { z } from "zod";
 import { Button, Space, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { CompanyInput } from "../../FormInputs/CompanyInput";
-import { LoproEditFormProps, LoproFormProps, LoproFormValues } from "../../../types";
+import {
+    LoproEditFormProps,
+    LoproFormProps,
+    LoproFormValues,
+} from "../../../types";
+import { useUnsavedWarn } from "../../../hooks";
 
 const LoproFormSchema = z.object({
     name: z.string().min(3, { message: "Name must be at least 3 characters" }),
@@ -79,32 +84,47 @@ export function LoproForm({ handleLopro, close, session }: LoproFormProps) {
         if (close) close();
     };
 
+    const [prompt] = useUnsavedWarn(Form);
+
     return (
-        <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-            <TextInput label="Name" {...Form.getInputProps("name")} required />
-            <TextInput label="Phone" {...Form.getInputProps("personPhone")} />
-            <TextInput
-                label="Mobile Phone"
-                {...Form.getInputProps("personMobilePhone")}
-            />
-            <TextInput
-                label="Email"
-                {...Form.getInputProps("personEmail")}
-                required
-            />
-            <TextInput label="Notes" {...Form.getInputProps("notes")} />
-            <Space h="xl" />
-            <CompanyInput Form={Form} />
-            <Button type="submit" fullWidth mt="xl">
-                Add Lopro
-            </Button>
-        </form>
+        <>
+            <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                    label="Name"
+                    {...Form.getInputProps("name")}
+                    required
+                />
+                <TextInput
+                    label="Phone"
+                    {...Form.getInputProps("personPhone")}
+                />
+                <TextInput
+                    label="Mobile Phone"
+                    {...Form.getInputProps("personMobilePhone")}
+                />
+                <TextInput
+                    label="Email"
+                    {...Form.getInputProps("personEmail")}
+                    required
+                />
+                <TextInput label="Notes" {...Form.getInputProps("notes")} />
+                <Space h="xl" />
+                <CompanyInput Form={Form} />
+                <Button type="submit" fullWidth mt="xl">
+                    Add Lopro
+                </Button>
+            </form>
+            {prompt}
+        </>
     );
 }
 
-
-export function LoproEditForm({handleLopro, session, data}: LoproEditFormProps) {
-    if(!data || !data.name) return <></>;
+export function LoproEditForm({
+    handleLopro,
+    session,
+    data,
+}: LoproEditFormProps) {
+    if (!data || !data.name) return <></>;
 
     const Form = useForm<LoproFormValues>({
         validate: zodResolver(LoproFormSchema),
@@ -166,27 +186,39 @@ export function LoproEditForm({handleLopro, session, data}: LoproEditFormProps) 
             },
         };
         handleLopro(loproData);
-    }
+    };
+
+    const [prompt] = useUnsavedWarn(Form);
 
     return (
-        <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-            <TextInput label="Name" {...Form.getInputProps('name')} required />
-            <TextInput label="Phone" {...Form.getInputProps("personPhone")} />
-            <TextInput
-                label="Mobile Phone"
-                {...Form.getInputProps("personMobilePhone")}
-            />
-            <TextInput
-                label="Email"
-                {...Form.getInputProps("personEmail")}
-                required
-            />
-            <TextInput label="Notes" {...Form.getInputProps("notes")} />
-            <Space h="xl" />
-            <CompanyInput Form={Form} />
-            <Button type="submit" fullWidth mt="xl">
-                Update Lopro Data
-            </Button>
-        </form>
+        <>
+            <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                    label="Name"
+                    {...Form.getInputProps("name")}
+                    required
+                />
+                <TextInput
+                    label="Phone"
+                    {...Form.getInputProps("personPhone")}
+                />
+                <TextInput
+                    label="Mobile Phone"
+                    {...Form.getInputProps("personMobilePhone")}
+                />
+                <TextInput
+                    label="Email"
+                    {...Form.getInputProps("personEmail")}
+                    required
+                />
+                <TextInput label="Notes" {...Form.getInputProps("notes")} />
+                <Space h="xl" />
+                <CompanyInput Form={Form} />
+                <Button type="submit" fullWidth mt="xl">
+                    Update Lopro Data
+                </Button>
+            </form>
+            {prompt}
+        </>
     );
 }
