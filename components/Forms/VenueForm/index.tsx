@@ -1,7 +1,6 @@
 import { Button, NumberInput, Space, Text, Textarea, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import dayjs from "dayjs";
-import mongoose from "mongoose";
 import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import {
@@ -47,7 +46,6 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
 
     const handleSubmit = (values: VenueFormValues) => {
         const venueData = {
-            _id: new mongoose.Types.ObjectId(),
             venueid: uuidv4(),
             venue: values.venue,
             capacity: values.capacity,

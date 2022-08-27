@@ -1,6 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
 import dayjs from "dayjs";
-import mongoose from "mongoose";
 import { z } from "zod";
 import { Button, Space, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
@@ -43,7 +42,6 @@ export function LoproForm({ handleLopro, close, session }: LoproFormProps) {
 
     const handleSubmit = (values: LoproFormValues) => {
         const loproData = {
-            _id: new mongoose.Types.ObjectId(),
             loproid: uuidv4(),
             name: values.name,
             phone: values.personPhone,
