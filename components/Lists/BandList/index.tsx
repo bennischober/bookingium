@@ -84,7 +84,7 @@ export function BandList({ bands }: BandListProps) {
     return (
         <ScrollArea>
             <Paper shadow="xs" p="xl" withBorder>
-                <DataGrid columns={columns} data={rows} title="Deal Memos" />
+                <DataGrid columns={columns} data={rows} title="Bands" />
             </Paper>
         </ScrollArea>
     );
