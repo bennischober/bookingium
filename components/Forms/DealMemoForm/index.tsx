@@ -385,8 +385,6 @@ export function DealEditForm({
     return (
         <>
             <form onSubmit={Form.onSubmit((values) => onDealSubmit(values))}>
-                <Title order={2}>Band name: {bandName}</Title>
-                <Space h="xl" />
                 <DealInput Form={Form} />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
