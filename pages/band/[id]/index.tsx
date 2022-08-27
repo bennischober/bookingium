@@ -1,12 +1,12 @@
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import axios from "axios";
 import { BandEditForm } from "../../../components/Forms/BandForm";
 import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { SpecificBandPageProps } from "../../../types";
 import { SpecificPageHeader } from "../../../components/Layout/SpecificPageHeader";
 import { Tabs } from "@mantine/core";
+import { serverSideFetch } from "../../../utils/appHandles";
 
 // finish this page and extract to new component as soon as the depending components are finished
 // update band model and interface to have a genre and founded field!
@@ -37,7 +37,6 @@ export default function SpecificBandPage({
                     <Tabs.Tab value="isrc-data">ISRC Codes</Tabs.Tab>
                 </Tabs.List>
                 <Tabs.Panel value="band-data">
-                    {" "}
                     <FormContainer>
                         <BandEditForm
                             session={session}
@@ -79,15 +78,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession({ req: ctx.req });
     const id = ctx.query.id;
 
-    const res = await axios.get(`http://localhost:3000/api/band/${id}`, {
-        params: {
-            userid: session?.userid,
-        },
-    });
-    const data = await res.data;
+    const data = await serverSideFetch(`/api/band/${id}`, {userid: session?.userid});
 
     // edit deal memo api endpoint to have another parameter "band"
     // return all deal memos that this user created for this band
 
-    return { props: { session: session, band: data.data } };
+    return { props: { session: session, band: data } };
 };

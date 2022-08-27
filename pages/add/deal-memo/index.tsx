@@ -5,7 +5,7 @@ import { useState } from "react";
 import { DealMemoForm } from "../../../components/Forms/DealMemoForm";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { AddDealMemoProps } from "../../../types";
-import { getBands, getMemos } from "../../../utils/appHandles";
+import { getBands, getMemos, serverSideFetch } from "../../../utils/appHandles";
 
 export default function AddDealMemoPage({
     session,
@@ -77,66 +77,21 @@ export default function AddDealMemoPage({
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession({ req: ctx.req });
-    const pl =
-        session && session.userid
-            ? await axios.get("http://localhost:3000/api/band", {
-                  params: {
-                      userid: session.userid,
-                  },
-              })
-            : null;
-    const bands = pl ? await pl.data : null;
 
-    const mm =
-        session && session.userid
-            ? await axios.get("http://localhost:3000/api/deal-memo", {
-                  params: {
-                      userid: session.userid,
-                  },
-              })
-            : null;
-    const memos = mm ? await mm.data : null;
-
-    const vn =
-        session && session.userid
-            ? await axios.get("http://localhost:3000/api/venue", {
-                  params: {
-                      userid: session.userid,
-                  },
-              })
-            : null;
-    const venues = vn ? await vn.data : null;
-
-    const lp =
-        session && session.userid
-            ? await axios.get("http://localhost:3000/api/lopro", {
-                  params: {
-                      userid: session.userid,
-                  },
-              })
-            : null;
-
-    const lopros = lp ? await lp.data : null;
-
-    const ht =
-        session && session.userid
-            ? await axios.get("http://localhost:3000/api/hotel", {
-                  params: {
-                      userid: session.userid,
-                  },
-              })
-            : null;
-
-    const hotels = ht ? await ht.data : null;
+    const bands = await serverSideFetch("/api/band", {userid: session?.userid});
+    const memos = await serverSideFetch("/api/deal-memo", {userid: session?.userid});
+    const venues = await serverSideFetch("/api/venue", {userid: session?.userid});
+    const lopros = await serverSideFetch("/api/lopro", {userid: session?.userid});
+    const hotels = await serverSideFetch("/api/hotel", {userid: session?.userid});
 
     return {
         props: {
             session,
-            bands: bands && bands.data ? bands.data : [],
-            memos: memos && memos.data ? memos.data : [],
-            venues: venues && venues.data ? venues.data : [],
-            lopros: lopros && lopros.data ? lopros.data : [],
-            hotels: hotels && hotels.data ? hotels.data : [],
+            bands: bands,
+            memos: memos,
+            venues: venues,
+            lopros: lopros,
+            hotels: hotels,
         },
     };
 };
