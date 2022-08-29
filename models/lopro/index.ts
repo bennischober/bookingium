@@ -1,7 +1,7 @@
 import mongoose, { Document } from 'mongoose';
 import dayjs from 'dayjs';
 import { ICompany, IDm } from './../modelTypes';
-import { OCompany } from '../modelObjects';
+import { OCompany, OPerson } from '../modelObjects';
 
 const loproSchema = new mongoose.Schema({
     loproid: {

@@ -57,9 +57,9 @@ export interface IBand extends Document {
         ustNumber: string;
         address: {
             street: string;
-            streetNumber: number;
+            streetNumber: string;
             addressSuffix: string;
-            zipCode: number;
+            zipCode: string;
             city: string;
             state: string;
             country: string;

@@ -1,6 +1,6 @@
 import mongoose, { Document } from 'mongoose';
 import dayjs from 'dayjs';
-import { ICompany, IDm, IContactPerson } from '../modelTypes';
+import { ICompany, IDm, IPerson } from '../modelTypes';
 
 const venueSchema = new mongoose.Schema({
     venueid: {
@@ -51,7 +51,7 @@ export interface IVenue extends Document {
     capacity: number;
     notes: string;
     company: ICompany;
-    contactPerson: IContactPerson[];
+    contactPerson: IPerson[];
     dm: IDm;
 }
 
