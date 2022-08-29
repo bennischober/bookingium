@@ -37,9 +37,9 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
             vatNumber: "",
             ustNumber: "",
             street: "",
-            streetNumber: 0,
+            streetNumber: "",
             addressSuffix: "",
-            zipCode: 0,
+            zipCode: "",
             city: "",
             state: "",
             country: "",
@@ -48,7 +48,7 @@ export function VenueForm({ handleVenue, close, session }: VenueFormProps) {
             phone: "",
             mobilePhone: "",
             homepage: "",
-            contactPerson: [{ name: "", role: "", email: "", phone: "" }],
+            contactPerson: [{ name: "", role: "", email: "", phone: "", mobilePhone: "" }],
         },
     });
 
@@ -124,8 +124,6 @@ export function VenueEditForm({
     session,
     data,
 }: VenueEditFormProps) {
-    if (!data || !data.contactPerson) return <></>;
-
     const Form = useForm<VenueFormValues>({
         validate: zodResolver(VenueFormSchema),
         initialValues: {

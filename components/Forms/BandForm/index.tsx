@@ -42,10 +42,10 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
             companyName: "",
             vatNumber: "",
             ustNumber: "",
-            streetNumber: 0,
+            streetNumber: "",
             street: "",
             addressSuffix: "",
-            zipCode: 0,
+            zipCode: "",
             city: "",
             state: "",
             country: "",
@@ -184,7 +184,7 @@ export function BandForm({ handleBands, close, session }: BandFormProps) {
 }
 
 export function BandEditForm({ handleBand, session, data }: BandEditFormProps) {
-    // early out, if data || data.members is not set => might happen at first render attempt
+    // apparently this is not allowed in react => conditional hook execution
     if (!data || !data.members) return <></>;
 
     const bandForm = useForm({

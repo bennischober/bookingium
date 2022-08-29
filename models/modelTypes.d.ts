@@ -1,8 +1,8 @@
 export interface IAddress {
     street: string;
-    streetNumber: number;
+    streetNumber: string;
     addressSuffix: string;
-    zipCode: number;
+    zipCode: string;
     city: string;
     state: string;
     country: string;
@@ -30,9 +30,25 @@ export interface IDm {
     edited: string;
 }
 
-export interface IContactPerson {
+// add Person schema!
+// add birthday, organization, and address? also encapuslate contact?
+export interface IPerson {
     name: string;
-    role: string;
+    lastname: string;
     email: string;
     phone: string;
+    mobilePhone: string;
+    role?: string;
+    notes?: string;
 }
+
+export interface IPersonTest {
+    name: string;
+    lastname: string;
+    birthday: string;
+    organization: string; //linked to this company; dont save data, only id
+    contact: IContact;
+    address: IAddress
+}
+
+// also split company to collection? google, if this makes sense! => looks like a relational database now...
