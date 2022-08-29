@@ -269,43 +269,55 @@ export default function CompleteDealMemoPage({
                     </Tabs.Panel>
                     <Tabs.Panel value="lopro-data">
                         <FormContainer>
-                            <LoproEditForm
-                                session={session}
-                                handleLopro={handleLopro}
-                                data={{
-                                    name: loproData?.name,
-                                    personPhone: loproData?.phone,
-                                    personMobilePhone: loproData?.mobilePhone,
-                                    personEmail: loproData?.email,
-                                    notes: loproData?.notes,
-                                    companyName: loproData?.company?.name,
-                                    vatNumber: loproData?.company?.vatNumber,
-                                    ustNumber: loproData?.company?.ustNumber,
-                                    streetNumber:
-                                        loproData?.company?.address
-                                            ?.streetNumber,
-                                    street: loproData?.company?.address?.street,
-                                    addressSuffix:
-                                        loproData?.company?.address
-                                            ?.addressSuffix,
-                                    zipCode:
-                                        loproData?.company?.address?.zipCode,
-                                    city: loproData?.company?.address?.city,
-                                    state: loproData?.company?.address?.state,
-                                    country:
-                                        loproData?.company?.address?.country,
-                                    countryCode:
-                                        loproData?.company?.address
-                                            ?.countryCode,
-                                    email: loproData?.company?.contact?.email,
-                                    phone: loproData?.company?.contact?.phone,
-                                    mobilePhone:
-                                        loproData?.company?.contact
-                                            ?.mobilePhone,
-                                    homepage:
-                                        loproData?.company?.contact?.homepage,
-                                }}
-                            />
+                            {loproData && loproData.name ? (
+                                <LoproEditForm
+                                    session={session}
+                                    handleLopro={handleLopro}
+                                    data={{
+                                        name: loproData?.name,
+                                        personPhone: loproData?.phone,
+                                        personMobilePhone:
+                                            loproData?.mobilePhone,
+                                        personEmail: loproData?.email,
+                                        notes: loproData?.notes,
+                                        companyName: loproData?.company?.name,
+                                        vatNumber:
+                                            loproData?.company?.vatNumber,
+                                        ustNumber:
+                                            loproData?.company?.ustNumber,
+                                        streetNumber:
+                                            loproData?.company?.address
+                                                ?.streetNumber,
+                                        street: loproData?.company?.address
+                                            ?.street,
+                                        addressSuffix:
+                                            loproData?.company?.address
+                                                ?.addressSuffix,
+                                        zipCode:
+                                            loproData?.company?.address
+                                                ?.zipCode,
+                                        city: loproData?.company?.address?.city,
+                                        state: loproData?.company?.address
+                                            ?.state,
+                                        country:
+                                            loproData?.company?.address
+                                                ?.country,
+                                        countryCode:
+                                            loproData?.company?.address
+                                                ?.countryCode,
+                                        email: loproData?.company?.contact
+                                            ?.email,
+                                        phone: loproData?.company?.contact
+                                            ?.phone,
+                                        mobilePhone:
+                                            loproData?.company?.contact
+                                                ?.mobilePhone,
+                                        homepage:
+                                            loproData?.company?.contact
+                                                ?.homepage,
+                                    }}
+                                />
+                            ) : null}
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="hotel-data">
