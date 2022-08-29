@@ -36,11 +36,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'PUT':
             try {
-                // update specific item
-                const dealMemo = await DealMemo.findByIdAndUpdate(id, req.body.data, {
-                    new: true,
-                    runValidators: true,
-                });
+                // this updates a only the given data in body
+                const dealMemo = await DealMemo.updateOne({ dealId: id }, { $set: req.body.data }, { runValidators: true });
+                
                 if (!dealMemo) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }
@@ -51,11 +49,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'DELETE':
             try {
                 // delete specific item
-                const dealMemo = await DealMemo.findByIdAndDelete(id);
+                const dealMemo = await DealMemo.deleteOne({dealId: id});
                 if (!dealMemo) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }
-                return res.status(200).json({ success: true, data: {} });
+                return res.status(200).json({ success: true, data: dealMemo });
             }
             catch (error) {
                 return new ApiError(res, 500).handle(error);
