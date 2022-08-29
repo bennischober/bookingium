@@ -1,4 +1,4 @@
-import { Group, NumberInput, Space, TextInput } from "@mantine/core";
+import { Group, Space, TextInput } from "@mantine/core";
 import { InputComponentProps } from "../../../types";
 
 // Note: This is no standalone component, this needs to be paired with a functional form component!
@@ -8,9 +8,8 @@ export default function AddressInput({ Form }: InputComponentProps) {
         <>
             <Group grow>
             <TextInput label="Street" {...Form.getInputProps("street")} />
-                <NumberInput
+                <TextInput
                     label="Street number"
-                    hideControls
                     {...Form.getInputProps("streetNumber")}
                 />
                 <TextInput
@@ -20,9 +19,8 @@ export default function AddressInput({ Form }: InputComponentProps) {
             </Group>
             <Space h="xl" />
             <Group grow>
-                <NumberInput
+                <TextInput
                     label="Zip code"
-                    hideControls
                     {...Form.getInputProps("zipCode")}
                 />
                 <TextInput label="City" {...Form.getInputProps("city")} />
