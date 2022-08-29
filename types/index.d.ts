@@ -230,10 +230,10 @@ export interface HotelEditFormProps {
 /** --- FORM TYPES --- **/
 
 export interface AddressInputValues {
-	streetNumber: number;
+	streetNumber: string;
 	street: string;
 	addressSuffix: string;
-	zipCode: number;
+	zipCode: string;
 	city: string;
 	state: string;
 	country: string;
@@ -316,9 +316,10 @@ export interface VenueFormValues extends CompanyInputValues {
 	capacity: number;
 	contactPerson: {
 		name: string;
-		role: string;
+		role?: string;
 		email: string;
 		phone: string;
+		mobilePhone: string;
 	}[];
 	notes: string;
 }
