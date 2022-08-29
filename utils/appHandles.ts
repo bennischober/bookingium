@@ -52,7 +52,6 @@ export function handleSession(router: NextRouter, session: SessionProps["session
 }
 
 /*--- OTHER HANDLE ---*/
-
 export function getCurrentYear() {
     return dayjs().format("YYYY");
 }
@@ -62,7 +61,6 @@ export function getNameInitials(name: string) {
 }
 
 /*--- DATA STRUCTURE HANDLE ---*/
-
 // function that adds a new item to a specific index of an array and pushes the rest of the array to the end
 export function addToArray(array: any[], index: number, item: any) {
     array.splice(index, 0, item);
@@ -75,6 +73,16 @@ export function convertToType<T>(data: any): T {
 
 export function convertMantineSizeToNumber(size: MantineNumberSize) {
     return size === "xs" ? 0 : size === "sm" ? 25 : size === "md" ? 50 : size === "lg" ? 75 : size === "xl" ? 100 : 0;
+}
+
+export function appendObject<T>(obj: any, value: T) {
+    type ObjectKey = keyof typeof value;
+
+    Object.keys(value).forEach((key) => {
+        const k = key as ObjectKey;
+        obj[k] = value[k];
+    });
+    //return obj;
 }
 
 /*--- FETCH HANDLE ---*/
@@ -110,7 +118,7 @@ export const serverSideFetch = async (url: string, params?: {}) => {
     return fetch.data.data;
 }
 
-/** --- DATABASE HANDLE --- **/
+/* --- DATABASE HANDLE --- */
 export function isPopulated<T>(obj: T | any): obj is T {
     // return (obj && obj.name && typeof obj.name === 'string');
     return obj !== null && obj !== undefined;
@@ -134,4 +142,16 @@ export function getValueAtKey<T, K>(data: T[], key: keyof T, value: K): T {
 
 export function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
     return obj[key];
+}
+
+export function getFormValueObject<T>(values: T, userid: string, created: string) {
+    const obj: { [k: string]: any } = {
+        dm: {
+            edited: dayjs().toISOString(),
+            userid: userid,
+            created: created,
+        },
+    };
+    appendObject<T>(obj, values);
+    return obj;
 }

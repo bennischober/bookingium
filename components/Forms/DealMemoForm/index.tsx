@@ -10,7 +10,6 @@ import {
     Modal,
     Paper,
     Space,
-    Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { IBand } from "../../../models/band";
@@ -28,7 +27,7 @@ import { HotelForm } from "../HotelForm";
 import { IVenue } from "../../../models/venue";
 import { ILopro } from "../../../models/lopro";
 import { IHotel } from "../../../models/hotel";
-import { getValueAtKey } from "../../../utils/appHandles";
+import { appendObject, getFormValueObject, getValueAtKey } from "../../../utils/appHandles";
 import { DealInput } from "../../FormInputs/DealInput";
 import { useUnsavedWarn } from "../../../hooks";
 
@@ -185,7 +184,6 @@ export function DealMemoForm({
 
     return (
         <>
-            {/* <Title order={1}>Create a new Deal Memo</Title> */}
             <Center>
                 <Paper
                     withBorder
@@ -353,7 +351,7 @@ export function DealEditForm({
     const Form = useForm<DealEditFormValues>({
         initialValues: {
             deal: data.deal,
-            date: data.date,
+            date: dayjs(data.date).toDate() as unknown as string,
             fee: data.fee,
             ticketPriceVVK: data.ticketPriceVVK,
             ticketPriceAK: data.ticketPriceAK,
@@ -364,19 +362,8 @@ export function DealEditForm({
     });
 
     const onDealSubmit = (values: DealEditFormValues) => {
-        const memoData = {
-            deal: values.deal,
-            date: values.date,
-            fee: values.fee,
-            posters: values.posters,
-            notes: values.notes,
-            dm: {
-                edited: dayjs().toISOString(),
-                userid: session.userid,
-                created: created,
-            },
-        };
-
+        Form.resetDirty();
+        const memoData = getFormValueObject<DealEditFormValues>(values, session.userid, created);
         handleMemos(memoData);
     };
 

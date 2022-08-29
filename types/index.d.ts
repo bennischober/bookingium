@@ -129,7 +129,7 @@ export interface ControlledSliderProps {
 }
 
 export interface SpecificPageHeaderProps {
-    title: string;
+    title: string | JSX.Element;
     titleName: string;
     subTitle?: string;
     other?: React.ReactElement;
@@ -302,7 +302,7 @@ export interface RegisterHandleData {
 
 export interface DealEditFormValues {
 	deal: string;
-	date: Date;
+	date: string;
 	fee: number;
 	ticketPriceVVK: number;
 	ticketPriceAK: number;

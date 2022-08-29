@@ -1,4 +1,4 @@
-import { Button, Center, Space, Tabs, Text, Title } from "@mantine/core";
+import { Button, Center, Tabs, Text } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -18,11 +18,11 @@ import { IDealMemo } from "../../../models/deal-memo";
 import { IHotel } from "../../../models/hotel";
 import { ILopro } from "../../../models/lopro";
 import { IVenue } from "../../../models/venue";
-import { CompleteDealMemoPageProps } from "../../../types";
+import { CompleteDealMemoPageProps, DealEditFormValues } from "../../../types";
 import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
-import { BackButton } from "../../../components/LayoutElements/BackButton";
 import { SpecificPageHeader } from "../../../components/Layout/SpecificPageHeader";
+import Link from "next/link";
 
 // move interface to types file
 // move jsx stuff to new component, if everything is finished and works properly
@@ -68,14 +68,12 @@ export default function CompleteDealMemoPage({
         });
 
         const res = await axios.put(
-            `http://localhost:3000/api/deal-memo/${memo._id}`,
+            `http://localhost:3000/api/deal-memo/${memo.dealId}`,
             { data: data },
             { params: { userid: session.userid } }
         );
 
         if (res.status === 200) {
-            setMemoData(res.data.data);
-
             updateNotification({
                 id: "load-data",
                 color: "teal",
@@ -118,7 +116,17 @@ export default function CompleteDealMemoPage({
         <>
             <PageTemplate title={`Deal Memo of ${bandData.name}`}>
                 <SpecificPageHeader
-                    title={bandData?.name}
+                    title={
+                        <Link href={`/band/${bandData?.bandid}`}>
+                            <Text<"a">
+                                component="a"
+                                variant="link"
+                                href={`/band/${bandData?.bandid}`}
+                            >
+                                {bandData.name}
+                            </Text>
+                        </Link>
+                    }
                     titleName={"Band"}
                     subTitle={`Date: ${dayjs(memoData.date).format(
                         "DD.MM.YYYY"
@@ -154,16 +162,7 @@ export default function CompleteDealMemoPage({
                             <DealEditForm
                                 handleMemos={handleMemo}
                                 session={session}
-                                data={{
-                                    deal: memoData.deal,
-                                    date: dayjs(memoData.date).toDate(),
-                                    fee: memoData.fee,
-                                    ticketPriceVVK: memoData.ticketPriceVVK,
-                                    ticketPriceAK: memoData.ticketPriceAK,
-                                    posters: memoData.posters,
-                                    status: memoData.status,
-                                    notes: memoData.notes,
-                                }}
+                                data={memoData as DealEditFormValues}
                                 bandName={bandData.name}
                                 created={memoData.dm.created}
                             />
@@ -171,79 +170,101 @@ export default function CompleteDealMemoPage({
                     </Tabs.Panel>
                     <Tabs.Panel value="band-data">
                         <FormContainer>
-                            <BandEditForm
-                                session={session}
-                                handleBand={handleBand}
-                                data={{
-                                    bandName: bandData?.name,
-                                    notes: bandData?.notes,
-                                    companyName: bandData?.company?.name,
-                                    vatNumber: bandData?.company?.vatNumber,
-                                    ustNumber: bandData?.company?.ustNumber,
-                                    streetNumber:
-                                        bandData?.company?.address
-                                            ?.streetNumber,
-                                    street: bandData?.company?.address?.street,
-                                    addressSuffix:
-                                        bandData?.company?.address
-                                            ?.addressSuffix,
-                                    zipCode:
-                                        bandData?.company?.address?.zipCode,
-                                    city: bandData?.company?.address?.city,
-                                    state: bandData?.company?.address?.state,
-                                    country:
-                                        bandData?.company?.address?.country,
-                                    countryCode:
-                                        bandData?.company?.address?.countryCode,
-                                    email: bandData?.company?.contact?.email,
-                                    phone: bandData?.company?.contact?.phone,
-                                    mobilePhone:
-                                        bandData.company?.contact?.mobilePhone,
-                                    homepage:
-                                        bandData?.company?.contact?.homepage,
-                                    members: bandData?.members,
-                                }}
-                            />
+                            {bandData && bandData.members ? (
+                                <BandEditForm
+                                    session={session}
+                                    handleBand={handleBand}
+                                    data={{
+                                        bandName: bandData?.name,
+                                        notes: bandData?.notes,
+                                        companyName: bandData?.company?.name,
+                                        vatNumber: bandData?.company?.vatNumber,
+                                        ustNumber: bandData?.company?.ustNumber,
+                                        streetNumber:
+                                            bandData?.company?.address
+                                                ?.streetNumber,
+                                        street: bandData?.company?.address
+                                            ?.street,
+                                        addressSuffix:
+                                            bandData?.company?.address
+                                                ?.addressSuffix,
+                                        zipCode:
+                                            bandData?.company?.address?.zipCode,
+                                        city: bandData?.company?.address?.city,
+                                        state: bandData?.company?.address
+                                            ?.state,
+                                        country:
+                                            bandData?.company?.address?.country,
+                                        countryCode:
+                                            bandData?.company?.address
+                                                ?.countryCode,
+                                        email: bandData?.company?.contact
+                                            ?.email,
+                                        phone: bandData?.company?.contact
+                                            ?.phone,
+                                        mobilePhone:
+                                            bandData.company?.contact
+                                                ?.mobilePhone,
+                                        homepage:
+                                            bandData?.company?.contact
+                                                ?.homepage,
+                                        members: bandData?.members,
+                                    }}
+                                />
+                            ) : (
+                                <p>No band data found</p>
+                            )}
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="venue-data">
                         <FormContainer>
-                            <VenueEditForm
-                                session={session}
-                                handleVenue={handleVenue}
-                                data={{
-                                    venue: venueData?.venue,
-                                    capacity: venueData?.capacity,
-                                    notes: venueData?.notes,
-                                    companyName: venueData?.company?.name,
-                                    vatNumber: venueData?.company?.vatNumber,
-                                    ustNumber: venueData?.company?.ustNumber,
-                                    streetNumber:
-                                        venueData?.company?.address
-                                            ?.streetNumber,
-                                    street: venueData?.company?.address?.street,
-                                    addressSuffix:
-                                        venueData?.company?.address
-                                            ?.addressSuffix,
-                                    zipCode:
-                                        venueData?.company?.address?.zipCode,
-                                    city: venueData?.company?.address?.city,
-                                    state: venueData?.company?.address?.state,
-                                    country:
-                                        venueData?.company?.address?.country,
-                                    countryCode:
-                                        venueData?.company?.address
-                                            ?.countryCode,
-                                    email: venueData?.company?.contact?.email,
-                                    phone: venueData?.company?.contact?.phone,
-                                    mobilePhone:
-                                        venueData?.company?.contact
-                                            ?.mobilePhone,
-                                    homepage:
-                                        venueData?.company?.contact?.homepage,
-                                    contactPerson: venueData?.contactPerson,
-                                }}
-                            />
+                            {venueData && venueData.contactPerson ? (
+                                <VenueEditForm
+                                    session={session}
+                                    handleVenue={handleVenue}
+                                    data={{
+                                        venue: venueData?.venue,
+                                        capacity: venueData?.capacity,
+                                        notes: venueData?.notes,
+                                        companyName: venueData?.company?.name,
+                                        vatNumber:
+                                            venueData?.company?.vatNumber,
+                                        ustNumber:
+                                            venueData?.company?.ustNumber,
+                                        streetNumber:
+                                            venueData?.company?.address
+                                                ?.streetNumber,
+                                        street: venueData?.company?.address
+                                            ?.street,
+                                        addressSuffix:
+                                            venueData?.company?.address
+                                                ?.addressSuffix,
+                                        zipCode:
+                                            venueData?.company?.address
+                                                ?.zipCode,
+                                        city: venueData?.company?.address?.city,
+                                        state: venueData?.company?.address
+                                            ?.state,
+                                        country:
+                                            venueData?.company?.address
+                                                ?.country,
+                                        countryCode:
+                                            venueData?.company?.address
+                                                ?.countryCode,
+                                        email: venueData?.company?.contact
+                                            ?.email,
+                                        phone: venueData?.company?.contact
+                                            ?.phone,
+                                        mobilePhone:
+                                            venueData?.company?.contact
+                                                ?.mobilePhone,
+                                        homepage:
+                                            venueData?.company?.contact
+                                                ?.homepage,
+                                        contactPerson: venueData?.contactPerson,
+                                    }}
+                                />
+                            ) : null}
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="lopro-data">
