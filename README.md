@@ -275,6 +275,7 @@ Cypress and Storybook tests could be automatically executed in Docker build.
 ## References
 
 - [PDF generation](https://pdfme.com/docs/getting-started) | [react-pdf (currently not working for react 18)](https://github.com/diegomura/react-pdf) | [jsPDF](https://github.com/parallax/jsPDF) | [pdf-lib](https://github.com/Hopding/pdf-lib) | [Relaxed pdf](https://github.com/RelaxedJS/ReLaXed)
+- NEW WAY TO GENERATE PDFS FROM [DOCX](https://morioh.com/p/51832d13a7dc)
 - [Newsletter with Nodemailer](https://nodemailer.com/about/)
 - [Deployment](https://reactjsexample.com/how-to-deploy-nextjs-database-app-with-docker-multi-container/)
 - Maps: [main](https://www.npmjs.com/package/leaflet) with [react components](https://www.npmjs.com/package/react-leaflet) and [search](https://www.npmjs.com/package/leaflet-search) | [Creating routes](https://www.qed42.com/insights/coe/javascript/navigation-leaflet-maps) 
