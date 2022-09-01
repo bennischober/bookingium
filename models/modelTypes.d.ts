@@ -30,6 +30,12 @@ export interface IDm {
     edited: string;
 }
 
+export interface IContactPerson {
+    name: string;
+    role: string;
+    email: string;
+    phone: string;
+}
 // add Person schema!
 // add birthday, organization, and address? also encapuslate contact?
 export interface IPerson {
@@ -41,14 +47,3 @@ export interface IPerson {
     role?: string;
     notes?: string;
 }
-
-export interface IPersonTest {
-    name: string;
-    lastname: string;
-    birthday: string;
-    organization: string; //linked to this company; dont save data, only id
-    contact: IContact;
-    address: IAddress
-}
-
-// also split company to collection? google, if this makes sense! => looks like a relational database now...

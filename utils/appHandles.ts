@@ -3,6 +3,7 @@ import { NextRouter } from "next/router";
 import dayjs from 'dayjs';
 import { SessionProps } from "../types";
 import axios from "axios";
+import { v4 } from "uuid";
 
 // handle theme, language, and other app settings
 
@@ -85,6 +86,14 @@ export function appendObject<T>(obj: any, value: T) {
     //return obj;
 }
 
+export function nonEmptyObj(obj: any) {
+    return Object.keys(obj).length > 0;
+}
+
+export function nonEmptyString(str: any) {
+    return str === null || str == undefined ? false : str.length > 0;
+}
+
 /*--- FETCH HANDLE ---*/
 export const getBands = async (session: SessionProps["session"]) => {
     // get url form links.ts
@@ -140,18 +149,35 @@ export function getValueAtKey<T, K>(data: T[], key: keyof T, value: K): T {
     return item;
 }
 
+export function getNestedValue(obj: any, path: string): any {
+    return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+}
+
 export function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
     return obj[key];
 }
 
-export function getFormValueObject<T>(values: T, userid: string, created: string) {
+export function getFormValueObject<T>(values: T, userid: string, created?: string, id?: { createId: string, value?: string }) {
     const obj: { [k: string]: any } = {
         dm: {
             edited: dayjs().toISOString(),
             userid: userid,
-            created: created,
+            created: nonEmptyString(created) ? created : dayjs().toISOString(),
         },
     };
+
+    if (id) {
+        obj[id.createId] = id.value ?? v4();
+    }
+
     appendObject<T>(obj, values);
     return obj;
+}
+
+export function someUnequal(toTest: any[], toCompare: any) {
+    if (toTest.some(element => element === undefined)) return false;
+
+    return toTest.some(item => {
+        return item !== toCompare;
+    });
 }

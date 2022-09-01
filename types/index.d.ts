@@ -2,10 +2,11 @@ import { MantineNumberSize } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form/lib/types";
 import { Session } from "next-auth";
 import { IconBase } from "react-icons/lib";
-import { IBand } from "../models/band";
+import { Band, IBand } from "../models/band";
 import { IDealMemo } from "../models/deal-memo";
 import { IHotel } from "../models/hotel";
 import { ILopro } from "../models/lopro";
+import { IPerson, Person } from "../models/person";
 import { IVenue } from "../models/venue";
 
 /** --- COMPONENTS --- **/
@@ -81,6 +82,10 @@ export interface InputComponentProps {
 	Form: UseFormReturnType;
 }
 
+export interface CompanyInputComponentProps extends InputComponentProps {
+	isCompany?: boolean;
+}
+
 export interface BandMemberInputProps extends InputComponentProps {
 	index: number;
 }
@@ -93,8 +98,15 @@ export interface BandFormProps {
 
 export interface BandEditFormProps {
 	session: SessionProps["session"];
+	created: string;
 	handleBand: (data: {}) => void;
-	data: BandFormValues;
+	data: Band;
+}
+
+export interface PersonFormProps {
+    handleData?(data: IPerson): void;
+	session: SessionProps["session"];
+	data?: IPerson;
 }
 
 export interface DealMemoListProps {
