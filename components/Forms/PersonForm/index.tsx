@@ -30,7 +30,7 @@ export function PersonForm({ handleData, session, data }: PersonFormProps) {
         initialValues: {
             firstName: data?.firstName ?? "",
             lastName: data?.lastName ?? "",
-            birthday: data?.birthday ?? (dayjs().toDate() as unknown as string),
+            birthday: data?.birthday ?? "",
             tag: data?.tag ?? "Band",
             role: data?.role ?? "",
             notes: data?.notes ?? "",
@@ -57,7 +57,10 @@ export function PersonForm({ handleData, session, data }: PersonFormProps) {
 
     const handleSubmit = (values: Person) => {
         const v = values;
-        v.birthday = dayjs(v.birthday).toISOString();
+        v.birthday =
+            v.birthday != undefined && v.birthday != ""
+                ? dayjs(v.birthday).toISOString()
+                : v.birthday;
 
         const created = data?.dm.created ?? "";
 
@@ -70,7 +73,7 @@ export function PersonForm({ handleData, session, data }: PersonFormProps) {
 
         console.log(vals);
 
-        // if not "delivered", handle data on own
+        // if handleData not passed, handle data on own
     };
 
     const [prompt] = useUnsavedWarn(Form);
@@ -103,7 +106,6 @@ export function PersonForm({ handleData, session, data }: PersonFormProps) {
                             clearable={false}
                             inputFormat="DD.MM.YYYY"
                             {...Form.getInputProps("birthday")}
-                            required
                         />
 
                         <Space h="xl" />

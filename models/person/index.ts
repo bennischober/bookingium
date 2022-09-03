@@ -1,6 +1,6 @@
 import { Document, model, Model, models, Schema } from 'mongoose';
 import { IAddress, IDm } from '../modelTypes';
-import { ODm } from '../modelObjects';
+import { OAddress, OContact, ODm } from '../modelObjects';
 
 const personSchema: Schema = new Schema({
     personid: {
@@ -8,8 +8,18 @@ const personSchema: Schema = new Schema({
         required: true,
         unique: true,
     },
-    name: { type: String, required: true },
-    notes: { type: String },
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    birthday: { type: Date },
+    tag: {
+        type: String,
+        required: true,
+        enum: ["Band", "Venue", "Lopro", "Hotel"]
+    },
+    role: { type: String, default: "" },
+    notes: { type: String, default: "" },
+    contact: OContact,
+    address: OAddress,
     dm: ODm,
 });
 
@@ -35,6 +45,12 @@ export interface Person {
         homepage: string;
     }
     address: IAddress;
+}
+
+// Person with Metadata => might not be needed => test
+export interface MPerson {
+    personid: string;
+    dm: IDm;
 }
 
 // this interface is for mongodb data => document has some extra properties
