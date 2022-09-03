@@ -76,7 +76,7 @@ export function convertMantineSizeToNumber(size: MantineNumberSize) {
     return size === "xs" ? 0 : size === "sm" ? 25 : size === "md" ? 50 : size === "lg" ? 75 : size === "xl" ? 100 : 0;
 }
 
-export function appendObject<T>(obj: any, value: T) {
+export function appendObject<T extends Object>(obj: any, value: T) {
     type ObjectKey = keyof typeof value;
 
     Object.keys(value).forEach((key) => {
@@ -133,7 +133,7 @@ export function isPopulated<T>(obj: T | any): obj is T {
     return obj !== null && obj !== undefined;
 }
 
-export function getKeys<T>(obj: T): (keyof T)[] {
+export function getKeys<T extends Object>(obj: T): (keyof T)[] {
     return Object.keys(obj) as (keyof T)[];
 }
 
@@ -157,7 +157,7 @@ export function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
     return obj[key];
 }
 
-export function getFormValueObject<T>(values: T, userid: string, created?: string, id?: { createId: string, value?: string }) {
+export function getFormValueObject<T extends Object>(values: T, userid: string, created?: string, id?: { createId: string, value?: string }) {
     const obj: { [k: string]: any } = {
         dm: {
             edited: dayjs().toISOString(),
