@@ -61,4 +61,4 @@ export interface IPerson extends Document, Person {
     dm: IDm;
 }
 
-export const Person: Model<IPerson> = models.Band || model<IPerson>('Band', personSchema);
+export const Person: Model<IPerson> = models.Person || model<IPerson>('Person', personSchema);
