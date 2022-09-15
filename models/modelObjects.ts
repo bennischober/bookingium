@@ -15,8 +15,10 @@ export const OContact = {
     email: { type: String, default: '' },
     phone: { type: String, default: '' },
     mobilePhone: { type: String, default: '' },
-    privatePhone: { type: String, default: '' },
-    otherNumbers: { type: [String], default: [] },
+    otherNumbers: [{
+        identifier: { type: String, default: '' },
+        number: { type: String, default: '' },
+    }],
     homepage: { type: String, default: '' },
 };
 

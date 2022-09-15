@@ -40,8 +40,10 @@ export interface Person {
         email: string;
         phone: string;
         mobilePhone: string;
-        privatePhone: string;
-        otherNumbers: string[];
+        otherNumbers: {
+            identifier: string;
+            number: string;
+        }[];
         homepage: string;
     }
     address: IAddress;

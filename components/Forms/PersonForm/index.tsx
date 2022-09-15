@@ -38,7 +38,6 @@ export function PersonForm({ handleData, session, data }: PersonFormProps) {
                 email: "",
                 phone: "",
                 mobilePhone: "",
-                privatePhone: "",
                 otherNumbers: [],
                 homepage: "",
             },
@@ -76,6 +75,7 @@ export function PersonForm({ handleData, session, data }: PersonFormProps) {
         // if handleData not passed, handle data on own
     };
 
+    // add a "save" button and deliver a save function?
     const [prompt] = useUnsavedWarn(Form);
 
     return (
