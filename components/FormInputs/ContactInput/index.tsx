@@ -12,33 +12,26 @@ import {
 } from "@mantine/core";
 import React, { useState } from "react";
 import { MdDelete, MdOutlineAdd } from "react-icons/md";
-import { CompanyInputComponentProps } from "../../../types";
+import { InputComponentProps } from "../../../types";
 import { getNestedValue } from "../../../utils/appHandles";
 
 // Note: This is no standalone component, this needs to be paired with a functional form component!
 export default function ContactInput({
     Form,
-    isCompany,
-}: CompanyInputComponentProps) {
+}: InputComponentProps) {
     const [opened, setOpened] = useState(false);
 
-    // test, if company contact or normal contact
-    const company = isCompany ?? true;
 
-    const email = company ? "company.contact.email" : "contact.email";
-    const homepage = company ? "company.contact.homepage" : "contact.homepage";
-    const phone = company ? "company.contact.phone" : "contact.phone";
-    const mobilePhone = company
-        ? "company.contact.mobilePhone"
-        : "contact.mobilePhone";
-    const otherNumbers = company
-        ? "company.contact.otherNumbers"
-        : "contact.otherNumbers";
+    const email = "contact.email";
+    const homepage = "contact.homepage";
+    const phone = "contact.phone";
+    const mobilePhone = "contact.mobilePhone";
+    const otherNumbers = "contact.otherNumbers";
 
     const otherNums = getNestedValue(Form.values, otherNumbers)?.map(
         (_: any, index: any) => {
             return (
-                <Paper key={_ + index}>
+                <Paper key={index}>
                     <Grid>
                         <Grid.Col span={5}>
                             <TextInput
