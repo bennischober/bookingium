@@ -200,7 +200,7 @@ export interface DealEditFormProps {
 }
 
 export interface VenueFormProps {
-	handleVenue: (data: {}) => void;
+	handleData: (data: IVenue) => void;
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IVenue;
@@ -214,42 +214,6 @@ export interface HotelFormProps {
 }
 
 /** --- FORM TYPES --- **/
-
-export interface AddressInputValues {
-	streetNumber: string;
-	street: string;
-	addressSuffix: string;
-	zipCode: string;
-	city: string;
-	state: string;
-	country: string;
-	countryCode: string;
-}
-
-export interface ContactInputValues {
-	email: string;
-	phone: string;
-	mobilePhone: string;
-	homepage: string;
-}
-
-export interface CompanyInputValues extends AddressInputValues, ContactInputValues {
-	companyName: string;
-	vatNumber: string;
-	ustNumber: string;
-}
-
-export interface BandFormValues extends CompanyInputValues {
-	bandName: string;
-	notes: string;
-	members: {
-		name: string;
-		role: string;
-		email: string;
-		phone: string;
-	}[];
-}
-
 export interface DealMemoFormValues {
 	band: string;
 	date: Date;
@@ -297,31 +261,6 @@ export interface DealEditFormValues {
 	notes: string;
 }
 
-export interface VenueFormValues extends CompanyInputValues {
-	venue: string;
-	capacity: number;
-	contactPerson: {
-		name: string;
-		role?: string;
-		email: string;
-		phone: string;
-		mobilePhone: string;
-	}[];
-	notes: string;
-}
-
-export interface LoproFormValues extends CompanyInputValues {
-	name: string;
-	personPhone: string;
-	personMobilePhone: string;
-	personEmail: string;
-	notes: string;
-}
-
-export interface HotelFormValues extends CompanyInputValues {
-	name: string;
-	notes: string;
-}
 
 export interface DataGridSettingsValues {
 	fontSize: MantineNumberSize;
