@@ -118,7 +118,7 @@ export function PersonForm({ handleData, close, session, data }: PersonFormProps
                             labelPosition="center"
                         />
 
-                        <ContactInput Form={Form} isCompany={false} />
+                        <ContactInput Form={Form} />
 
                         <Divider
                             label="Address"
@@ -126,7 +126,7 @@ export function PersonForm({ handleData, close, session, data }: PersonFormProps
                             labelPosition="center"
                         />
 
-                        <AddressInput Form={Form} isCompany={false} />
+                        <AddressInput Form={Form} />
                     </Box>
                 </Group>
                 <Button type="submit" fullWidth mt="xl">
