@@ -1,7 +1,8 @@
-import mongoose, { Document } from 'mongoose';
-import dayjs from 'dayjs';
+import { Document, model, Model, models, Schema, Types } from 'mongoose';
+import { ODm } from '../modelObjects';
+import { IDm } from '../modelTypes';
 
-const dealMemoSchema = new mongoose.Schema({
+const dealMemoSchema = new Schema({
     dealId: {
         type: String,
         required: true,
@@ -15,15 +16,14 @@ const dealMemoSchema = new mongoose.Schema({
     posters: { type: Number },
     status: { type: String },
     notes: { type: String },
-    bandid: { type: mongoose.Schema.Types.ObjectId, ref: 'Band', required: true },
-    venueid: { type: mongoose.Schema.Types.ObjectId, ref: 'Venue' }, // equals location
-    loproid: { type: mongoose.Schema.Types.ObjectId, ref: 'Lopro' }, // equals promoter
-    hotelid: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' },
-    dm: {
-        userid: { type: String, required: true, index: true },
-        created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
-        edited: { type: String }
-    }
+    lopro: {
+        person: { type: Schema.Types.ObjectId, ref: 'Person' },
+        company: { type: Schema.Types.ObjectId, ref: 'Company' },
+    },
+    bandid: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
+    venueid: { type: Schema.Types.ObjectId, ref: 'Venue' }, // equals location
+    hotelid: { type: Schema.Types.ObjectId, ref: 'Hotel' },
+    dm: ODm,
 }); // , { collection: 'dealMemo' }
 
 export interface IDealMemo extends Document {
@@ -36,15 +36,14 @@ export interface IDealMemo extends Document {
     posters: number;
     status: string;
     notes: string;
-    bandid: mongoose.Types.ObjectId;
-    venueid: mongoose.Types.ObjectId;
-    loproid: mongoose.Types.ObjectId;
-    hotelid: mongoose.Types.ObjectId | null;
-    dm: {
-        userid: string;
-        created: string;
-        edited: string;
-    };
+    lopro: {
+        person: Types.ObjectId;
+        company: Types.ObjectId;
+    },
+    bandid: Types.ObjectId;
+    venueid: Types.ObjectId;
+    hotelid: Types.ObjectId | null;
+    dm: IDm;
 }
 
-export default mongoose.models.DealMemo || mongoose.model('DealMemo', dealMemoSchema);
+export const DealMemo: Model<IDealMemo> = models.DealMemo || model<IDealMemo>('DealMemo', dealMemoSchema);
