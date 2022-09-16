@@ -12,12 +12,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     await connect();
 
+    if (!userid) return new ApiError(res).throwSpecific('access_denied');
+
     switch (method) {
         case 'GET':
-            if (!userid) return new ApiError(res).throwSpecific('access_denied');
             try {
                 // send all bands for user
-                // also no error handling if find.exec() throws an error!
                 const data = await Band.find({ 'dm.userid': userid }).exec();
                 return res.status(200).json({ success: true, data: data });
             } catch (error) {
