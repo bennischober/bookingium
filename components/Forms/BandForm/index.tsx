@@ -33,7 +33,6 @@ export function BandForm({
     close,
     session,
     data,
-    created,
 }: BandFormProps) {
     const [opened, setOpened] = useState(false);
 
