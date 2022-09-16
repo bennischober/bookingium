@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from '../../../lib/mongodb';
-import DealMemo from '../../../models/deal-memo';
+import { DealMemo } from '../../../models/deal-memo';
 import { ApiError } from '../../../types/errors';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -21,12 +21,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 // register schema/model if its not already registered
                 require('../../../models/band');
                 require('../../../models/venue');
-                require('../../../models/lopro');
                 require('../../../models/hotel');
 
                 // get specific item
                 // Note: if populate('foreignDoc') id does not exist, it returns null => no error is thrown!
-                const dealMemo = await DealMemo.findOne({ dealId: id }).populate('bandid').populate('venueid').populate('loproid').populate('hotelid').exec();
+                const dealMemo = await DealMemo.findOne({ dealId: id }).populate('bandid').populate('venueid').populate('hotelid').exec();
                 if (!dealMemo) {
                     return new ApiError(res, 404, `No data found for the id ${id}!`).throw();
                 }
@@ -36,9 +35,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'PUT':
             try {
-                // this updates a only the given data in body
+                // this updates only the given data in body
                 const dealMemo = await DealMemo.updateOne({ dealId: id }, { $set: req.body.data }, { runValidators: true });
-                
                 if (!dealMemo) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }
@@ -49,7 +47,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'DELETE':
             try {
                 // delete specific item
-                const dealMemo = await DealMemo.deleteOne({dealId: id});
+                const dealMemo = await DealMemo.deleteOne({ dealId: id });
                 if (!dealMemo) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }

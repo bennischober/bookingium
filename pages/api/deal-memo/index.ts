@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from '../../../lib/mongodb';
-import DealMemo from '../../../models/deal-memo';
+import { DealMemo } from '../../../models/deal-memo';
 import { ApiError } from '../../../types/errors';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -16,6 +16,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 require('../../../models/band');
 
                 // send populated data => needed in deal memo list
+                // only populate band name? .populate('bandid', 'name')
                 const dt = await DealMemo.find({ 'dm.userid': userid }).populate('bandid').exec();
                 return res.status(200).json({ success: true, data: dt });
             } catch (error) {
