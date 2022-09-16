@@ -104,7 +104,8 @@ export interface BandEditFormProps {
 }
 
 export interface PersonFormProps {
-    handleData?(data: IPerson): void;
+    handleData(data: IPerson): void;
+	close?: () => void;
 	session: SessionProps["session"];
 	data?: IPerson;
 }

@@ -17,7 +17,7 @@ import { getFormValueObject } from "../../../utils/appHandles";
 import AddressInput from "../../FormInputs/AddressInput";
 import ContactInput from "../../FormInputs/ContactInput";
 
-export function PersonForm({ handleData, session, data }: PersonFormProps) {
+export function PersonForm({ handleData, close, session, data }: PersonFormProps) {
     const Form = useForm<Person>({
         initialValues: {
             firstName: data?.firstName ?? "",
@@ -59,14 +59,11 @@ export function PersonForm({ handleData, session, data }: PersonFormProps) {
             value: data?.personid,
         }) as IPerson;
 
-        if (handleData) {
-            handleData(vals);
-            Form.reset();
-            return;
-        }
+        handleData(vals);
 
-        // if handleData not passed, handle data on own
-        console.log(vals);
+        if(close) close();
+
+        Form.reset();
     };
 
     // add a "save" button and deliver a save function?
