@@ -5,7 +5,6 @@ import { IconBase } from "react-icons/lib";
 import { Band, IBand } from "../models/band";
 import { IDealMemo } from "../models/deal-memo";
 import { IHotel } from "../models/hotel";
-import { ILopro } from "../models/lopro";
 import { IPerson, Person } from "../models/person";
 import { IVenue } from "../models/venue";
 
