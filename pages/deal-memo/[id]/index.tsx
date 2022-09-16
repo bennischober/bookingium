@@ -175,7 +175,7 @@ export default function CompleteDealMemoPage({
                             {nonEmptyObj(venueData) ? (
                                 <VenueForm
                                     session={session}
-                                    handleVenue={handleVenue}
+                                    handleData={handleVenue}
                                     data={venueData}
                                 />
                             ) : null}

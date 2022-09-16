@@ -61,6 +61,16 @@ export interface UserButtonProps {
 	color?: string;
 }
 
+export interface SearchableProps {
+    label: string;
+    placeholder?: string;
+    data: string[];
+    required?: boolean;
+	inputProps: string;
+    Form: UseFormReturnType<any>;
+}
+
+
 export interface SearchOrAddProps {
     ac: {
         data: string[];

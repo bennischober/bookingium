@@ -1,58 +1,37 @@
-import mongoose, { Document } from 'mongoose';
-import dayjs from 'dayjs';
-import { ICompany, IDm, IPerson } from '../modelTypes';
+import { Document, model, Model, models, Schema, Types } from 'mongoose';
+import { IDm } from '../modelTypes';
+import { ODm } from '../modelObjects';
+import { ICompany } from '../company';
 
-const venueSchema = new mongoose.Schema({
+const VenueSchema = new Schema({
     venueid: {
         type: String,
         required: true,
         unique: true,
     },
-    venue: { type: String, required: true },
+    name: { type: String, required: true },
     capacity: { type: Number },
     notes: { type: String },
-    company: {
-        name: { type: String },
-        vatNumber: { type: String },
-        ustNumber: { type: String },
-        address: {
-            street: { type: String },
-            streetNumber: { type: Number },
-            addressSuffix: { type: String },
-            zipCode: { type: Number },
-            city: { type: String },
-            state: { type: String },
-            country: { type: String },
-            countryCode: { type: String },
-        },
-        contact: {
-            phone: { type: String },
-            mobilePhone: { type: String },
-            email: { type: String },
-            homepage: { type: String },
-        },
-    },
-    contactPerson: [{
-        name: { type: String },
-        role: { type: String },
-        email: { type: String },
-        phone: { type: String },
-    }],
-    dm: {
-        userid: { type: String, required: true },
-        created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
-        edited: { type: String }
-    },
+    company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
+    dm: ODm,
 });
 
-export interface IVenue extends Document {
-    venueid: string;
-    venue: string;
+interface _Venue {
+    name: string;
     capacity: number;
     notes: string;
-    company: ICompany;
-    contactPerson: IPerson[];
-    dm: IDm;
 }
 
-export default mongoose.models.Venue || mongoose.model('Venue', venueSchema);
+export interface Venue extends _Venue {
+    company: Types.ObjectId;
+}
+
+export interface PVenue extends _Venue {
+    company: ICompany;
+}
+
+export interface IVenue extends Document, Venue {
+    venueid: string;
+    dm: IDm;
+}
+export const Venue: Model<IVenue> = models.Venue || model<IVenue>('Venue', VenueSchema);
