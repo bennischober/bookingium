@@ -21,6 +21,7 @@ import { Types } from "mongoose";
 import { getFormValueObject } from "../../../utils/appHandles";
 import { useState } from "react";
 import { MdDelete } from "react-icons/md";
+import { MemberInput } from "../../FormInputs/MemberInput";
 
 const schema = z.object({
     name: z
@@ -67,37 +68,6 @@ export function BandForm({
 
     const [prompt] = useUnsavedWarn(Form);
 
-    const members = Form.values.members.map((_: any, index: any) => {
-        return (
-            <Box key={_ + index}>
-                <Grid grow align="flex-end">
-                    <Grid.Col span={10}>
-                        <Autocomplete
-                            label="Member"
-                            placeholder="Type to search"
-                            data={[]}
-                            {...Form.getInputProps(`members.${index}`)}
-                            required
-                        />
-                    </Grid.Col>
-                    <Grid.Col span={2}>
-                        <Tooltip label="Delete member">
-                            <Button
-                                onClick={() =>
-                                    Form.removeListItem("members", index)
-                                }
-                                color="red"
-                            >
-                                <MdDelete />
-                            </Button>
-                        </Tooltip>
-                    </Grid.Col>
-                </Grid>
-                <Divider my="xl" />
-            </Box>
-        );
-    });
-
     return (
         <>
             <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
@@ -129,17 +99,7 @@ export function BandForm({
                     onClose={() => setOpened(false)}
                     size="xl"
                 >
-                    {members}
-                    <Center>
-                        <Button
-                            onClick={() => {
-                                Form.insertListItem("members", "");
-                            }}
-                            variant="default"
-                        >
-                            Add Member
-                        </Button>
-                    </Center>
+                    <MemberInput Form={Form} autocomplete={[]} />
                 </Modal>
             </form>
             {prompt}
