@@ -192,7 +192,7 @@ export default function CompleteDealMemoPage({
                             {nonEmptyObj(hotelData) ? (
                                 <HotelForm
                                     session={session}
-                                    handleHotel={handleHotel}
+                                    handleData={handleHotel}
                                     data={hotelData}
                                 />
                             ) : (

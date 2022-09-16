@@ -1,8 +1,9 @@
-import mongoose, { Document } from 'mongoose';
-import { OCompany, ODm } from '../modelObjects';
-import { ICompany, IDm } from '../modelTypes';
+import { Document, model, Model, models, Schema, Types } from 'mongoose';
+import { ICompany } from '../company';
+import { ODm } from '../modelObjects';
+import { IDm } from '../modelTypes';
 
-const hotelSchema = new mongoose.Schema({
+const HotelSchema = new Schema({
     hotelid: {
         type: String,
         required: true,
@@ -10,16 +11,26 @@ const hotelSchema = new mongoose.Schema({
     },
     name: { type: String, required: true },
     notes: { type: String },
-    company: OCompany,
+    company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
     dm: ODm,
 });
 
-export interface IHotel extends Document {
-    hotelid: string;
+interface _Hotel {
     name: string;
     notes: string;
+}
+
+export interface Hotel extends _Hotel {
+    company: Types.ObjectId;
+}
+
+export interface PHotel extends _Hotel {
     company: ICompany;
+}
+
+export interface IHotel extends Document, Hotel {
+    hotelid: string;
     dm: IDm;
 }
 
-export default mongoose.models.Hotel || mongoose.model('Hotel', hotelSchema);
+export const Hotel: Model<IHotel> = models.Hotel || model<IHotel>('Hotel', HotelSchema);

@@ -197,7 +197,7 @@ export interface VenueFormProps {
 }
 
 export interface HotelFormProps {
-	handleHotel: (data: {}) => void;
+	handleData: (data: IHotel) => void;
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IHotel;
