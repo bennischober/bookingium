@@ -1,12 +1,12 @@
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import { BandEditForm } from "../../../components/Forms/BandForm";
-import { FormContainer } from "../../../components/Layout/FormContainer";
-import { PageTemplate } from "../../../components/Layout/PageTemplate";
-import { SpecificBandPageProps } from "../../../types";
-import { SpecificPageHeader } from "../../../components/Layout/SpecificPageHeader";
+import { BandEditForm } from "../../../../components/Forms/BandForm";
+import { FormContainer } from "../../../../components/Layout/FormContainer";
+import { PageTemplate } from "../../../../components/Layout/PageTemplate";
+import { SpecificBandPageProps } from "../../../../types";
+import { SpecificPageHeader } from "../../../../components/Layout/SpecificPageHeader";
 import { Tabs } from "@mantine/core";
-import { serverSideFetch } from "../../../utils/appHandles";
+import { serverSideFetch } from "../../../../utils/appHandles";
 
 // finish this page and extract to new component as soon as the depending components are finished
 // update band model and interface to have a genre and founded field!

@@ -1,9 +1,9 @@
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
-import { PageTemplate } from "../../components/Layout/PageTemplate";
-import { BandList } from "../../components/Lists/BandList";
-import { IBand } from "../../models/band";
-import { serverSideFetch } from "../../utils/appHandles";
+import { PageTemplate } from "../../../components/Layout/PageTemplate";
+import { BandList } from "../../../components/Lists/BandList";
+import { IBand } from "../../../models/band";
+import { serverSideFetch } from "../../../utils/appHandles";
 
 export interface BandPageProps {
     bands: IBand[];

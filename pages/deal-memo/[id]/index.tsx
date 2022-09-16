@@ -7,27 +7,26 @@ import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { MdCheck, MdClose } from "react-icons/md";
-import { isPopulated, serverSideFetch } from "../../../utils/appHandles";
-import { BandEditForm } from "../../../components/Forms/BandForm";
+import {
+    isPopulated,
+    nonEmptyObj,
+    serverSideFetch,
+} from "../../../utils/appHandles";
+import { BandForm } from "../../../components/Forms/BandForm";
 import { DealEditForm } from "../../../components/Forms/DealMemoForm";
-import { HotelEditForm } from "../../../components/Forms/HotelForm";
-import { LoproEditForm } from "../../../components/Forms/LoproForm";
-import { VenueEditForm } from "../../../components/Forms/VenueForm";
 import { IBand } from "../../../models/band";
 import { IDealMemo } from "../../../models/deal-memo";
 import { IHotel } from "../../../models/hotel";
-import { ILopro } from "../../../models/lopro";
 import { IVenue } from "../../../models/venue";
 import { CompleteDealMemoPageProps, DealEditFormValues } from "../../../types";
 import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { SpecificPageHeader } from "../../../components/Layout/SpecificPageHeader";
 import Link from "next/link";
+import { VenueForm } from "../../../components/Forms/VenueForm";
+import { HotelForm } from "../../../components/Forms/HotelForm";
 
-// move interface to types file
 // move jsx stuff to new component, if everything is finished and works properly
-
-// might need to think about how to handle the hotel data. Initially there might not be any hotel
 
 export default function CompleteDealMemoPage({
     memo,
@@ -36,7 +35,6 @@ export default function CompleteDealMemoPage({
     const [memoData, setMemoData] = useState<IDealMemo>(memo);
     const [bandData, setBandData] = useState<IBand>({} as IBand);
     const [venueData, setVenueData] = useState<IVenue>({} as IVenue);
-    const [loproData, setLoproData] = useState<ILopro>({} as ILopro);
     const [hotelData, setHotelData] = useState<IHotel>({} as IHotel);
     const router = useRouter();
 
@@ -47,13 +45,10 @@ export default function CompleteDealMemoPage({
         if (isPopulated<IVenue>(memo.venueid)) {
             setVenueData(memo.venueid);
         }
-        if (isPopulated<ILopro>(memo.loproid)) {
-            setLoproData(memo.loproid);
-        }
         if (isPopulated<IHotel>(memo.hotelid)) {
             setHotelData(memo.hotelid);
         }
-    }, [memo, bandData, venueData, loproData, hotelData]);
+    }, [memo, bandData, venueData, hotelData]);
 
     // maybe move this to appHandles?
     const handleMemo = async (data: {}) => {
@@ -104,10 +99,6 @@ export default function CompleteDealMemoPage({
         console.log(data);
     };
 
-    const handleLopro = async (data: {}) => {
-        console.log(data);
-    };
-
     const handleHotel = async (data: {}) => {
         console.log(data);
     };
@@ -130,9 +121,7 @@ export default function CompleteDealMemoPage({
                     titleName={"Band"}
                     subTitle={`Date: ${dayjs(memoData.date).format(
                         "DD.MM.YYYY"
-                    )} | Venue: ${venueData?.venue} | Lopro: ${
-                        loproData?.name
-                    }`}
+                    )} | Venue: ${venueData?.name} | Lopro: Coming back soon!`}
                     other={
                         <Button
                             variant="default"
@@ -170,46 +159,12 @@ export default function CompleteDealMemoPage({
                     </Tabs.Panel>
                     <Tabs.Panel value="band-data">
                         <FormContainer>
-                            {bandData && bandData.members ? (
-                                <BandEditForm
+                            {nonEmptyObj(bandData) ? (
+                                <BandForm
                                     session={session}
-                                    handleBand={handleBand}
-                                    data={{
-                                        bandName: bandData?.name,
-                                        notes: bandData?.notes,
-                                        companyName: bandData?.company?.name,
-                                        vatNumber: bandData?.company?.vatNumber,
-                                        ustNumber: bandData?.company?.ustNumber,
-                                        streetNumber:
-                                            bandData?.company?.address
-                                                ?.streetNumber,
-                                        street: bandData?.company?.address
-                                            ?.street,
-                                        addressSuffix:
-                                            bandData?.company?.address
-                                                ?.addressSuffix,
-                                        zipCode:
-                                            bandData?.company?.address?.zipCode,
-                                        city: bandData?.company?.address?.city,
-                                        state: bandData?.company?.address
-                                            ?.state,
-                                        country:
-                                            bandData?.company?.address?.country,
-                                        countryCode:
-                                            bandData?.company?.address
-                                                ?.countryCode,
-                                        email: bandData?.company?.contact
-                                            ?.email,
-                                        phone: bandData?.company?.contact
-                                            ?.phone,
-                                        mobilePhone:
-                                            bandData.company?.contact
-                                                ?.mobilePhone,
-                                        homepage:
-                                            bandData?.company?.contact
-                                                ?.homepage,
-                                        members: bandData?.members,
-                                    }}
+                                    handleBands={handleBand}
+                                    data={bandData}
+                                    created={bandData.dm.created}
                                 />
                             ) : (
                                 <p>No band data found</p>
@@ -218,153 +173,27 @@ export default function CompleteDealMemoPage({
                     </Tabs.Panel>
                     <Tabs.Panel value="venue-data">
                         <FormContainer>
-                            {venueData && venueData.contactPerson ? (
-                                <VenueEditForm
+                            {nonEmptyObj(venueData) ? (
+                                <VenueForm
                                     session={session}
                                     handleVenue={handleVenue}
-                                    data={{
-                                        venue: venueData?.venue,
-                                        capacity: venueData?.capacity,
-                                        notes: venueData?.notes,
-                                        companyName: venueData?.company?.name,
-                                        vatNumber:
-                                            venueData?.company?.vatNumber,
-                                        ustNumber:
-                                            venueData?.company?.ustNumber,
-                                        streetNumber:
-                                            venueData?.company?.address
-                                                ?.streetNumber,
-                                        street: venueData?.company?.address
-                                            ?.street,
-                                        addressSuffix:
-                                            venueData?.company?.address
-                                                ?.addressSuffix,
-                                        zipCode:
-                                            venueData?.company?.address
-                                                ?.zipCode,
-                                        city: venueData?.company?.address?.city,
-                                        state: venueData?.company?.address
-                                            ?.state,
-                                        country:
-                                            venueData?.company?.address
-                                                ?.country,
-                                        countryCode:
-                                            venueData?.company?.address
-                                                ?.countryCode,
-                                        email: venueData?.company?.contact
-                                            ?.email,
-                                        phone: venueData?.company?.contact
-                                            ?.phone,
-                                        mobilePhone:
-                                            venueData?.company?.contact
-                                                ?.mobilePhone,
-                                        homepage:
-                                            venueData?.company?.contact
-                                                ?.homepage,
-                                        contactPerson: venueData?.contactPerson,
-                                    }}
+                                    data={venueData}
                                 />
                             ) : null}
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="lopro-data">
                         <FormContainer>
-                            {loproData && loproData.name ? (
-                                <LoproEditForm
-                                    session={session}
-                                    handleLopro={handleLopro}
-                                    data={{
-                                        name: loproData?.name,
-                                        personPhone: loproData?.phone,
-                                        personMobilePhone:
-                                            loproData?.mobilePhone,
-                                        personEmail: loproData?.email,
-                                        notes: loproData?.notes,
-                                        companyName: loproData?.company?.name,
-                                        vatNumber:
-                                            loproData?.company?.vatNumber,
-                                        ustNumber:
-                                            loproData?.company?.ustNumber,
-                                        streetNumber:
-                                            loproData?.company?.address
-                                                ?.streetNumber,
-                                        street: loproData?.company?.address
-                                            ?.street,
-                                        addressSuffix:
-                                            loproData?.company?.address
-                                                ?.addressSuffix,
-                                        zipCode:
-                                            loproData?.company?.address
-                                                ?.zipCode,
-                                        city: loproData?.company?.address?.city,
-                                        state: loproData?.company?.address
-                                            ?.state,
-                                        country:
-                                            loproData?.company?.address
-                                                ?.country,
-                                        countryCode:
-                                            loproData?.company?.address
-                                                ?.countryCode,
-                                        email: loproData?.company?.contact
-                                            ?.email,
-                                        phone: loproData?.company?.contact
-                                            ?.phone,
-                                        mobilePhone:
-                                            loproData?.company?.contact
-                                                ?.mobilePhone,
-                                        homepage:
-                                            loproData?.company?.contact
-                                                ?.homepage,
-                                    }}
-                                />
-                            ) : null}
+                            <p>Coming back soon!</p>
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="hotel-data">
                         <FormContainer>
-                            {hotelData && Object.keys(hotelData).length > 0 ? (
-                                <HotelEditForm
+                            {nonEmptyObj(hotelData) ? (
+                                <HotelForm
                                     session={session}
                                     handleHotel={handleHotel}
-                                    data={{
-                                        name: hotelData?.name,
-                                        notes: hotelData?.notes,
-                                        companyName: loproData?.company?.name,
-                                        vatNumber:
-                                            loproData?.company?.vatNumber,
-                                        ustNumber:
-                                            loproData?.company?.ustNumber,
-                                        streetNumber:
-                                            loproData?.company?.address
-                                                ?.streetNumber,
-                                        street: loproData?.company?.address
-                                            ?.street,
-                                        addressSuffix:
-                                            loproData?.company?.address
-                                                ?.addressSuffix,
-                                        zipCode:
-                                            loproData?.company?.address
-                                                ?.zipCode,
-                                        city: loproData?.company?.address?.city,
-                                        state: loproData?.company?.address
-                                            ?.state,
-                                        country:
-                                            loproData?.company?.address
-                                                ?.country,
-                                        countryCode:
-                                            loproData?.company?.address
-                                                ?.countryCode,
-                                        email: loproData?.company?.contact
-                                            ?.email,
-                                        phone: loproData?.company?.contact
-                                            ?.phone,
-                                        mobilePhone:
-                                            loproData?.company?.contact
-                                                ?.mobilePhone,
-                                        homepage:
-                                            loproData?.company?.contact
-                                                ?.homepage,
-                                    }}
+                                    data={hotelData}
                                 />
                             ) : (
                                 // Idea: goto hotel add form with params of deal and add new hotel.
