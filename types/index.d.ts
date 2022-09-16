@@ -23,9 +23,9 @@ export interface AppContainerProps {
 }
 
 export interface FormContainerProps {
-    children: React.ReactNode;
-    center?: boolean;
-    sx?: {};
+	children: React.ReactNode;
+	center?: boolean;
+	sx?: {};
 }
 
 export interface HeaderProps {
@@ -62,33 +62,38 @@ export interface UserButtonProps {
 }
 
 export interface SearchableProps {
-    label: string;
-    placeholder?: string;
-    data: string[];
-    required?: boolean;
+	label: string;
+	placeholder?: string;
+	data: string[];
+	required?: boolean;
 	inputProps: string;
-    Form: UseFormReturnType<any>;
+	Form: UseFormReturnType<any>;
 }
 
 
 export interface SearchOrAddProps {
-    ac: {
-        data: string[];
-        useForm: UseFormReturnType<any>;
-        required?: boolean;
-        label: string;
-        placeholder: string;
-        inputProps: string;
-    };
-    md: {
-        button: string;
-        handleOpen: (state: boolean) => void;
-    };
+	ac: {
+		data: string[];
+		useForm: UseFormReturnType<any>;
+		required?: boolean;
+		label: string;
+		placeholder: string;
+		inputProps: string;
+	};
+	md: {
+		button: string;
+		handleOpen: (state: boolean) => void;
+	};
 }
 
 // or type to any?
 export interface InputComponentProps {
 	Form: UseFormReturnType;
+}
+
+export interface MemberInputProps {
+	Form: UseFormReturnType;
+	autocomplete: any[];
 }
 
 export interface BandFormProps {
@@ -99,7 +104,7 @@ export interface BandFormProps {
 }
 
 export interface PersonFormProps {
-    handleData(data: IPerson): void;
+	handleData(data: IPerson): void;
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IPerson;
@@ -137,11 +142,11 @@ export interface ControlledSliderProps {
 }
 
 export interface SpecificPageHeaderProps {
-    title: string | JSX.Element;
-    titleName: string;
-    subTitle?: string;
-    other?: React.ReactElement;
-    useBackButton?: boolean;
+	title: string | JSX.Element;
+	titleName: string;
+	subTitle?: string;
+	other?: React.ReactElement;
+	useBackButton?: boolean;
 }
 
 /** --- SSR PAGE PROPS --- **/
@@ -188,7 +193,7 @@ export interface CompleteDealMemoPageProps {
 
 export interface SpecificBandPageProps {
 	session: SessionProps["session"];
-	band: IBand;	
+	band: IBand;
 }
 
 export interface DealEditFormProps {
@@ -211,6 +216,13 @@ export interface HotelFormProps {
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IHotel;
+}
+
+export interface CompanyFormProps {
+	handleData: (data: ICompany) => void;
+	close?: () => void;
+	session: SessionProps["session"];
+	data?: ICompany;
 }
 
 /** --- FORM TYPES --- **/

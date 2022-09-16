@@ -30,7 +30,7 @@ export function getNavbarData() {
         {
             label: "Add new data", icon: MdPostAdd, links: [
                 { label: "Band", link: "/add/band" },
-                { label: "Company", link: "/add/compoany" },
+                { label: "Company", link: "/add/company" },
                 { label: "Hotel", link: "/add/hotel" },
                 { label: "Venue", link: "/add/venue" },
                 { label: "Person", link: "/add/person" },
