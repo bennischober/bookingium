@@ -1,8 +1,8 @@
 import { Document, model, Model, models, Schema } from 'mongoose';
-import { IAddress, IDm } from '../modelTypes';
+import { IAddress, IContact, IDm } from '../modelTypes';
 import { OAddress, OContact, ODm } from '../modelObjects';
 
-const personSchema: Schema = new Schema({
+const PersonSchema: Schema = new Schema({
     personid: {
         type: String,
         required: true,
@@ -11,54 +11,43 @@ const personSchema: Schema = new Schema({
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     birthday: { type: Date },
-    tag: {
-        type: String,
-        required: true,
-        enum: ["Band", "Venue", "Lopro", "Hotel"]
-    },
     role: { type: String, default: "" },
     notes: { type: String, default: "" },
     contact: OContact,
     address: OAddress,
     dm: ODm,
+}, {
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
 });
 
-// for company with many persons: https://www.mongodb.com/community/forums/t/how-to-reference-and-populate-object-embedded-in-another-collection/169052
-// https://mongoosejs.com/docs/populate.html#populate_multiple_documents
+// Note: If you want to populate bands/companies, make sure the models are already registered!
+PersonSchema.virtual('bands', {
+    ref: 'Band',
+    localField: '_id',
+    foreignField: 'members',
+});
 
-// also add company schema and model!
+PersonSchema.virtual('companies', {
+    ref: 'Company',
+    localField: '_id',
+    foreignField: 'members',
+});
 
-// this interface is for other usage in the application
+
 export interface Person {
     firstName: string;
     lastName: string;
     birthday: string;
-    tag: "Band" | "Venue" | "Lopro" | "Hotel";
-    role?: string;
-    notes?: string;
-    contact: {
-        email: string;
-        phone: string;
-        mobilePhone: string;
-        otherNumbers: {
-            identifier: string;
-            number: string;
-        }[];
-        homepage: string;
-    }
+    role: string;
+    notes: string;
+    contact: IContact;
     address: IAddress;
 }
 
-// Person with Metadata => might not be needed => test
-export interface MPerson {
-    personid: string;
-    dm: IDm;
-}
-
-// this interface is for mongodb data => document has some extra properties
 export interface IPerson extends Document, Person {
     personid: string;
     dm: IDm;
 }
 
-export const Person: Model<IPerson> = models.Person || model<IPerson>('Person', personSchema);
+export const Person: Model<IPerson> = models.Person || model<IPerson>('Person', PersonSchema);

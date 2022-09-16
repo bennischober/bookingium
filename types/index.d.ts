@@ -157,6 +157,10 @@ export interface SessionProps extends Session {
 	};
 }
 
+export interface ReqAuthProps {
+	session: SessionProps["session"];
+}
+
 export interface DealMemoFormProps {
 	session: SessionProps["session"];
 	bands: IBand[];

@@ -3,7 +3,6 @@ import {
     Button,
     Divider,
     Group,
-    Select,
     Space,
     Textarea,
     TextInput,
@@ -18,20 +17,12 @@ import { getFormValueObject } from "../../../utils/appHandles";
 import AddressInput from "../../FormInputs/AddressInput";
 import ContactInput from "../../FormInputs/ContactInput";
 
-const Tag = [
-    { value: "Band", label: "Band member" },
-    { value: "Venue", label: "Venue" },
-    { value: "Lopro", label: "Local Promoter" },
-    { value: "Hotel", label: "Hotel" },
-];
-
 export function PersonForm({ handleData, session, data }: PersonFormProps) {
     const Form = useForm<Person>({
         initialValues: {
             firstName: data?.firstName ?? "",
             lastName: data?.lastName ?? "",
             birthday: data?.birthday ?? "",
-            tag: data?.tag ?? "Band",
             role: data?.role ?? "",
             notes: data?.notes ?? "",
             contact: data?.contact ?? {
@@ -68,11 +59,14 @@ export function PersonForm({ handleData, session, data }: PersonFormProps) {
             value: data?.personid,
         }) as IPerson;
 
-        if (handleData) handleData(vals);
-
-        console.log(vals);
+        if (handleData) {
+            handleData(vals);
+            Form.reset();
+            return;
+        }
 
         // if handleData not passed, handle data on own
+        console.log(vals);
     };
 
     // add a "save" button and deliver a save function?
@@ -98,24 +92,15 @@ export function PersonForm({ handleData, session, data }: PersonFormProps) {
 
                         <Space h="xl" />
 
-                        <DatePicker
-                            id="mantine-2wgfg6a6v"
-                            label="Birthday"
-                            placeholder="Select a date"
-                            allowFreeInput
-                            clearable={false}
-                            inputFormat="DD.MM.YYYY"
-                            {...Form.getInputProps("birthday")}
-                        />
-
-                        <Space h="xl" />
-
-                        <Group grow>
-                            <Select
-                                label="Tag"
-                                {...Form.getInputProps("tag")}
-                                data={Tag}
-                                required
+                        <Group grow align="flex-end">
+                            <DatePicker
+                                id="mantine-2wgfg6a6v"
+                                label="Birthday"
+                                placeholder="Select a date"
+                                allowFreeInput
+                                clearable={false}
+                                inputFormat="DD.MM.YYYY"
+                                {...Form.getInputProps("birthday")}
                             />
                             <TextInput
                                 label="Role"
@@ -144,11 +129,11 @@ export function PersonForm({ handleData, session, data }: PersonFormProps) {
                             labelPosition="center"
                         />
 
-                        <AddressInput Form={Form} />
+                        <AddressInput Form={Form} isCompany={false} />
                     </Box>
                 </Group>
                 <Button type="submit" fullWidth mt="xl">
-                    Add Person
+                    Save Person
                 </Button>
             </form>
             {prompt}
