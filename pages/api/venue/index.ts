@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { connect } from '../../../lib/mongodb';
-import Venue from "../../../models/venue";
+import { Venue } from "../../../models/venue";
 import { ApiError } from "../../../types/errors";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
