@@ -2,7 +2,7 @@ import { Document, model, Model, models, Schema, Types } from 'mongoose';
 import { ODm } from '../modelObjects';
 import { IDm } from '../modelTypes';
 
-const dealMemoSchema = new Schema({
+const DealMemoSchema = new Schema({
     dealId: {
         type: String,
         required: true,
@@ -21,10 +21,10 @@ const dealMemoSchema = new Schema({
         company: { type: Schema.Types.ObjectId, ref: 'Company' },
     },
     bandid: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
-    venueid: { type: Schema.Types.ObjectId, ref: 'Venue' }, // equals location
+    venueid: { type: Schema.Types.ObjectId, ref: 'Venue' },
     hotelid: { type: Schema.Types.ObjectId, ref: 'Hotel' },
     dm: ODm,
-}); // , { collection: 'dealMemo' }
+});
 
 export interface IDealMemo extends Document {
     dealId: string;
@@ -46,4 +46,4 @@ export interface IDealMemo extends Document {
     dm: IDm;
 }
 
-export const DealMemo: Model<IDealMemo> = models.DealMemo || model<IDealMemo>('DealMemo', dealMemoSchema);
+export const DealMemo: Model<IDealMemo> = models.DealMemo || model<IDealMemo>('DealMemo', DealMemoSchema);
