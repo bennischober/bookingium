@@ -5,11 +5,12 @@ import {
     Grid,
     Group,
     Modal,
+    Paper,
     Space,
     TextInput,
     Tooltip,
 } from "@mantine/core";
-import { useState } from "react";
+import React, { useState } from "react";
 import { MdDelete, MdOutlineAdd } from "react-icons/md";
 import { CompanyInputComponentProps } from "../../../types";
 import { getNestedValue } from "../../../utils/appHandles";
@@ -37,7 +38,7 @@ export default function ContactInput({
     const otherNums = getNestedValue(Form.values, otherNumbers)?.map(
         (_: any, index: any) => {
             return (
-                <>
+                <Paper key={_ + index}>
                     <Grid>
                         <Grid.Col span={5}>
                             <TextInput
@@ -49,7 +50,7 @@ export default function ContactInput({
                         </Grid.Col>
                         <Grid.Col span={5}>
                             <TextInput
-                                label="Identifier"
+                                label="Number"
                                 {...Form.getInputProps(
                                     `${otherNumbers}.${index}.number`
                                 )}
@@ -67,7 +68,7 @@ export default function ContactInput({
                         </Grid.Col>
                     </Grid>
                     <Divider my="xl" />
-                </>
+                </Paper>
             );
         }
     );
