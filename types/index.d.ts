@@ -91,16 +91,11 @@ export interface BandMemberInputProps extends InputComponentProps {
 }
 
 export interface BandFormProps {
-	handleBands?: (data: {}) => void;
+	handleData: (data: IBand) => void;
 	close?: () => void;
 	session: SessionProps["session"];
-}
-
-export interface BandEditFormProps {
-	session: SessionProps["session"];
-	created: string;
-	handleBand: (data: {}) => void;
-	data: Band;
+	data?: IBand;
+	created?: string;
 }
 
 export interface PersonFormProps {

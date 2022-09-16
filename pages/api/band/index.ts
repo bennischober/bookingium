@@ -25,7 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'POST':
             try {
-                const band = await Band.create(req.body.data); // create new db entry
+                const band = await Band.create(req.body.data);
                 return res.status(200).json({ success: true, data: band });
             } catch (error) {
                 return new ApiError(res, 500).handle(error);
