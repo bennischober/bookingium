@@ -162,9 +162,8 @@ export default function CompleteDealMemoPage({
                             {nonEmptyObj(bandData) ? (
                                 <BandForm
                                     session={session}
-                                    handleBands={handleBand}
+                                    handleData={handleBand}
                                     data={bandData}
-                                    created={bandData.dm.created}
                                 />
                             ) : (
                                 <p>No band data found</p>
