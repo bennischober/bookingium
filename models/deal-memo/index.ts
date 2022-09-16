@@ -26,8 +26,7 @@ const DealMemoSchema = new Schema({
     dm: ODm,
 });
 
-export interface IDealMemo extends Document {
-    dealId: string;
+export interface DealMemo {
     deal: string;
     date: string;
     fee: number;
@@ -43,6 +42,10 @@ export interface IDealMemo extends Document {
     bandid: Types.ObjectId;
     venueid: Types.ObjectId;
     hotelid: Types.ObjectId | null;
+}
+
+export interface IDealMemo extends Document, DealMemo {
+    dealId: string;
     dm: IDm;
 }
 
