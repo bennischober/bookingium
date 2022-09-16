@@ -81,20 +81,11 @@ export interface InputComponentProps {
 	Form: UseFormReturnType;
 }
 
-export interface CompanyInputComponentProps extends InputComponentProps {
-	isCompany?: boolean;
-}
-
-export interface BandMemberInputProps extends InputComponentProps {
-	index: number;
-}
-
 export interface BandFormProps {
 	handleData: (data: IBand) => void;
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IBand;
-	created?: string;
 }
 
 export interface PersonFormProps {
@@ -160,12 +151,10 @@ export interface DealMemoFormProps {
 	session: SessionProps["session"];
 	bands: IBand[];
 	venues?: IVenue[];
-	lopros?: ILopro[];
 	hotels?: IHotel[];
 	handleMemos: (data: {}) => void;
 	handleBands: (data: {}) => void;
 	handleVenues: (data: {}) => void;
-	handleLopros: (data: {}) => void;
 	handleHotels: (data: {}) => void;
 }
 
@@ -179,7 +168,6 @@ export interface AddDealMemoProps {
 	bands: IBand[];
 	memos: IDealMemo[];
 	venues?: IVenue[];
-	lopros?: ILopro[];
 	hotels?: IHotel[];
 }
 
@@ -205,38 +193,15 @@ export interface VenueFormProps {
 	handleVenue: (data: {}) => void;
 	close?: () => void;
 	session: SessionProps["session"];
-}
-
-export interface VenueEditFormProps {
-    handleVenue: (data: {}) => void;
-    session: SessionProps["session"];
-    data: VenueFormValues;
-}
-
-export interface LoproFormProps {
-	handleLopro: (data: {}) => void;
-	close?: () => void;
-	session: SessionProps["session"];
-}
-
-export interface LoproEditFormProps {
-	handleLopro: (data: {}) => void;
-	session: SessionProps["session"];
-	data: LoproFormValues;
+	data?: IVenue;
 }
 
 export interface HotelFormProps {
 	handleHotel: (data: {}) => void;
 	close?: () => void;
 	session: SessionProps["session"];
+	data?: IHotel;
 }
-
-export interface HotelEditFormProps {
-	handleHotel: (data: {}) => void;
-	session: SessionProps["session"];
-	data: HotelFormValues;
-}
-
 
 /** --- FORM TYPES --- **/
 
