@@ -158,12 +158,20 @@ export function getValueAtKey<T, K>(data: T[], key: keyof T, value: K): T {
     return item;
 }
 
-export function getValueAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value: K): T {
+/**
+ * Get a item of data by going through the keys of the data. The keys values will be combined and compared with the given value.
+ * @param data Data to search in
+ * @param keys keys to search through
+ * @param value to compare
+ * @returns the item, if it was found
+ */
+export function getValueAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value: K, seperator?: string): T {
+    const sep = seperator ?? " ";
     let item = {} as T;
     let combined;
     data.forEach(element => {
         combined = keys.map(key => getProperty(element, key) as unknown as K);
-        if (combined.join(" ") === value) {
+        if (combined.join(sep) === value) {
             item = element;
         }
     });
