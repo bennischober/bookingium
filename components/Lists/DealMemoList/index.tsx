@@ -85,11 +85,11 @@ export function DealMemoList({ memos }: DealMemoListProps) {
     );
 
     const rows: DealMemoListValues[] = memos.map((memo, index) => ({
-        dealId: memo.dealId,
+        dealId: memo.dealid,
         band:
             bandData[index] && bandData[index].name ? bandData[index].name : "",
         deal: memo.deal,
-        date: memo.date,
+        date: dayjs(memo.date).toISOString(),
         fee: memo.fee,
         status: memo.status,
     }));
