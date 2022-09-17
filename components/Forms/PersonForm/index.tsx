@@ -17,12 +17,17 @@ import { getFormValueObject } from "../../../utils/appHandles";
 import AddressInput from "../../FormInputs/AddressInput";
 import ContactInput from "../../FormInputs/ContactInput";
 
-export function PersonForm({ handleData, close, session, data }: PersonFormProps) {
+export function PersonForm({
+    handleData,
+    close,
+    session,
+    data,
+}: PersonFormProps) {
     const Form = useForm<Person>({
         initialValues: {
             firstName: data?.firstName ?? "",
             lastName: data?.lastName ?? "",
-            birthday: data?.birthday ?? "",
+            birthday: data && data.birthday ? dayjs().toDate() : undefined,
             role: data?.role ?? "",
             notes: data?.notes ?? "",
             contact: data?.contact ?? {
@@ -46,22 +51,21 @@ export function PersonForm({ handleData, close, session, data }: PersonFormProps
     });
 
     const handleSubmit = (values: Person) => {
-        const v = values;
-        v.birthday =
-            v.birthday != undefined && v.birthday != ""
-                ? dayjs(v.birthday).toISOString()
-                : v.birthday;
-
         const created = data?.dm.created ?? "";
 
-        const vals = getFormValueObject<Person>(v, session.userid, created, {
-            createId: "personid",
-            value: data?.personid,
-        }) as IPerson;
+        const vals = getFormValueObject<Person>(
+            values,
+            session.userid,
+            created,
+            {
+                createId: "personid",
+                value: data?.personid,
+            }
+        ) as IPerson;
 
         handleData(vals);
 
-        if(close) close();
+        if (close) close();
 
         Form.reset();
     };
@@ -130,7 +134,7 @@ export function PersonForm({ handleData, close, session, data }: PersonFormProps
                     </Box>
                 </Group>
                 <Button type="submit" fullWidth mt="xl">
-                    {data ? "Update Person": "Save Person"}
+                    {data ? "Update Person" : "Save Person"}
                 </Button>
             </form>
             {prompt}

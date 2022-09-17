@@ -1,5 +1,4 @@
 import {
-    Autocomplete,
     Button,
     Grid,
     NumberInput,
@@ -17,7 +16,7 @@ import { getFormValueObject } from "../../../utils/appHandles";
 import { CompanySearch } from "../../FormElements/Searchable/Company";
 
 const VenueFormSchema = z.object({
-    venue: z
+    name: z
         .string()
         .min(3, { message: "Venue name must be at least 3 characters" }),
     capacity: z.number().min(1, { message: "Capacity must be at least 1" }),
@@ -66,8 +65,8 @@ export function VenueForm({
                 <Grid grow>
                     <Grid.Col span={4}>
                         <TextInput
-                            label="Venue"
-                            {...Form.getInputProps("venue")}
+                            label="Name"
+                            {...Form.getInputProps("name")}
                             required
                         />
                     </Grid.Col>
@@ -82,6 +81,7 @@ export function VenueForm({
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
                 <Space h="xl" />
                 <CompanySearch Form={Form} autocomplete={[]} />
+                <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
                     {data ? "Update Venue" : "Save Venue"}
                 </Button>

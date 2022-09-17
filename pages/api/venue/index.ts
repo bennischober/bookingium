@@ -8,9 +8,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     await connect();
 
+    if (!userid) return new ApiError(res).throwSpecific('access_denied');
+
     switch (method) {
         case 'GET':
-            if (!userid) return new ApiError(res).throwSpecific('access_denied');
             try {
                 // send populated data => needed in deal memo list
                 const dt = await Venue.find({ 'dm.userid': userid }).exec();

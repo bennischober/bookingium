@@ -202,10 +202,9 @@ export interface SpecificBandPageProps {
 }
 
 export interface DealEditFormProps {
-	handleMemos: (data: {}) => void;
+	handleMemos: (data: IDealMemo) => void;
 	session: SessionProps["session"];
-	data: DealEditFormValues;
-	bandName: string;
+	data: IDealMemo;
 	created: string;
 }
 
@@ -231,21 +230,6 @@ export interface CompanyFormProps {
 }
 
 /** --- FORM TYPES --- **/
-export interface DealMemoFormValues {
-	band: string;
-	date: Date;
-	deal: string;
-	fee: number;
-	ticketPriceVVK: number;
-	ticketPriceAK: number;
-	posters: number;
-	status: string;
-	notes: string;
-	venue: string;
-	lopro: string;
-	hotel?: string;
-}
-
 export interface LoginFormValues {
 	email: string;
 	password: string;
@@ -266,18 +250,6 @@ export interface RegisterHandleData {
 	password: string;
 	accept: boolean;
 }
-
-export interface DealEditFormValues {
-	deal: string;
-	date: string;
-	fee: number;
-	ticketPriceVVK: number;
-	ticketPriceAK: number;
-	posters: number;
-	status: string;
-	notes: string;
-}
-
 
 export interface DataGridSettingsValues {
 	fontSize: MantineNumberSize;
