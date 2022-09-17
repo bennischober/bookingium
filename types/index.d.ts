@@ -107,6 +107,8 @@ export interface BandFormProps {
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IBand;
+	persons?: any[];
+	companies?: any[];
 }
 
 export interface PersonFormProps {
@@ -166,6 +168,11 @@ export interface SessionProps extends Session {
 
 export interface ReqAuthProps {
 	session: SessionProps["session"];
+}
+
+export interface BandPageProps extends ReqAuthProps {
+	persons: IPerson[];
+	companies: ICompany[];
 }
 
 export interface DealMemoFormProps {

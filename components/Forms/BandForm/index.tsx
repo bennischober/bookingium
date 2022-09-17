@@ -48,7 +48,16 @@ const music_genres = [
     "World Music",
 ];
 
-export function BandForm({ handleData, close, session, data }: BandFormProps) {
+export function BandForm({
+    handleData,
+    close,
+    session,
+    data,
+    persons,
+    companies,
+}: BandFormProps) {
+    console.log(persons, companies);
+
     const [opened, setOpened] = useState(false);
 
     const Form = useForm<Band>({
@@ -112,7 +121,10 @@ export function BandForm({ handleData, close, session, data }: BandFormProps) {
                 <Grid align="flex-end">
                     <Grid.Col span={6}>
                         {/*If in "edit mode", add button with link to update company/members? or with modal? or inline? */}
-                        <CompanySearch Form={Form} autocomplete={[]} />
+                        <CompanySearch
+                            Form={Form}
+                            autocomplete={companies ?? []}
+                        />
                     </Grid.Col>
                     <Grid.Col span={6}>
                         <Button
@@ -132,7 +144,7 @@ export function BandForm({ handleData, close, session, data }: BandFormProps) {
                     onClose={() => setOpened(false)}
                     size="xl"
                 >
-                    <MemberInput Form={Form} autocomplete={[]} />
+                    <MemberInput Form={Form} autocomplete={persons ?? []} />
                 </Modal>
             </form>
             {prompt}
