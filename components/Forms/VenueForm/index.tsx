@@ -27,6 +27,7 @@ export function VenueForm({
     close,
     session,
     data,
+    companies,
 }: VenueFormProps) {
     const Form = useForm<Venue>({
         validate: zodResolver(VenueFormSchema),
@@ -80,7 +81,7 @@ export function VenueForm({
                 </Grid>
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
                 <Space h="xl" />
-                <CompanySearch Form={Form} autocomplete={[]} />
+                <CompanySearch Form={Form} autocomplete={companies ?? []} />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
                     {data ? "Update Venue" : "Save Venue"}

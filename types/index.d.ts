@@ -236,6 +236,7 @@ export interface VenueFormProps {
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IVenue;
+	companies?: any[]; // could also be string[]
 }
 
 export interface HotelFormProps {
