@@ -141,9 +141,6 @@ export default function CompleteDealMemoPage({
                         <Tabs.Tab value="deal-data">Deal data</Tabs.Tab>
                         <Tabs.Tab value="band-data">Band data</Tabs.Tab>
                         <Tabs.Tab value="venue-data">Venue data</Tabs.Tab>
-                        <Tabs.Tab value="lopro-data">
-                            Local promoter data
-                        </Tabs.Tab>
                         <Tabs.Tab value="hotel-data">Hotel data</Tabs.Tab>
                     </Tabs.List>
                     <Tabs.Panel value="deal-data">
@@ -173,11 +170,6 @@ export default function CompleteDealMemoPage({
                                     handleData={handleVenue}
                                     data={venueData}
                                 />
-                        </FormContainer>
-                    </Tabs.Panel>
-                    <Tabs.Panel value="lopro-data">
-                        <FormContainer>
-                            <p>Coming back soon!</p>
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="hotel-data">
