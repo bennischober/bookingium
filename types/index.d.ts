@@ -91,9 +91,13 @@ export interface InputComponentProps {
 	Form: UseFormReturnType;
 }
 
-export interface MemberInputProps {
-	Form: UseFormReturnType;
+export interface AcComponentsInputProps extends InputComponentProps {
 	autocomplete: any[];
+}
+
+export interface LoproInputProps extends InputComponentProps {
+	person: any[];
+	company: any[];
 }
 
 export interface BandFormProps {

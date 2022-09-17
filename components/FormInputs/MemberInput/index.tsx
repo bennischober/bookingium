@@ -8,9 +8,9 @@ import {
     Tooltip,
 } from "@mantine/core";
 import { MdDelete } from "react-icons/md";
-import { MemberInputProps } from "../../../types";
+import { AcComponentsInputProps } from "../../../types";
 
-export function MemberInput({ Form, autocomplete }: MemberInputProps) {
+export function MemberInput({ Form, autocomplete }: AcComponentsInputProps) {
     const members = Form.values.members.map((_: any, index: any) => {
         return (
             <Box key={index}>
