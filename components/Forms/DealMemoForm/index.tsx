@@ -64,6 +64,8 @@ export function DealMemoForm({
         },
     });
 
+    const [prompt] = useUnsavedWarn(Form);
+
     const onDealSubmit = async (values: DealMemo) => {
         if (!bands || !venues || !hotels || !persons || !companies) {
             console.error("No bands, venues or hotels found");
@@ -112,8 +114,6 @@ export function DealMemoForm({
     const hotelsAutoComplete = toAutocomplete(hotels, "name");
     const personsAutoComplete = toCombinedAutocomplete(persons, ["firstName", "lastName"], " ");
     const companiesAutoComplete = toAutocomplete(companies, "name");
-
-    const [prompt] = useUnsavedWarn(Form);
 
     return (
         <>
@@ -242,7 +242,6 @@ export function DealMemoForm({
                     handleData={handleHotels}
                     close={closeModals}
                     session={session}
-                    companies={companiesAutoComplete}
                 />
             </Modal>
             {prompt}
