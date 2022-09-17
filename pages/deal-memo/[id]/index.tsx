@@ -159,26 +159,20 @@ export default function CompleteDealMemoPage({
                     </Tabs.Panel>
                     <Tabs.Panel value="band-data">
                         <FormContainer>
-                            {nonEmptyObj(bandData) ? (
                                 <BandForm
                                     session={session}
                                     handleData={handleBand}
                                     data={bandData}
                                 />
-                            ) : (
-                                <p>No band data found</p>
-                            )}
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="venue-data">
                         <FormContainer>
-                            {nonEmptyObj(venueData) ? (
                                 <VenueForm
                                     session={session}
                                     handleData={handleVenue}
                                     data={venueData}
                                 />
-                            ) : null}
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="lopro-data">

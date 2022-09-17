@@ -22,70 +22,53 @@ import {
 import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../../FormElements/SearchOrAdd";
 import { VenueForm } from "../VenueForm";
-import { LoproForm } from "../LoproForm";
 import { HotelForm } from "../HotelForm";
 import { IVenue } from "../../../models/venue";
-import { ILopro } from "../../../models/lopro";
 import { IHotel } from "../../../models/hotel";
-import { appendObject, getFormValueObject, getValueAtKey } from "../../../utils/appHandles";
+import { getFormValueObject, getValueAtKey } from "../../../utils/appHandles";
 import { DealInput } from "../../FormInputs/DealInput";
 import { useUnsavedWarn } from "../../../hooks";
+import { DealMemo } from "../../../models/deal-memo";
+import { Types } from "mongoose";
 
 export function DealMemoForm({
     bands,
     venues,
-    lopros,
     hotels,
     session,
     handleMemos,
     handleBands,
     handleVenues,
-    handleLopros,
     handleHotels,
 }: DealMemoFormProps) {
     const [bandModalOpened, setBandModalOpened] = useState(false);
     const [venueModalOpened, setVenueModalOpened] = useState(false);
-    const [loproModalOpened, setLoproModalOpened] = useState(false);
     const [hotelModalOpened, setHotelModalOpened] = useState(false);
 
-    const dealForm = useForm<DealMemoFormValues>({
+    const dealForm = useForm<DealMemo>({
         initialValues: {
-            band: "",
-            date: dayjs().toDate(),
             deal: "",
+            date: "",
             fee: 0,
             ticketPriceVVK: 0,
             ticketPriceAK: 0,
             posters: 0,
             status: "pending",
             notes: "",
-            venue: "",
-            lopro: "",
-            hotel: "",
+            lopro: {
+                person: "" as unknown as Types.ObjectId,
+                company: "" as unknown as Types.ObjectId,
+            },
+            bandid: "" as unknown as Types.ObjectId,
+            venueid: "" as unknown as Types.ObjectId,
+            hotelid: "" as unknown as Types.ObjectId,
         },
-        validate: (values: DealMemoFormValues) => ({
-            band: values.band.length > 0 ? undefined : "Band is required",
-            date:
-                values.date.toString().length > 0
-                    ? undefined
-                    : "Date is required",
-            deal: values.deal.length > 0 ? undefined : "Deal is required",
-            fee: values.fee >= 0 ? undefined : "Price is required",
-            ticketPriceVVK:
-                values.ticketPriceVVK >= 0 ? undefined : "Price is required",
-            ticketPriceAK:
-                values.ticketPriceAK >= 0 ? undefined : "Price is required",
-            posters: values.posters >= 0 ? undefined : "Posters is required",
-            status: values.status.length > 0 ? undefined : "Status is required",
-            venue: values.venue.length > 0 ? undefined : "Venue is required",
-            lopro: values.lopro.length > 0 ? undefined : "Lopro is required",
-        }),
     });
 
-    const onDealSubmit = async (values: DealMemoFormValues) => {
+    const onDealSubmit = async (values: DealMemo) => {
         let band = {} as IBand;
         bands.forEach((val) => {
-            if (val.name === values.band) {
+            if (val._id === values.bandid) {
                 band = val;
             }
         });
@@ -97,7 +80,7 @@ export function DealMemoForm({
 
         let venue = {} as IVenue;
         venues?.forEach((val) => {
-            if (val.venue === values.venue) {
+            if (val._id === values.venueid) {
                 venue = val;
             }
         });
@@ -107,19 +90,8 @@ export function DealMemoForm({
             return;
         }
 
-        let lopro = {} as ILopro;
-        lopros?.forEach((val) => {
-            if (val.name === values.lopro) {
-                lopro = val;
-            }
-        });
-        if (!lopro) {
-            console.log("lopro not found, aborting save action!");
-            return;
-        }
-
         let hotel = hotels
-            ? getValueAtKey(hotels, "name", values.hotel)
+            ? getValueAtKey(hotels, "_id", values.hotelid)
             : ({} as IHotel);
 
         const memoData = {
@@ -127,7 +99,10 @@ export function DealMemoForm({
             deal: values.deal,
             bandid: band._id,
             venueid: venue._id,
-            loproid: lopro._id,
+            lorpo: {
+                person: "",
+                company: "",
+            },
             hotelid: hotel ? hotel._id : null,
             date: values.date,
             fee: values.fee,
@@ -151,7 +126,6 @@ export function DealMemoForm({
     const closeModals = () => {
         setBandModalOpened(false);
         setVenueModalOpened(false);
-        setLoproModalOpened(false);
         setHotelModalOpened(false);
     };
 
@@ -164,12 +138,6 @@ export function DealMemoForm({
 
     const venuesAutoComplete = venues
         ? venues?.map((val) => {
-              return val.venue;
-          })
-        : [];
-
-    const loprosAutoComplete = lopros
-        ? lopros?.map((val) => {
               return val.name;
           })
         : [];
@@ -244,21 +212,6 @@ export function DealMemoForm({
                                 <Space h="xl" />
                                 <SearchOrAdd
                                     ac={{
-                                        data: loprosAutoComplete,
-                                        useForm: dealForm,
-                                        required: true,
-                                        label: "Choose a local promoter",
-                                        placeholder: "lopro name",
-                                        inputProps: "lopro",
-                                    }}
-                                    md={{
-                                        button: "Add new local promoter",
-                                        handleOpen: setLoproModalOpened,
-                                    }}
-                                />
-                                <Space h="xl" />
-                                <SearchOrAdd
-                                    ac={{
                                         data: hotelsAutoComplete,
                                         useForm: dealForm,
                                         required: false,
@@ -285,11 +238,10 @@ export function DealMemoForm({
                 onClose={() => setBandModalOpened(false)}
                 title="Add a new Band"
                 size="xl"
-                overflow="inside"
                 centered
             >
                 <BandForm
-                    handleBands={handleBands}
+                    handleData={handleBands}
                     close={closeModals}
                     session={session}
                 />
@@ -299,25 +251,10 @@ export function DealMemoForm({
                 onClose={() => setVenueModalOpened(false)}
                 title="Add a new Venue"
                 size="xl"
-                overflow="inside"
                 centered
             >
                 <VenueForm
-                    handleVenue={handleVenues}
-                    close={closeModals}
-                    session={session}
-                />
-            </Modal>
-            <Modal
-                opened={loproModalOpened}
-                onClose={() => setLoproModalOpened(false)}
-                title="Add a new Lopro"
-                size="xl"
-                overflow="inside"
-                centered
-            >
-                <LoproForm
-                    handleLopro={handleLopros}
+                    handleData={handleVenues}
                     close={closeModals}
                     session={session}
                 />
@@ -327,11 +264,10 @@ export function DealMemoForm({
                 onClose={() => setHotelModalOpened(false)}
                 title="Add a new Hotel"
                 size="xl"
-                overflow="inside"
                 centered
             >
                 <HotelForm
-                    handleHotel={handleHotels}
+                    handleData={handleHotels}
                     close={closeModals}
                     session={session}
                 />
@@ -363,7 +299,11 @@ export function DealEditForm({
 
     const onDealSubmit = (values: DealEditFormValues) => {
         Form.resetDirty();
-        const memoData = getFormValueObject<DealEditFormValues>(values, session.userid, created);
+        const memoData = getFormValueObject<DealEditFormValues>(
+            values,
+            session.userid,
+            created
+        );
         handleMemos(memoData);
     };
 
