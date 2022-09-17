@@ -87,12 +87,26 @@ export function appendObject<T extends Object>(obj: any, value: T) {
 }
 
 export function nonEmptyObj(obj: any) {
-    if(!obj) return false;
+    if (!obj) return false;
     return Object.keys(obj).length > 0;
 }
 
 export function nonEmptyString(str: any) {
     return str === null || str == undefined ? false : str.length > 0;
+}
+
+export function toAutocomplete<T>(data?: T[], identifier?: keyof T) {
+    if (!data || !identifier) return [];
+    return data.map((item) => {
+        return item[identifier];
+    });
+}
+
+export function toCombinedAutocomplete<T>(data?: T[], identifier?: (keyof T)[], seperator?: string) {
+    if (!data || !identifier) return [];
+    return data.map((item) => {
+        return identifier.map((id) => item[id]).join(seperator ?? " ");
+    });
 }
 
 /*--- FETCH HANDLE ---*/
@@ -119,7 +133,7 @@ export const getMemos = async (session: SessionProps["session"]) => {
     return memos;
 };
 
-export const serverSideFetch = async <T>(url: string, params?: {}) : Promise<T> => {
+export const serverSideFetch = async <T>(url: string, params?: {}): Promise<T> => {
     const u = url.includes("localhost") ? url : `http://localhost:3000${url}`;
     const fetch = await axios.get(u, {
         params: params,

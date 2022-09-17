@@ -15,7 +15,13 @@ import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../../FormElements/SearchOrAdd";
 import { VenueForm } from "../VenueForm";
 import { HotelForm } from "../HotelForm";
-import { getFormValueObject, getValueAtCombinedKey, getValueAtKey } from "../../../utils/appHandles";
+import {
+    getFormValueObject,
+    getValueAtCombinedKey,
+    getValueAtKey,
+    toAutocomplete,
+    toCombinedAutocomplete,
+} from "../../../utils/appHandles";
 import { DealInput } from "../../FormInputs/DealInput";
 import { useUnsavedWarn } from "../../../hooks";
 import { DealMemo, IDealMemo } from "../../../models/deal-memo";
@@ -67,7 +73,11 @@ export function DealMemoForm({
         const band = getValueAtKey(bands, "name", values.bandid);
         const venue = getValueAtKey(venues, "name", values.venueid);
         const hotel = getValueAtKey(hotels, "name", values.hotelid);
-        const lopro = getValueAtCombinedKey(persons, ["firstName", "lastName"], values.lopro.person);
+        const lopro = getValueAtCombinedKey(
+            persons,
+            ["firstName", "lastName"],
+            values.lopro.person
+        );
         const company = getValueAtKey(companies, "name", values.lopro.company);
 
         const memoData = getFormValueObject<DealMemo>(
@@ -97,35 +107,11 @@ export function DealMemoForm({
     };
 
     // useMemo?
-    const bandsAutoComplete = bands
-        ? bands?.map((val) => {
-              return val.name;
-          })
-        : [];
-
-    const venuesAutoComplete = venues
-        ? venues?.map((val) => {
-              return val.name;
-          })
-        : [];
-
-    const hotelsAutoComplete = hotels
-        ? hotels?.map((val) => {
-              return val.name;
-          })
-        : [];
-
-    const personsAutoComplete = persons
-        ? persons?.map((val) => {
-              return val.firstName + " " + val.lastName;
-          })
-        : [];
-
-    const companiesAutoComplete = companies
-        ? companies?.map((val) => {
-              return val.name;
-          })
-        : [];
+    const bandsAutoComplete = toAutocomplete(bands, "name");
+    const venuesAutoComplete = toAutocomplete(venues, "name");
+    const hotelsAutoComplete = toAutocomplete(hotels, "name");
+    const personsAutoComplete = toCombinedAutocomplete(persons, ["firstName", "lastName"], " ");
+    const companiesAutoComplete = toAutocomplete(companies, "name");
 
     const [prompt] = useUnsavedWarn(Form);
 
@@ -227,6 +213,8 @@ export function DealMemoForm({
                     handleData={handleBands}
                     close={closeModals}
                     session={session}
+                    persons={personsAutoComplete}
+                    companies={companiesAutoComplete}
                 />
             </Modal>
             <Modal
