@@ -29,7 +29,10 @@ export function DealInput({ Form }: InputComponentProps) {
                     <DatePicker
                         id="mantine-2wgfg6a6v"
                         label="Date"
-                        defaultValue={dayjs().toDate()}
+                        placeholder="Select a date"
+                        allowFreeInput
+                        clearable={false}
+                        inputFormat="DD.MM.YYYY"
                         {...Form.getInputProps("date")}
                         required
                     />
