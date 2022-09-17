@@ -244,7 +244,6 @@ export interface HotelFormProps {
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IHotel;
-	companies?: any[];
 }
 
 export interface CompanyFormProps {

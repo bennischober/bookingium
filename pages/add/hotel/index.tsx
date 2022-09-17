@@ -6,7 +6,7 @@ import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { IHotel } from "../../../models/hotel";
 import { CompanyACPageProps } from "../../../types";
-import { serverSideFetch, toAutocomplete } from "../../../utils/appHandles";
+import { serverSideFetch } from "../../../utils/appHandles";
 
 export default function AddHotelPage({
     session,
@@ -22,15 +22,12 @@ export default function AddHotelPage({
         console.log(ret.data, ret.status);
     };
 
-    const companyAC = toAutocomplete(companies, "name");
-
     return (
         <PageTemplate title={"Add a Band"}>
             <FormContainer>
                 <HotelForm
                     session={session}
                     handleData={handleSave}
-                    companies={companyAC}
                 />
             </FormContainer>
         </PageTemplate>
@@ -40,14 +37,11 @@ export default function AddHotelPage({
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession({ req: ctx.req });
 
-    const companies = await serverSideFetch("/api/company", {
-        userid: session?.userid,
-    });
 
     return {
         props: {
             session,
-            companies,
+
         },
     };
 };

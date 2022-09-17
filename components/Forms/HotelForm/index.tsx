@@ -1,38 +1,49 @@
 import { z } from "zod";
-import {
-    Autocomplete,
-    Button,
-    Space,
-    Textarea,
-    TextInput,
-} from "@mantine/core";
+import { Button, Divider, Space, Textarea, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { HotelFormProps } from "../../../types";
 import { useUnsavedWarn } from "../../../hooks";
 import { Hotel, IHotel } from "../../../models/hotel";
-import { Types } from "mongoose";
 import { getFormValueObject } from "../../../utils/appHandles";
-import { CompanySearch } from "../../FormElements/Searchable/Company";
+import AddressInput from "../../FormInputs/AddressInput";
+import ContactInput from "../../FormInputs/ContactInput";
 
 const HotelFormSchema = z.object({
     name: z.string().min(3, { message: "Name must be at least 3 characters" }),
 });
 
 export function HotelForm({
-    handleData: handleHotel,
+    handleData,
     close,
     session,
     data,
-    companies,
 }: HotelFormProps) {
     const Form = useForm<Hotel>({
         validate: zodResolver(HotelFormSchema),
         initialValues: {
             name: data?.name ?? "",
             notes: data?.notes ?? "",
-            company: data?.company ?? ("" as unknown as Types.ObjectId),
+            contact: data?.contact ?? {
+                email: "",
+                phone: "",
+                mobilePhone: "",
+                otherNumbers: [],
+                homepage: "",
+            },
+            address: data?.address ?? {
+                streetNumber: "",
+                street: "",
+                addressSuffix: "",
+                zipCode: "",
+                city: "",
+                state: "",
+                country: "",
+                countryCode: "",
+            },
         },
     });
+
+    const [prompt] = useUnsavedWarn(Form);
 
     const handleSubmit = (values: Hotel) => {
         const created = data?.dm.created ?? "";
@@ -46,14 +57,13 @@ export function HotelForm({
                 value: data?.hotelid,
             }
         ) as IHotel;
+        console.log(hotelData);
 
-        handleHotel(hotelData);
+        handleData(hotelData);
         if (close) close();
 
         Form.reset();
     };
-
-    const [prompt] = useUnsavedWarn(Form);
 
     return (
         <>
@@ -64,8 +74,10 @@ export function HotelForm({
                     required
                 />
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
-                <Space h="xl" />
-                <CompanySearch Form={Form} autocomplete={companies ?? []} />
+                <Divider my="xl" label="Address" labelPosition="center" />
+                <AddressInput Form={Form} />
+                <Divider my="xl" label="Contact" labelPosition="center" />
+                <ContactInput Form={Form} />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
                     {data ? "Update Hotel" : "Save Hotel"}

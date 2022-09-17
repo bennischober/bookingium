@@ -1,7 +1,6 @@
-import { Document, model, Model, models, Schema, Types } from 'mongoose';
-import { ICompany } from '../company';
-import { ODm } from '../modelObjects';
-import { IDm } from '../modelTypes';
+import { Document, model, Model, models, Schema } from 'mongoose';
+import { OAddress, OContact, ODm } from '../modelObjects';
+import { IAddress, IContact, IDm } from '../modelTypes';
 
 const HotelSchema = new Schema({
     hotelid: {
@@ -11,21 +10,16 @@ const HotelSchema = new Schema({
     },
     name: { type: String, required: true },
     notes: { type: String },
-    company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
+    address: OAddress,
+    contact: OContact,
     dm: ODm,
 });
 
-interface _Hotel {
+export interface Hotel {
     name: string;
     notes: string;
-}
-
-export interface Hotel extends _Hotel {
-    company: Types.ObjectId;
-}
-
-export interface PHotel extends _Hotel {
-    company: ICompany;
+    contact: IContact;
+    address: IAddress;
 }
 
 export interface IHotel extends Document, Hotel {
