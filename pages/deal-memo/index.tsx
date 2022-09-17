@@ -4,6 +4,7 @@ import { getSession } from "next-auth/react";
 import { useState } from "react";
 import { DealMemoForm } from "../../components/Forms/DealMemoForm";
 import { PageTemplate } from "../../components/Layout/PageTemplate";
+import { IDealMemo } from "../../models/deal-memo";
 import { AddDealMemoProps } from "../../types";
 import { getBands, getMemos, serverSideFetch } from "../../utils/appHandles";
 
@@ -20,13 +21,20 @@ export default function AddDealMemoPage({
     const [venueData, setVenueData] = useState(venues);
     const [hotelData, setHotelData] = useState(hotels);
 
-    const handleMemos = async (data: {}) => {
-        // post memo data
-        await axios.post("/api/deal-memo", { data: data });
+    const handleMemos = async (data: IDealMemo) => {
+        console.log("data", data);
 
-        // refetch memo data
-        const memos = await getMemos(session);
-        setMemosData(memos);
+        // post band data
+        const ret = await axios.post(
+            "/api/deal-memo",
+            { data: data },
+            { params: { userid: session.userid } }
+        );
+        console.log(ret.data, ret.status);
+
+        // // refetch memo data
+        // const memos = await getMemos(session);
+        // setMemosData(memos);
     };
 
     const handleBands = async (data: {}) => {

@@ -18,7 +18,7 @@ import { IBand } from "../../../models/band";
 import { IDealMemo } from "../../../models/deal-memo";
 import { IHotel } from "../../../models/hotel";
 import { IVenue } from "../../../models/venue";
-import { CompleteDealMemoPageProps, DealEditFormValues } from "../../../types";
+import { CompleteDealMemoPageProps } from "../../../types";
 import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { SpecificPageHeader } from "../../../components/Layout/SpecificPageHeader";
@@ -51,7 +51,7 @@ export default function CompleteDealMemoPage({
     }, [memo, bandData, venueData, hotelData]);
 
     // maybe move this to appHandles?
-    const handleMemo = async (data: {}) => {
+    const handleMemo = async (data: IDealMemo) => {
         showNotification({
             id: "load-data",
             loading: true,
@@ -63,7 +63,7 @@ export default function CompleteDealMemoPage({
         });
 
         const res = await axios.put(
-            `http://localhost:3000/api/deal-memo/${memo.dealId}`,
+            `http://localhost:3000/api/deal-memo/${memo.dealid}`,
             { data: data },
             { params: { userid: session.userid } }
         );
@@ -91,15 +91,15 @@ export default function CompleteDealMemoPage({
     };
 
     // Note: For the put action new apis /[id]/index.ts will be needed!
-    const handleBand = async (data: {}) => {
+    const handleBand = async (data: IBand) => {
         console.log(data);
     };
 
-    const handleVenue = async (data: {}) => {
+    const handleVenue = async (data: IVenue) => {
         console.log(data);
     };
 
-    const handleHotel = async (data: {}) => {
+    const handleHotel = async (data: IHotel) => {
         console.log(data);
     };
 
@@ -121,14 +121,14 @@ export default function CompleteDealMemoPage({
                     titleName={"Band"}
                     subTitle={`Date: ${dayjs(memoData.date).format(
                         "DD.MM.YYYY"
-                    )} | Venue: ${venueData?.name} | Lopro: Coming back soon!`}
+                    )} | Venue: ${venueData?.name}`}
                     other={
                         <Button
                             variant="default"
                             onClick={() => {
                                 router.push({
                                     pathname: "/contract",
-                                    query: { id: memoData.dealId },
+                                    query: { id: memoData.dealid },
                                 });
                             }}
                         >
@@ -148,28 +148,31 @@ export default function CompleteDealMemoPage({
                             <DealEditForm
                                 handleMemos={handleMemo}
                                 session={session}
-                                data={memoData as DealEditFormValues}
-                                bandName={bandData.name}
+                                data={memoData}
                                 created={memoData.dm.created}
                             />
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="band-data">
                         <FormContainer>
+                            {nonEmptyObj(bandData) ? (
                                 <BandForm
                                     session={session}
                                     handleData={handleBand}
                                     data={bandData}
                                 />
+                            ) : null}
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="venue-data">
                         <FormContainer>
+                            {nonEmptyObj(venueData) ? (
                                 <VenueForm
                                     session={session}
                                     handleData={handleVenue}
                                     data={venueData}
                                 />
+                            ) : null}
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="hotel-data">

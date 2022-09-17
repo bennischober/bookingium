@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { connect } from '../../../lib/mongodb';
-import { DealMemo } from '../../../models/deal-memo';
-import { ApiError } from '../../../types/errors';
+import { connect } from '../../../../lib/mongodb';
+import { DealMemo } from '../../../../models/deal-memo';
+import { ApiError } from '../../../../types/errors';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const {
@@ -19,9 +19,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'GET':
             try {
                 // register schema/model if its not already registered
-                require('../../../models/band');
-                require('../../../models/venue');
-                require('../../../models/hotel');
+                require("../../../../models/band");
+                require("../../../../models/venue");
+                require("../../../../models/hotel");
 
                 // get specific item
                 // Note: if populate('foreignDoc') id does not exist, it returns null => no error is thrown!

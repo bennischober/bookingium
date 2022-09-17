@@ -172,10 +172,10 @@ export interface DealMemoFormProps {
 	bands: IBand[];
 	venues?: IVenue[];
 	hotels?: IHotel[];
-	handleMemos: (data: {}) => void;
-	handleBands: (data: {}) => void;
-	handleVenues: (data: {}) => void;
-	handleHotels: (data: {}) => void;
+	handleMemos: (data: IDealMemo) => void;
+	handleBands: (data: IBand) => void;
+	handleVenues: (data: IVenue) => void;
+	handleHotels: (data: IHotel) => void;
 }
 
 export interface DealMemoProps {

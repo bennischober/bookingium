@@ -1,6 +1,4 @@
 import { useState } from "react";
-import dayjs from "dayjs";
-import { v4 as uuidv4 } from "uuid";
 import {
     Box,
     Button,
@@ -12,24 +10,17 @@ import {
     Space,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IBand } from "../../../models/band";
-import {
-    DealEditFormProps,
-    DealEditFormValues,
-    DealMemoFormProps,
-    DealMemoFormValues,
-} from "../../../types";
+import { DealEditFormProps, DealMemoFormProps } from "../../../types";
 import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../../FormElements/SearchOrAdd";
 import { VenueForm } from "../VenueForm";
 import { HotelForm } from "../HotelForm";
-import { IVenue } from "../../../models/venue";
-import { IHotel } from "../../../models/hotel";
 import { getFormValueObject, getValueAtKey } from "../../../utils/appHandles";
 import { DealInput } from "../../FormInputs/DealInput";
 import { useUnsavedWarn } from "../../../hooks";
-import { DealMemo } from "../../../models/deal-memo";
+import { DealMemo, IDealMemo } from "../../../models/deal-memo";
 import { Types } from "mongoose";
+import dayjs from "dayjs";
 
 export function DealMemoForm({
     bands,
@@ -45,10 +36,10 @@ export function DealMemoForm({
     const [venueModalOpened, setVenueModalOpened] = useState(false);
     const [hotelModalOpened, setHotelModalOpened] = useState(false);
 
-    const dealForm = useForm<DealMemo>({
+    const Form = useForm<DealMemo>({
         initialValues: {
             deal: "",
-            date: "",
+            date: dayjs().toDate(),
             fee: 0,
             ticketPriceVVK: 0,
             ticketPriceAK: 0,
@@ -66,61 +57,31 @@ export function DealMemoForm({
     });
 
     const onDealSubmit = async (values: DealMemo) => {
-        let band = {} as IBand;
-        bands.forEach((val) => {
-            if (val._id === values.bandid) {
-                band = val;
-            }
-        });
-
-        if (!band) {
-            console.log("band not found, aborting save action!");
+        if (!bands || !venues || !hotels) {
+            console.error("No bands, venues or hotels found");
             return;
         }
 
-        let venue = {} as IVenue;
-        venues?.forEach((val) => {
-            if (val._id === values.venueid) {
-                venue = val;
+        const band = getValueAtKey(bands, "name", values.bandid);
+        const venue = getValueAtKey(venues, "name", values.venueid);
+        const hotel = getValueAtKey(hotels, "name", values.hotelid);
+
+        const memoData = getFormValueObject<DealMemo>(
+            values,
+            session.userid,
+            undefined,
+            {
+                createId: "dealid",
             }
-        });
+        ) as IDealMemo;
 
-        if (!venue) {
-            console.log("venue not found, aborting save action!");
-            return;
-        }
-
-        let hotel = hotels
-            ? getValueAtKey(hotels, "_id", values.hotelid)
-            : ({} as IHotel);
-
-        const memoData = {
-            dealId: uuidv4(),
-            deal: values.deal,
-            bandid: band._id,
-            venueid: venue._id,
-            lorpo: {
-                person: "",
-                company: "",
-            },
-            hotelid: hotel ? hotel._id : null,
-            date: values.date,
-            fee: values.fee,
-            ticketPriceVVK: values.ticketPriceVVK,
-            ticketPriceAK: values.ticketPriceAK,
-            posters: values.posters,
-            status: values.status,
-            notes: values.notes,
-            dm: {
-                userid: session.userid,
-                created: dayjs().toISOString(),
-                edited: dayjs().toISOString(),
-            },
-        };
+        memoData.bandid = band._id;
+        memoData.venueid = venue._id;
+        memoData.hotelid = hotel._id;
 
         handleMemos(memoData);
 
-        dealForm.reset();
+        Form.reset();
     };
 
     const closeModals = () => {
@@ -148,7 +109,7 @@ export function DealMemoForm({
           })
         : [];
 
-    const [prompt] = useUnsavedWarn(dealForm);
+    const [prompt] = useUnsavedWarn(Form);
 
     return (
         <>
@@ -162,7 +123,7 @@ export function DealMemoForm({
                     sx={{ minWidth: 300, maxWidth: 750, width: "100vw" }}
                 >
                     <form
-                        onSubmit={dealForm.onSubmit((values) =>
+                        onSubmit={Form.onSubmit((values) =>
                             onDealSubmit(values)
                         )}
                     >
@@ -171,11 +132,11 @@ export function DealMemoForm({
                                 <SearchOrAdd
                                     ac={{
                                         data: bandsAutoComplete,
-                                        useForm: dealForm,
+                                        useForm: Form,
                                         required: true,
                                         label: "Choose a band",
                                         placeholder: "Band name",
-                                        inputProps: "band",
+                                        inputProps: "bandid",
                                     }}
                                     md={{
                                         button: "Add new band",
@@ -188,7 +149,7 @@ export function DealMemoForm({
                                     label="Deal data"
                                     labelPosition="center"
                                 />
-                                <DealInput Form={dealForm} />
+                                <DealInput Form={Form} />
                                 <Space h="xl" />
                                 <Divider
                                     my="xl"
@@ -198,11 +159,11 @@ export function DealMemoForm({
                                 <SearchOrAdd
                                     ac={{
                                         data: venuesAutoComplete,
-                                        useForm: dealForm,
+                                        useForm: Form,
                                         required: true,
                                         label: "Choose a venue",
                                         placeholder: "Venue name",
-                                        inputProps: "venue",
+                                        inputProps: "venueid",
                                     }}
                                     md={{
                                         button: "Add new venue",
@@ -213,11 +174,11 @@ export function DealMemoForm({
                                 <SearchOrAdd
                                     ac={{
                                         data: hotelsAutoComplete,
-                                        useForm: dealForm,
+                                        useForm: Form,
                                         required: false,
                                         label: "Choose a hotel",
                                         placeholder: "Hotel name",
-                                        inputProps: "hotel",
+                                        inputProps: "hotelid",
                                     }}
                                     md={{
                                         button: "Add new hotel",
@@ -281,29 +242,36 @@ export function DealEditForm({
     handleMemos,
     session,
     data,
-    bandName,
     created,
 }: DealEditFormProps) {
-    const Form = useForm<DealEditFormValues>({
+    const Form = useForm<DealMemo>({
         initialValues: {
             deal: data.deal,
-            date: dayjs(data.date).toDate() as unknown as string,
+            date: dayjs(data.date).toDate(),
             fee: data.fee,
             ticketPriceVVK: data.ticketPriceVVK,
             ticketPriceAK: data.ticketPriceAK,
             posters: data.posters,
             status: data.status,
             notes: data.notes,
+            lopro: data.lopro,
+            bandid: data.bandid,
+            venueid: data.venueid,
+            hotelid: data.hotelid,
         },
     });
 
-    const onDealSubmit = (values: DealEditFormValues) => {
+    const onDealSubmit = (values: DealMemo) => {
         Form.resetDirty();
-        const memoData = getFormValueObject<DealEditFormValues>(
+        const memoData = getFormValueObject<DealMemo>(
             values,
             session.userid,
-            created
-        );
+            created,
+            {
+                createId: "dealid",
+                value: data.dealid,
+            }
+        ) as IDealMemo;
         handleMemos(memoData);
     };
 

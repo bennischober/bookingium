@@ -3,13 +3,13 @@ import { ODm } from '../modelObjects';
 import { IDm } from '../modelTypes';
 
 const DealMemoSchema = new Schema({
-    dealId: {
+    dealid: {
         type: String,
         required: true,
         unique: true,
     },
     deal: { type: String, required: true },
-    date: { type: String, required: true },
+    date: { type: Date, required: true },
     fee: { type: Number },
     ticketPriceVVK: { type: Number },
     ticketPriceAK: { type: Number },
@@ -28,7 +28,7 @@ const DealMemoSchema = new Schema({
 
 export interface DealMemo {
     deal: string;
-    date: string;
+    date: Date;
     fee: number;
     ticketPriceVVK: number;
     ticketPriceAK: number;
@@ -45,7 +45,7 @@ export interface DealMemo {
 }
 
 export interface IDealMemo extends Document, DealMemo {
-    dealId: string;
+    dealid: string;
     dm: IDm;
 }
 
