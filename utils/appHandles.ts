@@ -133,6 +133,14 @@ export const getMemos = async (session: SessionProps["session"]) => {
     return memos;
 };
 
+export const clientSideFetch = async <T>(url: string, params?: {}): Promise<T> => {
+    const fetch = await axios.get(url, {
+        params: params,
+    });
+    if (fetch.status !== 200) return [] as T;
+    return fetch.data.data;
+}
+
 export const serverSideFetch = async <T>(url: string, params?: {}): Promise<T> => {
     const u = url.includes("localhost") ? url : `http://localhost:3000${url}`;
     const fetch = await axios.get(u, {
