@@ -170,6 +170,10 @@ export interface ReqAuthProps {
 	session: SessionProps["session"];
 }
 
+export interface CompanyACPageProps extends ReqAuthProps {
+	companies: ICompany[];
+}
+
 export interface CompanyPageProps extends ReqAuthProps {
 	persons: IPerson[];
 }
@@ -239,6 +243,7 @@ export interface HotelFormProps {
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IHotel;
+	companies?: any[];
 }
 
 export interface CompanyFormProps {

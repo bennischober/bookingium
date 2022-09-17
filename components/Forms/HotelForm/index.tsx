@@ -23,6 +23,7 @@ export function HotelForm({
     close,
     session,
     data,
+    companies,
 }: HotelFormProps) {
     const Form = useForm<Hotel>({
         validate: zodResolver(HotelFormSchema),
@@ -64,7 +65,7 @@ export function HotelForm({
                 />
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
                 <Space h="xl" />
-                <CompanySearch Form={Form} autocomplete={[]} />
+                <CompanySearch Form={Form} autocomplete={companies ?? []} />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
                     {data ? "Update Hotel" : "Save Hotel"}

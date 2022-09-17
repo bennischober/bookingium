@@ -5,9 +5,13 @@ import { HotelForm } from "../../../components/Forms/HotelForm";
 import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { IHotel } from "../../../models/hotel";
-import { ReqAuthProps } from "../../../types";
+import { CompanyACPageProps } from "../../../types";
+import { serverSideFetch, toAutocomplete } from "../../../utils/appHandles";
 
-export default function AddHotelPage({ session }: ReqAuthProps) {
+export default function AddHotelPage({
+    session,
+    companies,
+}: CompanyACPageProps) {
     const handleSave = async (data: IHotel) => {
         // post band data
         const ret = await axios.post(
@@ -18,10 +22,16 @@ export default function AddHotelPage({ session }: ReqAuthProps) {
         console.log(ret.data, ret.status);
     };
 
+    const companyAC = toAutocomplete(companies, "name");
+
     return (
         <PageTemplate title={"Add a Band"}>
             <FormContainer>
-                <HotelForm session={session} handleData={handleSave} />
+                <HotelForm
+                    session={session}
+                    handleData={handleSave}
+                    companies={companyAC}
+                />
             </FormContainer>
         </PageTemplate>
     );
@@ -29,10 +39,15 @@ export default function AddHotelPage({ session }: ReqAuthProps) {
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession({ req: ctx.req });
-    
+
+    const companies = await serverSideFetch("/api/company", {
+        userid: session?.userid,
+    });
+
     return {
         props: {
             session,
+            companies,
         },
     };
 };
