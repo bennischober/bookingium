@@ -93,6 +93,7 @@ export interface InputComponentProps {
 
 export interface AcComponentsInputProps extends InputComponentProps {
 	autocomplete: any[];
+	inputProps?: string;
 }
 
 export interface LoproInputProps extends InputComponentProps {
