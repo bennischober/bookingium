@@ -14,16 +14,17 @@ export default function AddDealMemoPage({
     memos,
     venues,
     hotels,
+    persons,
+    companies,
 }: AddDealMemoProps) {
     // fetched data
+    // do we really need a state here?
     const [bandsData, setBandsData] = useState(bands);
     const [memosData, setMemosData] = useState(memos);
     const [venueData, setVenueData] = useState(venues);
     const [hotelData, setHotelData] = useState(hotels);
 
     const handleMemos = async (data: IDealMemo) => {
-        console.log("data", data);
-
         // post band data
         const ret = await axios.post(
             "/api/deal-memo",
@@ -46,8 +47,6 @@ export default function AddDealMemoPage({
         setBandsData(bands);
     };
 
-    // add other forms => add api calls on ssr => add data to state => add data to autocomplete in forms => populate data on specific memo => add edit components for specific memo
-    // => think about a good way to handle the hotel data (if it is not choosen in the form => how to do it in edit form on specific memo)
     const handleVenues = async (data: {}) => {
         console.log(data);
         await axios.post("/api/venue", { data: data });
@@ -65,6 +64,8 @@ export default function AddDealMemoPage({
                 bands={bandsData}
                 venues={venueData}
                 hotels={hotelData}
+                persons={persons}
+                companies={companies}
                 handleBands={handleBands}
                 handleMemos={handleMemos}
                 handleVenues={handleVenues}
@@ -89,6 +90,12 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const hotels = await serverSideFetch("/api/hotel", {
         userid: session?.userid,
     });
+    const persons = await serverSideFetch("/api/person", {
+        userid: session?.userid,
+    });
+    const companies = await serverSideFetch("/api/company", {
+        userid: session?.userid,
+    });
 
     return {
         props: {
@@ -97,6 +104,8 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             memos: memos,
             venues: venues,
             hotels: hotels,
+            persons: persons,
+            companies: companies,
         },
     };
 };

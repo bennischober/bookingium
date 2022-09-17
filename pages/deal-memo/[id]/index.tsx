@@ -5,7 +5,6 @@ import dayjs from "dayjs";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import { MdCheck, MdClose } from "react-icons/md";
 import {
     isPopulated,
@@ -31,26 +30,14 @@ import { HotelForm } from "../../../components/Forms/HotelForm";
 export default function CompleteDealMemoPage({
     memo,
     session,
+    band,
+    venue,
+    hotel,
 }: CompleteDealMemoPageProps) {
-    const [memoData, setMemoData] = useState<IDealMemo>(memo);
-    const [bandData, setBandData] = useState<IBand>({} as IBand);
-    const [venueData, setVenueData] = useState<IVenue>({} as IVenue);
-    const [hotelData, setHotelData] = useState<IHotel>({} as IHotel);
     const router = useRouter();
 
-    useEffect(() => {
-        if (isPopulated<IBand>(memo.bandid)) {
-            setBandData(memo.bandid);
-        }
-        if (isPopulated<IVenue>(memo.venueid)) {
-            setVenueData(memo.venueid);
-        }
-        if (isPopulated<IHotel>(memo.hotelid)) {
-            setHotelData(memo.hotelid);
-        }
-    }, [memo, bandData, venueData, hotelData]);
-
     // maybe move this to appHandles?
+    // => make a function to take parameters and finish for every handle here!
     const handleMemo = async (data: IDealMemo) => {
         showNotification({
             id: "load-data",
@@ -105,30 +92,30 @@ export default function CompleteDealMemoPage({
 
     return (
         <>
-            <PageTemplate title={`Deal Memo of ${bandData.name}`}>
+            <PageTemplate title={`Deal Memo of ${band?.name}`}>
                 <SpecificPageHeader
                     title={
-                        <Link href={`/band/${bandData?.bandid}`}>
+                        <Link href={`/band/${band?.bandid}`}>
                             <Text<"a">
                                 component="a"
                                 variant="link"
-                                href={`/band/${bandData?.bandid}`}
+                                href={`/band/${band?.bandid}`}
                             >
-                                {bandData.name}
+                                {band?.name}
                             </Text>
                         </Link>
                     }
                     titleName={"Band"}
-                    subTitle={`Date: ${dayjs(memoData.date).format(
+                    subTitle={`Date: ${dayjs(memo.date).format(
                         "DD.MM.YYYY"
-                    )} | Venue: ${venueData?.name}`}
+                    )} | Venue: ${venue?.name}`}
                     other={
                         <Button
                             variant="default"
                             onClick={() => {
                                 router.push({
                                     pathname: "/contract",
-                                    query: { id: memoData.dealid },
+                                    query: { id: memo.dealid },
                                 });
                             }}
                         >
@@ -148,40 +135,40 @@ export default function CompleteDealMemoPage({
                             <DealEditForm
                                 handleMemos={handleMemo}
                                 session={session}
-                                data={memoData}
-                                created={memoData.dm.created}
+                                data={memo}
+                                created={memo.dm.created}
                             />
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="band-data">
                         <FormContainer>
-                            {nonEmptyObj(bandData) ? (
+                            {nonEmptyObj(band) ? (
                                 <BandForm
                                     session={session}
                                     handleData={handleBand}
-                                    data={bandData}
+                                    data={band}
                                 />
                             ) : null}
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="venue-data">
                         <FormContainer>
-                            {nonEmptyObj(venueData) ? (
+                            {nonEmptyObj(venue) ? (
                                 <VenueForm
                                     session={session}
                                     handleData={handleVenue}
-                                    data={venueData}
+                                    data={venue}
                                 />
                             ) : null}
                         </FormContainer>
                     </Tabs.Panel>
                     <Tabs.Panel value="hotel-data">
                         <FormContainer>
-                            {nonEmptyObj(hotelData) ? (
+                            {nonEmptyObj(hotel) ? (
                                 <HotelForm
                                     session={session}
                                     handleData={handleHotel}
-                                    data={hotelData}
+                                    data={hotel}
                                 />
                             ) : (
                                 // Idea: goto hotel add form with params of deal and add new hotel.
@@ -203,14 +190,27 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession({ req: ctx.req });
     const id = ctx.query.id;
 
-    const data = await serverSideFetch(`/api/deal-memo/${id}`, {
+    const data = await serverSideFetch<IDealMemo>(`/api/deal-memo/${id}`, {
         userid: session?.userid,
     });
+
+    const band = isPopulated<IBand>(data.bandid)
+        ? (data.bandid as IBand)
+        : null;
+    const venue = isPopulated<IVenue>(data.venueid)
+        ? (data.venueid as IVenue)
+        : null;
+    const hotel = isPopulated<IHotel>(data.hotelid)
+        ? (data.hotelid as IHotel)
+        : null;
 
     return {
         props: {
             session: session,
             memo: data,
+            band: band,
+            venue: venue,
+            hotel: hotel,
         },
     };
 };

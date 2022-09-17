@@ -87,6 +87,7 @@ export function appendObject<T extends Object>(obj: any, value: T) {
 }
 
 export function nonEmptyObj(obj: any) {
+    if(!obj) return false;
     return Object.keys(obj).length > 0;
 }
 
@@ -118,16 +119,24 @@ export const getMemos = async (session: SessionProps["session"]) => {
     return memos;
 };
 
-export const serverSideFetch = async (url: string, params?: {}) => {
+export const serverSideFetch = async <T>(url: string, params?: {}) : Promise<T> => {
     const u = url.includes("localhost") ? url : `http://localhost:3000${url}`;
     const fetch = await axios.get(u, {
         params: params,
     });
-    if (fetch.status !== 200) return [];
+    if (fetch.status !== 200) return [] as T;
     return fetch.data.data;
 }
 
 /* --- DATABASE HANDLE --- */
+
+/**
+ * This lets typescript know, that a object is populated. Usually this would only cntain an id, but mongoose populated the id, so it has actual value.
+ * 
+ * NOTE: Only use this, if the data is really populated. Otherwise it might throw an error!
+ * @param obj Object to populate
+ * @returns The populated object
+ */
 export function isPopulated<T>(obj: T | any): obj is T {
     // return (obj && obj.name && typeof obj.name === 'string');
     return obj !== null && obj !== undefined;
@@ -143,6 +152,18 @@ export function getValueAtKey<T, K>(data: T[], key: keyof T, value: K): T {
     data.forEach(element => {
         // kind of a hack, but it works
         if (getProperty(element, key) as unknown as K === value) {
+            item = element;
+        }
+    });
+    return item;
+}
+
+export function getValueAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value: K): T {
+    let item = {} as T;
+    let combined;
+    data.forEach(element => {
+        combined = keys.map(key => getProperty(element, key) as unknown as K);
+        if (combined.join(" ") === value) {
             item = element;
         }
     });

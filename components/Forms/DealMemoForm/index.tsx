@@ -15,7 +15,7 @@ import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../../FormElements/SearchOrAdd";
 import { VenueForm } from "../VenueForm";
 import { HotelForm } from "../HotelForm";
-import { getFormValueObject, getValueAtKey } from "../../../utils/appHandles";
+import { getFormValueObject, getValueAtCombinedKey, getValueAtKey } from "../../../utils/appHandles";
 import { DealInput } from "../../FormInputs/DealInput";
 import { useUnsavedWarn } from "../../../hooks";
 import { DealMemo, IDealMemo } from "../../../models/deal-memo";
@@ -26,6 +26,8 @@ export function DealMemoForm({
     bands,
     venues,
     hotels,
+    persons,
+    companies,
     session,
     handleMemos,
     handleBands,
@@ -57,7 +59,7 @@ export function DealMemoForm({
     });
 
     const onDealSubmit = async (values: DealMemo) => {
-        if (!bands || !venues || !hotels) {
+        if (!bands || !venues || !hotels || !persons || !companies) {
             console.error("No bands, venues or hotels found");
             return;
         }
@@ -65,6 +67,8 @@ export function DealMemoForm({
         const band = getValueAtKey(bands, "name", values.bandid);
         const venue = getValueAtKey(venues, "name", values.venueid);
         const hotel = getValueAtKey(hotels, "name", values.hotelid);
+        const lopro = getValueAtCombinedKey(persons, ["firstName", "lastName"], values.lopro.person);
+        const company = getValueAtKey(companies, "name", values.lopro.company);
 
         const memoData = getFormValueObject<DealMemo>(
             values,
@@ -78,6 +82,8 @@ export function DealMemoForm({
         memoData.bandid = band._id;
         memoData.venueid = venue._id;
         memoData.hotelid = hotel._id;
+        memoData.lopro.person = lopro._id;
+        memoData.lopro.company = company._id;
 
         handleMemos(memoData);
 
@@ -105,6 +111,18 @@ export function DealMemoForm({
 
     const hotelsAutoComplete = hotels
         ? hotels?.map((val) => {
+              return val.name;
+          })
+        : [];
+
+    const personsAutoComplete = persons
+        ? persons?.map((val) => {
+              return val.firstName + " " + val.lastName;
+          })
+        : [];
+
+    const companiesAutoComplete = companies
+        ? companies?.map((val) => {
               return val.name;
           })
         : [];
@@ -149,7 +167,11 @@ export function DealMemoForm({
                                     label="Deal data"
                                     labelPosition="center"
                                 />
-                                <DealInput Form={Form} />
+                                <DealInput
+                                    Form={Form}
+                                    person={personsAutoComplete}
+                                    company={companiesAutoComplete}
+                                />
                                 <Space h="xl" />
                                 <Divider
                                     my="xl"
@@ -280,7 +302,7 @@ export function DealEditForm({
     return (
         <>
             <form onSubmit={Form.onSubmit((values) => onDealSubmit(values))}>
-                <DealInput Form={Form} />
+                <DealInput Form={Form} person={[]} company={[]} />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
                     Update Deal Data

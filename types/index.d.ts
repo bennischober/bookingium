@@ -3,6 +3,7 @@ import { UseFormReturnType } from "@mantine/form/lib/types";
 import { Session } from "next-auth";
 import { IconBase } from "react-icons/lib";
 import { Band, IBand } from "../models/band";
+import { ICompany } from "../models/company";
 import { IDealMemo } from "../models/deal-memo";
 import { IHotel } from "../models/hotel";
 import { IPerson, Person } from "../models/person";
@@ -172,6 +173,8 @@ export interface DealMemoFormProps {
 	bands: IBand[];
 	venues?: IVenue[];
 	hotels?: IHotel[];
+	persons?: IPerson[];
+	companies?: ICompany[];
 	handleMemos: (data: IDealMemo) => void;
 	handleBands: (data: IBand) => void;
 	handleVenues: (data: IVenue) => void;
@@ -189,11 +192,16 @@ export interface AddDealMemoProps {
 	memos: IDealMemo[];
 	venues?: IVenue[];
 	hotels?: IHotel[];
+	persons?: IPerson[];
+	companies?: ICompany[];
 }
 
 export interface CompleteDealMemoPageProps {
 	session: SessionProps["session"];
 	memo: IDealMemo;
+	band?: IBand;
+	venue?: IVenue;
+	hotel?: IHotel;
 }
 
 export interface SpecificBandPageProps {
@@ -260,7 +268,7 @@ export interface DataGridSettingsValues {
 
 /** --- DATA GRID TYPES --- **/
 export interface DealMemoListValues {
-	dealId: string;
+	dealid: string;
 	band: string;
 	deal: string;
 	date: string;

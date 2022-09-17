@@ -9,10 +9,10 @@ import {
     Textarea,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
-import { InputComponentProps } from "../../../types";
+import { LoproInputProps } from "../../../types";
 import { LoproInput } from "../LoproInput";
 
-export function DealInput({ Form }: InputComponentProps) {
+export function DealInput({ Form, person, company }: LoproInputProps) {
     return (
         <Group grow align="top">
             <Box>
@@ -107,8 +107,12 @@ export function DealInput({ Form }: InputComponentProps) {
                     autosize
                     minRows={3}
                 />
-                <Divider label="Local Promoter" my="xl" labelPosition="center" />
-                <LoproInput Form={Form} person={[]} company={[]} />
+                <Divider
+                    label="Local Promoter"
+                    my="xl"
+                    labelPosition="center"
+                />
+                <LoproInput Form={Form} person={person} company={company} />
             </Box>
         </Group>
     );
