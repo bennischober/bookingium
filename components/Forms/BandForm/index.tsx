@@ -22,6 +22,7 @@ import { getFormValueObject } from "../../../utils/appHandles";
 import { useState } from "react";
 import { MdDelete } from "react-icons/md";
 import { MemberInput } from "../../FormInputs/MemberInput";
+import { CompanySearch } from "../../FormElements/Searchable/Company";
 
 const schema = z.object({
     name: z
@@ -29,12 +30,7 @@ const schema = z.object({
         .min(3, { message: "Band name must be at least 3 characters" }),
 });
 
-export function BandForm({
-    handleData,
-    close,
-    session,
-    data,
-}: BandFormProps) {
+export function BandForm({ handleData, close, session, data }: BandFormProps) {
     const [opened, setOpened] = useState(false);
 
     const Form = useForm<Band>({
@@ -79,20 +75,15 @@ export function BandForm({
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
                 <Space h="xl" />
                 <Group grow align="flex-end">
-                    <Autocomplete
-                        label="Company"
-                        placeholder="Type to search"
-                        data={[]}
-                        {...Form.getInputProps("company")}
-                        required
-                    />
+                    {/*If in "edit mode", add button with link to update company/members? or with modal? or inline? */}
+                    <CompanySearch Form={Form} autocomplete={[]} />
                     <Button onClick={() => setOpened(true)} variant="default">
                         Add members
                     </Button>
                 </Group>
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
-                    Add Band
+                    {data ? "Update Band" : "Save Band"}
                 </Button>
                 <Modal
                     opened={opened}

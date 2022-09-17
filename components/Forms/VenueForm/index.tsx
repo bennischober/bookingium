@@ -14,6 +14,7 @@ import { useUnsavedWarn } from "../../../hooks";
 import { IVenue, Venue } from "../../../models/venue";
 import { VenueFormProps } from "../../../types";
 import { getFormValueObject } from "../../../utils/appHandles";
+import { CompanySearch } from "../../FormElements/Searchable/Company";
 
 const VenueFormSchema = z.object({
     venue: z
@@ -80,15 +81,9 @@ export function VenueForm({
                 </Grid>
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
                 <Space h="xl" />
-                <Autocomplete
-                    label="Company"
-                    placeholder="Type to search"
-                    data={[]}
-                    {...Form.getInputProps("company")}
-                    required
-                />
+                <CompanySearch Form={Form} autocomplete={[]} />
                 <Button type="submit" fullWidth mt="xl">
-                    Add Venue
+                    {data ? "Update Venue" : "Save Venue"}
                 </Button>
             </form>
             {prompt}

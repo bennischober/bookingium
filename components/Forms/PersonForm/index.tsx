@@ -130,7 +130,7 @@ export function PersonForm({ handleData, close, session, data }: PersonFormProps
                     </Box>
                 </Group>
                 <Button type="submit" fullWidth mt="xl">
-                    Save Person
+                    {data ? "Update Person": "Save Person"}
                 </Button>
             </form>
             {prompt}

@@ -12,6 +12,7 @@ import { useUnsavedWarn } from "../../../hooks";
 import { Hotel, IHotel } from "../../../models/hotel";
 import { Types } from "mongoose";
 import { getFormValueObject } from "../../../utils/appHandles";
+import { CompanySearch } from "../../FormElements/Searchable/Company";
 
 const HotelFormSchema = z.object({
     name: z.string().min(3, { message: "Name must be at least 3 characters" }),
@@ -63,16 +64,10 @@ export function HotelForm({
                 />
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
                 <Space h="xl" />
-                <Autocomplete
-                    label="Company"
-                    placeholder="Type to search"
-                    data={[]}
-                    {...Form.getInputProps("company")}
-                    required
-                />
+                <CompanySearch Form={Form} autocomplete={[]} />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
-                    Add Hotel
+                    {data ? "Update Hotel" : "Save Hotel"}
                 </Button>
             </form>
             {prompt}
