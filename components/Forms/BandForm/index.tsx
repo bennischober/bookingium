@@ -103,8 +103,8 @@ export function BandForm({
                         label="Genre"
                         {...Form.getInputProps("genre")}
                         data={music_genres}
-                        placeholder="Select items"
-                        nothingFound="Nothing found"
+                        placeholder="Select genre"
+                        nothingFound="Genre not found"
                         searchable
                         creatable
                         getCreateLabel={(query) => `+ Create ${query}`}
