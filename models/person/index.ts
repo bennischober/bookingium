@@ -10,7 +10,7 @@ const PersonSchema: Schema = new Schema({
     },
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
-    birthday: { type: Date },
+    birthday: { type: Date, default: null },
     role: { type: String, default: "" },
     notes: { type: String, default: "" },
     contact: OContact,
@@ -38,7 +38,7 @@ PersonSchema.virtual('companies', {
 export interface Person {
     firstName: string;
     lastName: string;
-    birthday: string;
+    birthday?: Date;
     role: string;
     notes: string;
     contact: IContact;
