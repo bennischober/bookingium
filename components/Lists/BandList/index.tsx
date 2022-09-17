@@ -46,27 +46,27 @@ export function BandList({ bands }: BandListProps) {
                 cell: (props) => props.getValue(),
                 footer: (props) => props.column.id,
             },
-            {
-                id: "website",
-                header: "website",
-                accessorKey: "website",
-                cell: (props) => props.getValue(),
-                footer: (props) => props.column.id,
-            },
-            {
-                id: "country",
-                header: "country",
-                accessorKey: "country",
-                cell: (props) => props.getValue(),
-                footer: (props) => props.column.id,
-            },
             // {
-            //     id: "genre",
-            //     header: "genre",
-            //     accessorKey: "genre",
+            //     id: "website",
+            //     header: "website",
+            //     accessorKey: "website",
             //     cell: (props) => props.getValue(),
             //     footer: (props) => props.column.id,
             // },
+            // {
+            //     id: "country",
+            //     header: "country",
+            //     accessorKey: "country",
+            //     cell: (props) => props.getValue(),
+            //     footer: (props) => props.column.id,
+            // },
+            {
+                id: "genre",
+                header: "genre",
+                accessorKey: "genre",
+                cell: (props) => props.getValue(),
+                footer: (props) => props.column.id,
+            },
         ],
         []
     );
@@ -75,9 +75,9 @@ export function BandList({ bands }: BandListProps) {
             bands.map((band) => ({
                 bandId: band.bandid,
                 name: band.name,
-                website: band.company.contact.homepage,
-                country: band.company.address.country,
-                //genre: band.genre,
+                // website: band.company.contact.homepage,
+                // country: band.company.address.country,
+                genre: band.genre,
             })),
         [bands]
     );

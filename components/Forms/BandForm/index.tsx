@@ -1,17 +1,13 @@
 import z from "zod";
 import {
-    Autocomplete,
-    Box,
     Button,
-    Center,
-    Divider,
     Grid,
     Group,
     Modal,
+    Select,
     Space,
     Textarea,
     TextInput,
-    Tooltip,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { BandFormProps } from "../../../types";
@@ -20,7 +16,6 @@ import { Band, IBand } from "../../../models/band";
 import { Types } from "mongoose";
 import { getFormValueObject } from "../../../utils/appHandles";
 import { useState } from "react";
-import { MdDelete } from "react-icons/md";
 import { MemberInput } from "../../FormInputs/MemberInput";
 import { CompanySearch } from "../../FormElements/Searchable/Company";
 
@@ -30,6 +25,29 @@ const schema = z.object({
         .min(3, { message: "Band name must be at least 3 characters" }),
 });
 
+const music_genres = [
+    "Alternative",
+    "Blues",
+    "Classical",
+    "Country",
+    "Dance",
+    "Electronic",
+    "Folk",
+    "House",
+    "Hip Hop",
+    "Indie",
+    "Jazz",
+    "Metal",
+    "Opera",
+    "Pop",
+    "Punk",
+    "R&B",
+    "Reggae",
+    "Rock",
+    "Soul",
+    "World Music",
+];
+
 export function BandForm({ handleData, close, session, data }: BandFormProps) {
     const [opened, setOpened] = useState(false);
 
@@ -37,6 +55,7 @@ export function BandForm({ handleData, close, session, data }: BandFormProps) {
         validate: zodResolver(schema),
         initialValues: {
             name: data?.name ?? "",
+            genre: data?.genre ?? "",
             notes: data?.notes ?? "",
             company: data?.company ?? ("" as unknown as Types.ObjectId),
             members: data?.members ?? [],
@@ -67,20 +86,43 @@ export function BandForm({ handleData, close, session, data }: BandFormProps) {
     return (
         <>
             <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-                <TextInput
-                    label="Band Name"
-                    {...Form.getInputProps("name")}
-                    required
-                />
+                <Group grow>
+                    <TextInput
+                        label="Band Name"
+                        {...Form.getInputProps("name")}
+                        required
+                    />
+                    <Select
+                        label="Genre"
+                        {...Form.getInputProps("genre")}
+                        data={music_genres}
+                        placeholder="Select items"
+                        nothingFound="Nothing found"
+                        searchable
+                        creatable
+                        getCreateLabel={(query) => `+ Create ${query}`}
+                        onCreate={(query) => {
+                            music_genres.push(query);
+                            Form.setFieldValue("genre", query);
+                        }}
+                    />
+                </Group>
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
                 <Space h="xl" />
-                <Group grow align="flex-end">
-                    {/*If in "edit mode", add button with link to update company/members? or with modal? or inline? */}
-                    <CompanySearch Form={Form} autocomplete={[]} />
-                    <Button onClick={() => setOpened(true)} variant="default">
-                        Add members
-                    </Button>
-                </Group>
+                <Grid align="flex-end">
+                    <Grid.Col span={6}>
+                        {/*If in "edit mode", add button with link to update company/members? or with modal? or inline? */}
+                        <CompanySearch Form={Form} autocomplete={[]} />
+                    </Grid.Col>
+                    <Grid.Col span={6}>
+                        <Button
+                            onClick={() => setOpened(true)}
+                            variant="default"
+                        >
+                            Add members
+                        </Button>
+                    </Grid.Col>
+                </Grid>
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
                     {data ? "Update Band" : "Save Band"}

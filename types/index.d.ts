@@ -298,7 +298,7 @@ export interface DealMemoListValues {
 export interface BandListValues {
 	bandId: string;
 	name: string;
-	// genre: string;
-	website: string;
-	country: string;
+	genre: string;
+	// website: string;
+	// country: string;
 }

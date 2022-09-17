@@ -12,6 +12,7 @@ const BandSchema: Schema = new Schema({
         unique: true,
     },
     name: { type: String, required: true },
+    genre: { type: String},
     notes: { type: String },
     company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
     members: [{ type: Schema.Types.ObjectId, ref: 'Person', required: true }],
@@ -20,6 +21,7 @@ const BandSchema: Schema = new Schema({
 
 export interface Band {
     name: string;
+    genre: string;
     notes: string;
     company: Types.ObjectId;
     members: Types.ObjectId[];
