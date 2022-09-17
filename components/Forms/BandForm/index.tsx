@@ -56,8 +56,6 @@ export function BandForm({
     persons,
     companies,
 }: BandFormProps) {
-    console.log(persons, companies);
-
     const [opened, setOpened] = useState(false);
 
     const Form = useForm<Band>({

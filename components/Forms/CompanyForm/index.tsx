@@ -13,6 +13,7 @@ export function CompanyForm({
     close,
     session,
     data,
+    persons,
 }: CompanyFormProps) {
     const Form = useForm<Company>({
         initialValues: {
@@ -65,7 +66,7 @@ export function CompanyForm({
     return (
         <>
             <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-                <CompanyInput Form={Form} autocomplete={[]} />
+                <CompanyInput Form={Form} autocomplete={persons ?? []} />
                 <Button type="submit" fullWidth mt="xl">
                     {data ? "Update Company" : "Save Company"}
                 </Button>

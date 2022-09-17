@@ -5,9 +5,10 @@ import { CompanyForm } from "../../../components/Forms/CompanyForm";
 import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { ICompany } from "../../../models/company";
-import { ReqAuthProps } from "../../../types";
+import { CompanyPageProps } from "../../../types";
+import { serverSideFetch, toCombinedAutocomplete } from "../../../utils/appHandles";
 
-export default function AddCompanyPage({ session }: ReqAuthProps) {
+export default function AddCompanyPage({ session, persons }: CompanyPageProps) {
     const handleSave = async (data: ICompany) => {
         const ret = await axios.post(
             "/api/company",
@@ -17,10 +18,20 @@ export default function AddCompanyPage({ session }: ReqAuthProps) {
         console.log(ret.data, ret.status);
     };
 
+    const personAC = toCombinedAutocomplete(
+        persons,
+        ["firstName", "lastName"],
+        " "
+    );
+
     return (
         <PageTemplate title={"Add a Copany"}>
             <FormContainer>
-                <CompanyForm session={session} handleData={handleSave} />
+                <CompanyForm
+                    session={session}
+                    handleData={handleSave}
+                    persons={personAC}
+                />
             </FormContainer>
         </PageTemplate>
     );
@@ -29,9 +40,14 @@ export default function AddCompanyPage({ session }: ReqAuthProps) {
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession({ req: ctx.req });
 
+    const persons = await serverSideFetch("/api/person", {
+        userid: session?.userid,
+    });
+
     return {
         props: {
             session,
+            persons,
         },
     };
 };
