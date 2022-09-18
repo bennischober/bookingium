@@ -9,22 +9,24 @@ import {
 } from "@mantine/core";
 import { MdDelete } from "react-icons/md";
 import { AcComponentsInputProps } from "../../../types";
+import { PersonSearch } from "../../FormElements/Searchable/Person";
 
-export function MemberInput({ Form, autocomplete }: AcComponentsInputProps) {
+export function MemberInput({ Form, autocomplete, isEdit }: AcComponentsInputProps) {
     const members = Form.values.members.map((_: any, index: any) => {
         return (
             <Box key={index}>
                 <Grid grow align="flex-end">
                     <Grid.Col span={10}>
-                        <Autocomplete
+                        <PersonSearch
+                            Form={Form}
                             label="Member"
-                            placeholder="Type to search"
-                            data={autocomplete}
-                            {...Form.getInputProps(`members.${index}`)}
-                            required
+                            autocomplete={autocomplete}
+                            inputProps={`members.${index}`}
+                            isEdit={isEdit}
                         />
                     </Grid.Col>
-                    <Grid.Col span={2}>
+                    {isEdit ? null : (
+                        <Grid.Col span={2}>
                         <Tooltip label="Delete member">
                             <Button
                                 onClick={() =>
@@ -35,7 +37,7 @@ export function MemberInput({ Form, autocomplete }: AcComponentsInputProps) {
                                 <MdDelete />
                             </Button>
                         </Tooltip>
-                    </Grid.Col>
+                    </Grid.Col>)}
                 </Grid>
                 <Divider my="xl" />
             </Box>

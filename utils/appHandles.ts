@@ -200,6 +200,17 @@ export function getValueAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value:
     return item;
 }
 
+export function getValuesAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value: K[], seperator?: string, returnKey?: keyof T) : T[] | T[keyof T][] {
+    if (returnKey) {
+        return value.map((item) => {
+            return getValueAtCombinedKey(data, keys, item, seperator)[returnKey];
+        })
+    }
+    return value.map((item) => {
+        return getValueAtCombinedKey(data, keys, item, seperator);
+    })
+}
+
 export function getNestedValue(obj: any, path: string): any {
     return path.split('.').reduce((acc, key) => acc && acc[key], obj);
 }

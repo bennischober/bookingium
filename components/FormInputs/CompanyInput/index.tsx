@@ -14,7 +14,7 @@ import AddressInput from "../AddressInput";
 import ContactInput from "../ContactInput";
 import { MemberInput } from "../MemberInput";
 
-export function CompanyInput({ Form, autocomplete }: AcComponentsInputProps) {
+export function CompanyInput({ Form, autocomplete, isEdit }: AcComponentsInputProps) {
     const [opened, setOpened] = useState(false);
 
     return (
@@ -42,14 +42,14 @@ export function CompanyInput({ Form, autocomplete }: AcComponentsInputProps) {
             <Divider my="xl" label="Member" labelPosition="center" />
             <Center>
                 <Button onClick={() => setOpened(true)} variant="default">
-                    Add Member
+                    {isEdit ? "Edit Member" : "Add Member"}
                 </Button>
             </Center>
 
             <Divider my="xl" />
 
             <Modal opened={opened} onClose={() => setOpened(false)} size="xl">
-                <MemberInput Form={Form} autocomplete={autocomplete} />
+                <MemberInput Form={Form} autocomplete={autocomplete} isEdit={isEdit} />
             </Modal>
         </>
     );

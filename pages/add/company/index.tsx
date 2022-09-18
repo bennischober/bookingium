@@ -6,7 +6,7 @@ import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { ICompany } from "../../../models/company";
 import { CompanyPageProps } from "../../../types";
-import { serverSideFetch, toCombinedAutocomplete } from "../../../utils/appHandles";
+import { serverSideFetch } from "../../../utils/appHandles";
 
 export default function AddCompanyPage({ session, persons }: CompanyPageProps) {
     const handleSave = async (data: ICompany) => {
@@ -18,19 +18,13 @@ export default function AddCompanyPage({ session, persons }: CompanyPageProps) {
         console.log(ret.data, ret.status);
     };
 
-    const personAC = toCombinedAutocomplete(
-        persons,
-        ["firstName", "lastName"],
-        " "
-    );
-
     return (
         <PageTemplate title={"Add a Copany"}>
             <FormContainer>
                 <CompanyForm
                     session={session}
                     handleData={handleSave}
-                    persons={personAC}
+                    persons={persons}
                 />
             </FormContainer>
         </PageTemplate>

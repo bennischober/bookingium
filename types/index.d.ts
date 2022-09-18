@@ -94,7 +94,9 @@ export interface InputComponentProps {
 
 export interface AcComponentsInputProps extends InputComponentProps {
 	autocomplete: any[];
+	label?: string;
 	inputProps?: string;
+	isEdit?: boolean;
 }
 
 export interface LoproInputProps extends InputComponentProps {
@@ -178,6 +180,10 @@ export interface CompanyPageProps extends ReqAuthProps {
 	persons: IPerson[];
 }
 
+export interface CompanyEditPageProps extends ReqAuthProps {
+	company: ICompany;
+}
+
 export interface BandPageProps extends ReqAuthProps {
 	persons: IPerson[];
 	companies: ICompany[];
@@ -251,7 +257,7 @@ export interface CompanyFormProps {
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: ICompany;
-	persons?: any[];
+	persons?: IPerson[];
 }
 
 /** --- FORM TYPES --- **/

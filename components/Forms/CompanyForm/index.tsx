@@ -1,9 +1,11 @@
 import { Button } from "@mantine/core";
-import { useForm, zodResolver } from "@mantine/form";
-import { Types } from "mongoose";
-import { z } from "zod";
+import { useForm } from "@mantine/form";
 import { useUnsavedWarn } from "../../../hooks";
-import { getFormValueObject } from "../../../utils/appHandles";
+import {
+    getFormValueObject,
+    getValuesAtCombinedKey,
+    toCombinedAutocomplete,
+} from "../../../utils/appHandles";
 import { CompanyFormProps } from "../../../types";
 import { Company, ICompany } from "../../../models/company";
 import { CompanyInput } from "../../FormInputs/CompanyInput";
@@ -55,18 +57,41 @@ export function CompanyForm({
             }
         ) as ICompany;
 
+        vals.members = persons
+            ? getValuesAtCombinedKey(
+                  persons,
+                  ["firstName", "lastName"],
+                  values.members,
+                  " ",
+                  "_id"
+              )
+            : [];
+
         handleData(vals);
         if (close) close();
 
-        Form.reset();
+        Form.resetDirty();
+
+        if (!data) Form.reset();
     };
+
+    // change to useMemo?
+    const personAC = toCombinedAutocomplete(
+        persons,
+        ["firstName", "lastName"],
+        " "
+    );
 
     const [prompt] = useUnsavedWarn(Form);
 
     return (
         <>
             <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
-                <CompanyInput Form={Form} autocomplete={persons ?? []} />
+                <CompanyInput
+                    Form={Form}
+                    autocomplete={personAC}
+                    isEdit={data ? true : false}
+                />
                 <Button type="submit" fullWidth mt="xl">
                     {data ? "Update Company" : "Save Company"}
                 </Button>
