@@ -9,12 +9,12 @@ import {
     TextInput,
 } from "@mantine/core";
 import { useState } from "react";
-import { AcComponentsInputProps } from "../../../types";
+import { CompanyInputProps } from "../../../types";
 import AddressInput from "../AddressInput";
 import ContactInput from "../ContactInput";
 import { MemberInput } from "../MemberInput";
 
-export function CompanyInput({ Form, autocomplete, isEdit }: AcComponentsInputProps) {
+export function CompanyInput({ Form, autocomplete, isEdit, persons }: CompanyInputProps) {
     const [opened, setOpened] = useState(false);
 
     return (
@@ -49,7 +49,7 @@ export function CompanyInput({ Form, autocomplete, isEdit }: AcComponentsInputPr
             <Divider my="xl" />
 
             <Modal opened={opened} onClose={() => setOpened(false)} size="xl">
-                <MemberInput Form={Form} autocomplete={autocomplete} isEdit={isEdit} />
+                <MemberInput Form={Form} autocomplete={autocomplete} isEdit={isEdit} persons={persons} />
             </Modal>
         </>
     );

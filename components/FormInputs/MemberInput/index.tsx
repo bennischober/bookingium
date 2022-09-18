@@ -1,45 +1,47 @@
-import {
-    Autocomplete,
-    Box,
-    Button,
-    Center,
-    Divider,
-    Grid,
-    Tooltip,
-} from "@mantine/core";
-import { MdDelete } from "react-icons/md";
-import { AcComponentsInputProps } from "../../../types";
-import { PersonSearch } from "../../FormElements/Searchable/Person";
+import { Box, Button, Center } from "@mantine/core";
+import { useRouter } from "next/router";
+import { IPerson } from "../../../models/person";
+import { CompanyInputProps } from "../../../types";
+import { PersonSearchCRUD } from "../../FormElements/SearchableEditDelete/Person";
+import { arrayToMap, mapToArray } from "../../../utils/appHandles";
 
-export function MemberInput({ Form, autocomplete, isEdit }: AcComponentsInputProps) {
+export function MemberInput({
+    Form,
+    autocomplete,
+    isEdit,
+    persons,
+}: CompanyInputProps) {
+    const router = useRouter();
+
+    const people = persons
+        ? arrayToMap(persons, "_id")
+        : new Map<string, IPerson>();
+
+    const peopleArray = mapToArray(people);
+
+    const handleMemberEdit = (url: string) => {
+        console.log(Form.isDirty());
+
+        peopleArray.forEach((person, index) => {
+            if (url === person.firstName + " " + person.lastName) {
+                router.push(`/edit/person/oid/${person._id}`);
+            }
+        });
+    };
+
+
     const members = Form.values.members.map((_: any, index: any) => {
         return (
             <Box key={index}>
-                <Grid grow align="flex-end">
-                    <Grid.Col span={10}>
-                        <PersonSearch
-                            Form={Form}
-                            label="Member"
-                            autocomplete={autocomplete}
-                            inputProps={`members.${index}`}
-                            isEdit={isEdit}
-                        />
-                    </Grid.Col>
-                    {isEdit ? null : (
-                        <Grid.Col span={2}>
-                        <Tooltip label="Delete member">
-                            <Button
-                                onClick={() =>
-                                    Form.removeListItem("members", index)
-                                }
-                                color="red"
-                            >
-                                <MdDelete />
-                            </Button>
-                        </Tooltip>
-                    </Grid.Col>)}
-                </Grid>
-                <Divider my="xl" />
+                <PersonSearchCRUD
+                    index={index}
+                    handleEdit={handleMemberEdit}
+                    Form={Form}
+                    label={"Member"}
+                    data={autocomplete}
+                    inputProps={`members`}
+                    isEdit={isEdit}
+                />
             </Box>
         );
     });

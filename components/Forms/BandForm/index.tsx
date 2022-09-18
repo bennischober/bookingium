@@ -14,7 +14,7 @@ import { BandFormProps } from "../../../types";
 import { useUnsavedWarn } from "../../../hooks";
 import { Band, IBand } from "../../../models/band";
 import { Types } from "mongoose";
-import { getFormValueObject } from "../../../utils/appHandles";
+import { getFormValueObject, membersIdToName } from "../../../utils/appHandles";
 import { useState } from "react";
 import { MemberInput } from "../../FormInputs/MemberInput";
 import { CompanySearch } from "../../FormElements/Searchable/Company";
@@ -54,6 +54,7 @@ export function BandForm({
     session,
     data,
     persons,
+    allPersons,
     companies,
 }: BandFormProps) {
     const [opened, setOpened] = useState(false);
@@ -65,7 +66,12 @@ export function BandForm({
             genre: data?.genre ?? "",
             notes: data?.notes ?? "",
             company: data?.company ?? ("" as unknown as Types.ObjectId),
-            members: data?.members ?? [],
+            members: data
+                ? membersIdToName(
+                      data.members as unknown as string[],
+                      allPersons
+                  )
+                : [],
         },
     });
 
@@ -142,7 +148,12 @@ export function BandForm({
                     onClose={() => setOpened(false)}
                     size="xl"
                 >
-                    <MemberInput Form={Form} autocomplete={persons ?? []} />
+                    <MemberInput
+                        Form={Form}
+                        autocomplete={persons ?? []}
+                        isEdit={allPersons ? true : false}
+                        persons={allPersons}
+                    />
                 </Modal>
             </form>
             {prompt}

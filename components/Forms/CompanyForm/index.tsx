@@ -4,6 +4,7 @@ import { useUnsavedWarn } from "../../../hooks";
 import {
     getFormValueObject,
     getValuesAtCombinedKey,
+    membersIdToName,
     toCombinedAutocomplete,
 } from "../../../utils/appHandles";
 import { CompanyFormProps } from "../../../types";
@@ -40,7 +41,9 @@ export function CompanyForm({
                 otherNumbers: [],
                 homepage: "",
             },
-            members: data?.members ?? [],
+            members: data
+                ? membersIdToName(data.members as unknown as string[], persons)
+                : [],
         },
     });
 
@@ -91,6 +94,7 @@ export function CompanyForm({
                     Form={Form}
                     autocomplete={personAC}
                     isEdit={data ? true : false}
+                    persons={persons}
                 />
                 <Button type="submit" fullWidth mt="xl">
                     {data ? "Update Company" : "Save Company"}

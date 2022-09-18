@@ -63,14 +63,19 @@ export interface UserButtonProps {
 }
 
 export interface SearchableProps {
+	Form: UseFormReturnType<any>;
 	label: string;
 	placeholder?: string;
 	data: string[];
 	required?: boolean;
 	inputProps: string;
-	Form: UseFormReturnType<any>;
 }
 
+export  interface SearchableEditDeleteProps extends SearchableProps {
+	isEdit?: boolean;
+	index: number;
+	handleEdit(url: string): void;
+}
 
 export interface SearchOrAddProps {
 	ac: {
@@ -99,6 +104,10 @@ export interface AcComponentsInputProps extends InputComponentProps {
 	isEdit?: boolean;
 }
 
+export interface CompanyInputProps extends AcComponentsInputProps {
+	persons?: IPerson[];	
+}
+
 export interface LoproInputProps extends InputComponentProps {
 	person: any[];
 	company: any[];
@@ -111,6 +120,7 @@ export interface BandFormProps {
 	data?: IBand;
 	persons?: any[];
 	companies?: any[];
+	allPersons?: IPerson[];
 }
 
 export interface PersonFormProps {
@@ -182,6 +192,11 @@ export interface CompanyPageProps extends ReqAuthProps {
 
 export interface CompanyEditPageProps extends ReqAuthProps {
 	company: ICompany;
+	persons: IPerson[];
+}
+
+export interface SingleEditPageProps<T> extends ReqAuthProps {
+	data: T;
 }
 
 export interface BandPageProps extends ReqAuthProps {
@@ -223,6 +238,7 @@ export interface CompleteDealMemoPageProps {
 	band?: IBand;
 	venue?: IVenue;
 	hotel?: IHotel;
+	persons?: IPerson[];
 }
 
 export interface SpecificBandPageProps {

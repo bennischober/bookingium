@@ -24,6 +24,7 @@ import { SpecificPageHeader } from "../../../components/Layout/SpecificPageHeade
 import Link from "next/link";
 import { VenueForm } from "../../../components/Forms/VenueForm";
 import { HotelForm } from "../../../components/Forms/HotelForm";
+import { IPerson } from "../../../models/person";
 
 // move jsx stuff to new component, if everything is finished and works properly
 
@@ -33,6 +34,7 @@ export default function CompleteDealMemoPage({
     band,
     venue,
     hotel,
+    persons,
 }: CompleteDealMemoPageProps) {
     const router = useRouter();
 
@@ -147,6 +149,7 @@ export default function CompleteDealMemoPage({
                                     session={session}
                                     handleData={handleBand}
                                     data={band}
+                                    allPersons={persons}
                                 />
                             ) : null}
                         </FormContainer>
@@ -204,6 +207,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         ? (data.hotelid as IHotel)
         : null;
 
+    const persons = await serverSideFetch<IPerson[]>(`/api/person`, {
+        userid: session?.userid,
+    });
+
     return {
         props: {
             session: session,
@@ -211,6 +218,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             band: band,
             venue: venue,
             hotel: hotel,
+            persons: persons,
         },
     };
 };

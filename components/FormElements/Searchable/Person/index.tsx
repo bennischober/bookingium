@@ -1,10 +1,15 @@
 import { Searchable } from "..";
 import { AcComponentsInputProps } from "../../../../types";
 
-export function PersonSearch({ Form, autocomplete, inputProps }: AcComponentsInputProps) {
+export function PersonSearch({
+    Form,
+    autocomplete,
+    inputProps,
+    label,
+}: AcComponentsInputProps) {
     return (
         <Searchable
-            label="Person"
+            label={label ?? "Person"}
             placeholder="Type to search"
             data={autocomplete}
             inputProps={inputProps ?? "person"}

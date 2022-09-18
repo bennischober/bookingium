@@ -11,6 +11,7 @@ import { serverSideFetch } from "../../../../utils/appHandles";
 export default function EditCompanyPage({
     session,
     company,
+    persons,
 }: CompanyEditPageProps) {
     const handleSave = async (data: ICompany) => {
         const ret = await axios.put(
@@ -32,6 +33,7 @@ export default function EditCompanyPage({
                     session={session}
                     handleData={handleSave}
                     data={company}
+                    persons={persons}
                 />
             </FormContainer>
         </PageTemplate>
@@ -46,10 +48,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         userid: session?.userid,
     });
 
+    const persons = await serverSideFetch("/api/person", {
+        userid: session?.userid,
+    });
+
     return {
         props: {
             session,
             company,
+            persons,
         },
     };
 };
