@@ -4,6 +4,9 @@ import dayjs from 'dayjs';
 import { SessionProps } from "../types";
 import axios from "axios";
 import { v4 } from "uuid";
+import { IPerson } from "../models/person";
+import { Types } from "mongoose";
+import { ICompany } from "../models/company";
 
 // handle theme, language, and other app settings
 
@@ -109,6 +112,46 @@ export function toCombinedAutocomplete<T>(data?: T[], identifier?: (keyof T)[], 
     });
 }
 
+export function isObjectId(id: string) {
+    // ObjectId has a length of 24
+    if (id.length === 24) {
+        // now second check: check for white spaces and it should include any number
+        if (/\s/.test(id) || !/\d/.test(id)) {
+            return false;
+        }
+        return true;
+    }
+    return false;
+};
+
+// export function arrayToMap<T>(array: T[], key: keyof T) {
+//     const m: { [id: string]: T } = {};
+//     array.forEach((item) => {
+//         m[(item[key] as unknown as string)] = item;
+//     });
+//     return m;
+// }
+
+export function arrayToMultiMap<T>(array: T[], key: keyof T) {
+    const m: { [id: string]: string } = {};
+}
+
+export function arrayToMap<T>(array: T[], key: keyof T) {
+    const map = new Map<T[keyof T], T>();
+    array.forEach((item) => {
+        map.set(item[key], item);
+    });
+    return map;
+}
+
+export function mapToArray<T>(map: Map<T[keyof T], T>) {
+    const array: T[] = [];
+    map.forEach((value) => {
+        array.push(value);
+    });
+    return array;
+}
+
 /*--- FETCH HANDLE ---*/
 export const getBands = async (session: SessionProps["session"]) => {
     // get url form links.ts
@@ -164,6 +207,28 @@ export function isPopulated<T>(obj: T | any): obj is T {
     return obj !== null && obj !== undefined;
 }
 
+// also add this function for a single person!
+export function membersIdToName(members: string[], persons?: IPerson[]) {
+    if (!persons) return members as unknown as Types.ObjectId[];
+    const p: string[] = [];
+    members.forEach((m) => {
+        const member = persons.find((p) => p._id === m);
+        if (member) p.push(member.firstName + " " + member.lastName);
+    });
+
+    return p as unknown as Types.ObjectId[];
+}
+
+export function companyToName(company: string, companies?: ICompany[]) {
+    if (!companies) return company as unknown as Types.ObjectId;
+    let c: string = "";
+    companies.forEach((m) => {
+        if(m._id === company) c = m.name;
+    });
+
+    return c as unknown as Types.ObjectId;
+}
+
 export function getKeys<T extends Object>(obj: T): (keyof T)[] {
     return Object.keys(obj) as (keyof T)[];
 }
@@ -200,7 +265,7 @@ export function getValueAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value:
     return item;
 }
 
-export function getValuesAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value: K[], seperator?: string, returnKey?: keyof T) : T[] | T[keyof T][] {
+export function getValuesAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value: K[], seperator?: string, returnKey?: keyof T): T[] | T[keyof T][] {
     if (returnKey) {
         return value.map((item) => {
             return getValueAtCombinedKey(data, keys, item, seperator)[returnKey];
