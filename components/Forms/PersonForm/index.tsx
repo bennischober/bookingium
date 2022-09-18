@@ -27,7 +27,7 @@ export function PersonForm({
         initialValues: {
             firstName: data?.firstName ?? "",
             lastName: data?.lastName ?? "",
-            birthday: data && data.birthday ? dayjs().toDate() : undefined,
+            birthday: data && data.birthday ? dayjs(data.birthday).toDate() : undefined,
             role: data?.role ?? "",
             notes: data?.notes ?? "",
             contact: data?.contact ?? {
@@ -67,7 +67,9 @@ export function PersonForm({
 
         if (close) close();
 
-        Form.reset();
+        if(!data) Form.reset();
+
+        Form.resetDirty();
     };
 
     // add a "save" button and deliver a save function?
@@ -99,7 +101,6 @@ export function PersonForm({
                                 label="Birthday"
                                 placeholder="Select a date"
                                 allowFreeInput
-                                clearable={false}
                                 inputFormat="DD.MM.YYYY"
                                 {...Form.getInputProps("birthday")}
                             />
