@@ -19,6 +19,8 @@ import {
     getFormValueObject,
     getValueAtCombinedKey,
     getValueAtKey,
+    loproIdToNames,
+    objectIdToName,
     toAutocomplete,
     toCombinedAutocomplete,
 } from "../../../utils/appHandles";
@@ -27,6 +29,11 @@ import { useUnsavedWarn } from "../../../hooks";
 import { DealMemo, IDealMemo } from "../../../models/deal-memo";
 import { Types } from "mongoose";
 import dayjs from "dayjs";
+import { IBand } from "../../../models/band";
+import { IVenue } from "../../../models/venue";
+import { IHotel } from "../../../models/hotel";
+import { IPerson } from "../../../models/person";
+import { ICompany } from "../../../models/company";
 
 export function DealMemoForm({
     bands,
@@ -112,7 +119,11 @@ export function DealMemoForm({
     const bandsAutoComplete = toAutocomplete(bands, "name");
     const venuesAutoComplete = toAutocomplete(venues, "name");
     const hotelsAutoComplete = toAutocomplete(hotels, "name");
-    const personsAutoComplete = toCombinedAutocomplete(persons, ["firstName", "lastName"], " ");
+    const personsAutoComplete = toCombinedAutocomplete(
+        persons,
+        ["firstName", "lastName"],
+        " "
+    );
     const companiesAutoComplete = toAutocomplete(companies, "name");
 
     return (
@@ -265,7 +276,10 @@ export function DealEditForm({
             posters: data.posters,
             status: data.status,
             notes: data.notes,
-            lopro: data.lopro,
+            lopro: loproIdToNames(
+                data.lopro.person as unknown as IPerson,
+                data.lopro.company as unknown as ICompany
+            ),
             bandid: data.bandid,
             venueid: data.venueid,
             hotelid: data.hotelid,
