@@ -62,19 +62,25 @@ export interface UserButtonProps {
 	color?: string;
 }
 
-export interface SearchableProps {
-	Form: UseFormReturnType<any>;
-	label: string;
-	placeholder?: string;
-	data: string[];
-	required?: boolean;
-	inputProps: string;
+export interface ActionButtonProps {
+	Icon: typeof IconBase;
+	handleOnClick: () => void;
+	tooltip?: string;
+	buttonColor?: string;
 }
 
-export  interface SearchableEditDeleteProps extends SearchableProps {
-	isEdit?: boolean;
-	index: number;
-	handleEdit(url: string): void;
+export interface SearchableInputProps {
+	Form: UseFormReturnType;
+	label: string;
+	placeholder?: string;
+	autocomplete: any[];
+	inputProps: string;
+	required?: boolean;
+	editChild?: React.ReactNode;
+	deleteChild?: React.ReactNode;
+	buttonChild?: React.ReactNode;
+	isIteratable?: boolean; // refers to if its a looped item or just a single item
+	index?: number; // might not be needed?
 }
 
 export interface SearchOrAddProps {
