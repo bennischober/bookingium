@@ -22,10 +22,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 require("../../../../models/band");
                 require("../../../../models/venue");
                 require("../../../../models/hotel");
+                require("../../../../models/person");
+                require("../../../../models/company");
 
                 // get specific item
                 // Note: if populate('foreignDoc') id does not exist, it returns null => no error is thrown!
-                const dealMemo = await DealMemo.findOne({ dealid: id }).populate('bandid').populate('venueid').populate('hotelid').exec();
+                const dealMemo = await DealMemo.findOne({ dealid: id }).populate('bandid').populate('venueid').populate('hotelid').populate({
+                    path: 'lopro',
+                    populate: { path: 'person company' },
+                }).exec();
 
                 if (!dealMemo) {
                     return new ApiError(res, 404, `No data found for the id ${id}!`).throw();
