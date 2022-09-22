@@ -212,7 +212,6 @@ export function isPopulated<T>(obj: T | any): obj is T {
 
 // also add this function for a single person!
 export function membersIdToName(members: string[], persons?: IPerson[]) {
-    console.log("membersIdToName call!");
     if (!persons) return members as unknown as Types.ObjectId[];
     const p: string[] = [];
     members.forEach((m) => {
@@ -224,12 +223,10 @@ export function membersIdToName(members: string[], persons?: IPerson[]) {
 }
 
 export function objectIdToName<T extends IHotel | ICompany | IVenue | IBand>(data: T) {
-    console.log("objectIdToName call!", data);
     return data.name as unknown as Types.ObjectId;
 }
 
 export function loproIdToNames(person: IPerson, company: ICompany) {
-    console.log("loproIdToNames call!");
     return {
         person: person.firstName + " " + person.lastName as unknown as Types.ObjectId,
         company: company.name as unknown as Types.ObjectId,

@@ -11,8 +11,6 @@ export interface BandListProps {
 }
 
 export function BandList({ bands }: BandListProps) {
-    console.log(bands);
-
     const router = useRouter();
 
     const handleBandClick = (bandId: string) => {
