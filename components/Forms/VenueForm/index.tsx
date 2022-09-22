@@ -10,10 +10,11 @@ import { useForm, zodResolver } from "@mantine/form";
 import { Types } from "mongoose";
 import { z } from "zod";
 import { useUnsavedWarn } from "../../../hooks";
+import { Company } from "../../../models/company";
 import { IVenue, Venue } from "../../../models/venue";
 import { VenueFormProps } from "../../../types";
 import { getFormValueObject } from "../../../utils/appHandles";
-import { CompanySearch } from "../../FormElements/Searchable/Company";
+import { Searchable } from "../../FormElements/Searchable";
 
 const VenueFormSchema = z.object({
     name: z
@@ -81,7 +82,12 @@ export function VenueForm({
                 </Grid>
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
                 <Space h="xl" />
-                <CompanySearch Form={Form} autocomplete={companies ?? []} />
+                <Searchable
+                    Form={Form}
+                    label="company"
+                    inputProps="company"
+                    autocomplete={companies ?? []}
+                />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
                     {data ? "Update Venue" : "Save Venue"}

@@ -17,7 +17,7 @@ import { Types } from "mongoose";
 import { getFormValueObject, membersIdToName } from "../../../utils/appHandles";
 import { useState } from "react";
 import { MemberInput } from "../../FormInputs/MemberInput";
-import { CompanySearch } from "../../FormElements/Searchable/Company";
+import { Searchable } from "../../FormElements/Searchable";
 
 const schema = z.object({
     name: z
@@ -125,9 +125,11 @@ export function BandForm({
                 <Grid align="flex-end">
                     <Grid.Col span={6}>
                         {/*If in "edit mode", add button with link to update company/members? or with modal? or inline? */}
-                        <CompanySearch
+                        <Searchable
                             Form={Form}
+                            label="company"
                             autocomplete={companies ?? []}
+                            inputProps="company"
                         />
                     </Grid.Col>
                     <Grid.Col span={6}>

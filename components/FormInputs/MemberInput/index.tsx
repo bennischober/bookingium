@@ -2,8 +2,10 @@ import { Box, Button, Center } from "@mantine/core";
 import { useRouter } from "next/router";
 import { IPerson } from "../../../models/person";
 import { CompanyInputProps } from "../../../types";
-import { PersonSearchCRUD } from "../../FormElements/SearchableEditDelete/Person";
 import { arrayToMap, mapToArray } from "../../../utils/appHandles";
+import { ActionButton } from "../../Core/Buttons/ActionButton";
+import { MdDelete, MdEdit } from "react-icons/md";
+import { Searchable } from "../../FormElements/Searchable";
 
 export function MemberInput({
     Form,
@@ -29,18 +31,36 @@ export function MemberInput({
         });
     };
 
-
     const members = Form.values.members.map((_: any, index: any) => {
+        const del = (
+            <ActionButton
+                Icon={MdDelete}
+                handleOnClick={() => Form.removeListItem("members", index)}
+                tooltip="Delete field"
+                buttonColor="red"
+            />
+        );
+
+        const edit = isEdit ? (
+            <ActionButton
+                Icon={MdEdit}
+                handleOnClick={() => {
+                    handleMemberEdit(Form.values.members[index]);
+                }}
+                tooltip="Edit field"
+            />
+        ) : null;
+
         return (
             <Box key={index}>
-                <PersonSearchCRUD
-                    index={index}
-                    handleEdit={handleMemberEdit}
+                <Searchable
                     Form={Form}
-                    label={"Member"}
-                    data={autocomplete}
-                    inputProps={`members`}
-                    isEdit={isEdit}
+                    label="Member"
+                    autocomplete={autocomplete}
+                    inputProps={`members.${index}`}
+                    editChild={edit}
+                    deleteChild={del}
+                    isIteratable
                 />
             </Box>
         );
