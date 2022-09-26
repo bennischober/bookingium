@@ -19,7 +19,7 @@
     "@mantine/notifications": "^5.4.1",
     "@mantine/nprogress": "^5.4.1",
     "@mantine/prism": "^5.4.1",
-    "@mantine/rte": "^5.4.0",
+    "@mantine/rte": "^5.4.1",
     "@mantine/spotlight": "^5.4.0",
     "@tanstack/react-table": "^8.5.13",
     "@tanstack/table-core": "^8.5.10",
