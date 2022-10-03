@@ -16,7 +16,7 @@
     "@mantine/hooks": "^5.4.1",
     "@mantine/modals": "^5.4.1",
     "@mantine/next": "^5.4.1",
-    "@mantine/notifications": "^5.4.1",
+    "@mantine/notifications": "^5.5.1",
     "@mantine/nprogress": "^5.5.1",
     "@mantine/prism": "^5.4.1",
     "@mantine/rte": "^5.5.1",
