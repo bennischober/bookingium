@@ -14,10 +14,18 @@ import { BandFormProps } from "../../../types";
 import { useUnsavedWarn } from "../../../hooks";
 import { Band, IBand } from "../../../models/band";
 import { Types } from "mongoose";
-import { getFormValueObject, membersIdToName } from "../../../utils/appHandles";
+import {
+    companyToName,
+    getFormValueObject,
+    getValuesAtCombinedKey,
+    getValueAtKey,
+    membersIdToName,
+    toAutocomplete,
+} from "../../../utils/appHandles";
 import { useState } from "react";
 import { MemberInput } from "../../FormInputs/MemberInput";
 import { Searchable } from "../../FormElements/Searchable";
+import { ICompany } from "../../../models/company";
 
 const schema = z.object({
     name: z
@@ -54,8 +62,8 @@ export function BandForm({
     session,
     data,
     persons,
-    allPersons,
     companies,
+    isEdit,
 }: BandFormProps) {
     const [opened, setOpened] = useState(false);
 
@@ -65,19 +73,27 @@ export function BandForm({
             name: data?.name ?? "",
             genre: data?.genre ?? "",
             notes: data?.notes ?? "",
-            company: data?.company ?? ("" as unknown as Types.ObjectId),
+            company: data?.company
+                ? companyToName(data.company as unknown as ICompany, companies)
+                : ("" as unknown as Types.ObjectId),
             members: data
-                ? membersIdToName(
-                      data.members as unknown as string[],
-                      allPersons
-                  )
+                ? membersIdToName(data.members as unknown as string[], persons)
                 : [],
         },
     });
 
+    const companiesAutoComplete = toAutocomplete(companies, "name");
+
     const handleSubmit = async (values: Band) => {
+        if(!companies || !persons) {
+            console.error("No companies or persons found");
+            return;
+        }
+
         const created = data?.dm.created ?? "";
 
+        const company = getValueAtKey(companies, "name", values.company);
+        const members = getValuesAtCombinedKey(persons, ["firstName", "lastName"], values.members, " " );
         const bandData = getFormValueObject<Band>(
             values,
             session.userid,
@@ -87,6 +103,9 @@ export function BandForm({
                 value: data?.bandid,
             }
         ) as IBand;
+
+        bandData.company = company._id;
+        bandData.members = members.map((m) => m._id);
 
         handleData(bandData);
         if (close) close();
@@ -128,7 +147,7 @@ export function BandForm({
                         <Searchable
                             Form={Form}
                             label="company"
-                            autocomplete={companies ?? []}
+                            autocomplete={companiesAutoComplete ?? []}
                             inputProps="company"
                         />
                     </Grid.Col>
@@ -152,9 +171,8 @@ export function BandForm({
                 >
                     <MemberInput
                         Form={Form}
-                        autocomplete={persons ?? []}
-                        isEdit={allPersons ? true : false}
-                        persons={allPersons}
+                        isEdit={isEdit}
+                        persons={persons}
                     />
                 </Modal>
             </form>

@@ -224,7 +224,7 @@ export function DealMemoForm({
                     handleData={handleBands}
                     close={closeModals}
                     session={session}
-                    persons={personsAutoComplete}
+                    persons={persons}
                     companies={companiesAutoComplete}
                 />
             </Modal>

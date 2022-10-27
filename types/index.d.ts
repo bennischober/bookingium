@@ -103,6 +103,11 @@ export interface InputComponentProps {
 	Form: UseFormReturnType;
 }
 
+export interface MemberInputProps extends InputComponentProps {
+	isEdit?: boolean;
+	persons?: IPerson[];
+}
+
 export interface AcComponentsInputProps extends InputComponentProps {
 	autocomplete: any[];
 	label?: string;
@@ -124,9 +129,9 @@ export interface BandFormProps {
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IBand;
-	persons?: any[];
-	companies?: any[];
-	allPersons?: IPerson[];
+	persons?: IPerson[];
+	companies?: ICompany[];
+	isEdit?: boolean;
 }
 
 export interface PersonFormProps {
@@ -250,6 +255,8 @@ export interface CompleteDealMemoPageProps {
 export interface SpecificBandPageProps {
 	session: SessionProps["session"];
 	band: IBand;
+	persons: IPerson[];
+	companies: ICompany[];
 }
 
 export interface DealEditFormProps {

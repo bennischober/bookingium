@@ -1,18 +1,17 @@
 import { Box, Button, Center } from "@mantine/core";
 import { useRouter } from "next/router";
 import { IPerson } from "../../../models/person";
-import { CompanyInputProps } from "../../../types";
-import { arrayToMap, mapToArray } from "../../../utils/appHandles";
+import { MemberInputProps } from "../../../types";
+import { arrayToMap, mapToArray, toCombinedAutocomplete } from "../../../utils/appHandles";
 import { ActionButton } from "../../Core/Buttons/ActionButton";
 import { MdDelete, MdEdit } from "react-icons/md";
 import { Searchable } from "../../FormElements/Searchable";
 
 export function MemberInput({
     Form,
-    autocomplete,
     isEdit,
     persons,
-}: CompanyInputProps) {
+}: MemberInputProps) {
     const router = useRouter();
 
     const people = persons
@@ -20,6 +19,8 @@ export function MemberInput({
         : new Map<string, IPerson>();
 
     const peopleArray = mapToArray(people);
+
+    const autocomplete = toCombinedAutocomplete(persons, ['firstName', 'lastName'], ' ');
 
     const handleMemberEdit = (url: string) => {
         console.log(Form.isDirty());

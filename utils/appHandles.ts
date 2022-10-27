@@ -233,7 +233,7 @@ export function loproIdToNames(person: IPerson, company: ICompany) {
     }
 }
 
-export function companyToName(company: string, companies?: ICompany[]) {
+export function companyToName(company: ICompany, companies?: ICompany[]) {
     if (!companies) return company as unknown as Types.ObjectId;
     let c: string = "";
     companies.forEach((m) => {

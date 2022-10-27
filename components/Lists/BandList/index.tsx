@@ -14,7 +14,7 @@ export function BandList({ bands }: BandListProps) {
     const router = useRouter();
 
     const handleBandClick = (bandId: string) => {
-        router.push(`/band/${bandId}`);
+        router.push(`/lists/band/${bandId}`);
     };
 
     const columns = useMemo<ColumnDef<BandListValues>[]>(

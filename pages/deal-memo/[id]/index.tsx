@@ -149,7 +149,8 @@ export default function CompleteDealMemoPage({
                                     session={session}
                                     handleData={handleBand}
                                     data={band}
-                                    allPersons={persons}
+                                    persons={persons}
+                                    isEdit
                                 />
                             ) : null}
                         </FormContainer>

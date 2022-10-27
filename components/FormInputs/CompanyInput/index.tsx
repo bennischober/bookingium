@@ -49,7 +49,7 @@ export function CompanyInput({ Form, autocomplete, isEdit, persons }: CompanyInp
             <Divider my="xl" />
 
             <Modal opened={opened} onClose={() => setOpened(false)} size="xl">
-                <MemberInput Form={Form} autocomplete={autocomplete} isEdit={isEdit} persons={persons} />
+                <MemberInput Form={Form} isEdit={isEdit} persons={persons} />
             </Modal>
         </>
     );
