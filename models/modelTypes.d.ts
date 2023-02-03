@@ -1,3 +1,5 @@
+import { Types } from 'mongoose';
+
 export interface IAddress {
     street: string;
     streetNumber: string;
@@ -21,7 +23,7 @@ export interface IContact {
 }
 
 export interface IDm {
-    userid: string;
+    userid: Types.ObjectId;
     created: string;
     edited: string;
 }

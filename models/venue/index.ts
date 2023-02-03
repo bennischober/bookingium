@@ -3,13 +3,6 @@ import { IDm } from '../modelTypes';
 import { ODm } from '../modelObjects';
 
 const VenueSchema = new Schema({
-    venueid: {
-        type: String,
-        required: true,
-        unique: true,
-        // refers to #118
-        index: true,
-    },
     name: { type: String, required: true },
     capacity: { type: Number },
     notes: { type: String },
@@ -18,7 +11,7 @@ const VenueSchema = new Schema({
         identifier: { type: String, default: '' },
         person: { type: Schema.Types.ObjectId, ref: 'Person', default: null },
     }],
-    dm: ODm,
+    ...ODm,
 });
 
 export interface Venue {
@@ -33,9 +26,6 @@ export interface Venue {
     }[];
 }
 
+export interface IVenue extends Document, Venue, IDm { }
 
-export interface IVenue extends Document, Venue {
-    venueid: string;
-    dm: IDm;
-}
 export const Venue: Model<IVenue> = models.Venue || model<IVenue>('Venue', VenueSchema);
