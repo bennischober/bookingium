@@ -10,6 +10,7 @@ import {
 import { DatePicker } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import dayjs from "dayjs";
+import { MdCalendarToday } from "react-icons/md";
 import { useUnsavedWarn } from "../../../hooks";
 import { IPerson, Person } from "../../../models/person";
 import { PersonFormProps } from "../../../types";
@@ -103,6 +104,7 @@ export function PersonForm({
                                 allowFreeInput
                                 inputFormat="DD.MM.YYYY"
                                 {...Form.getInputProps("birthday")}
+                                icon={<MdCalendarToday />}
                             />
                             <TextInput
                                 label="Role"

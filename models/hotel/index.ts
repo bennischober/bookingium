@@ -7,9 +7,11 @@ const HotelSchema = new Schema({
         type: String,
         required: true,
         unique: true,
+        // refers to #118
+        index: true,
     },
     name: { type: String, required: true },
-    notes: { type: String },
+    notes: { type: String, default: '' },
     address: OAddress,
     contact: OContact,
     dm: ODm,

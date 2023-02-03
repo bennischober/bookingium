@@ -1,13 +1,14 @@
 import { Document, model, Model, models, Schema, Types } from 'mongoose';
 import { IAddress, IContact, IDm } from '../modelTypes';
 import { OAddress, OContact, ODm } from '../modelObjects';
-import { IPerson } from '../person';
 
 const CompanySchema: Schema = new Schema({
     companyid: {
         type: String,
         required: true,
         unique: true,
+        // refers to #118
+        index: true,
     },
     name: { type: String, required: true },
     notes: { type: String, default: '' },
@@ -19,22 +20,14 @@ const CompanySchema: Schema = new Schema({
     dm: ODm,
 });
 
-interface _Company {
+export interface Company {
     name: string;
     notes?: string;
     vatNumber: string;
     ustNumber: string;
     address: IAddress;
     contact: IContact;
-}
-
-export interface Company extends _Company {
     members: Types.ObjectId[];
-}
-
-// company with populated data
-export interface PCompany extends _Company {
-    members: IPerson[];
 }
 
 export interface ICompany extends Document, Company {

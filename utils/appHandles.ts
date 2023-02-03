@@ -67,6 +67,12 @@ export function getNameInitials(name: string) {
     return name.split(" ").map(word => word[0]).join("");
 }
 
+export function clientLog(...args: any[]) {
+    if (typeof window !== "undefined") {
+        console.log(...args);
+    }
+}
+
 /*--- DATA STRUCTURE HANDLE ---*/
 // function that adds a new item to a specific index of an array and pushes the rest of the array to the end
 export function addToArray(array: any[], index: number, item: any) {
@@ -196,10 +202,46 @@ export const serverSideFetch = async <T>(url: string, params?: {}): Promise<T> =
     return fetch.data.data;
 }
 
+export const addData = async <T>(endpoint: string, data: T, userid?: string): Promise<number> => {
+    const url = endpoint.includes("localhost") ? endpoint : `http://localhost:3000/${endpoint}`;
+
+    const res = await axios.post(url, data, {
+        params: {
+            userid: userid,
+        },
+    });
+    return res.status;
+}
+
+export const updateData = async <T>(endpoint: string, data: T, userid?: string): Promise<number> => {
+    const url = endpoint.includes("localhost") ? endpoint : `http://localhost:3000/${endpoint}`;
+
+    const res = await axios.put(url, { data: data }, {
+        params: {
+            userid: userid,
+        },
+    });
+
+    console.log(res.data.data);
+
+    return res.status;
+}
+
+export const deleteData = async (endpoint: string, userid?: string): Promise<number> => {
+    const url = endpoint.includes("localhost") ? endpoint : `http://localhost:3000/${endpoint}`;
+
+    const res = await axios.delete(url, {
+        params: {
+            userid: userid,
+        },
+    });
+    return res.status;
+}
+
 /* --- DATABASE HANDLE --- */
 
 /**
- * This lets typescript know, that a object is populated. Usually this would only cntain an id, but mongoose populated the id, so it has actual value.
+ * This lets typescript know, that a object is populated. Usually this would only contain an id, but mongoose populated the id, so it has actual value.
  * 
  * NOTE: Only use this, if the data is really populated. Otherwise it might throw an error!
  * @param obj Object to populate
@@ -220,6 +262,18 @@ export function membersIdToName(members: string[], persons?: IPerson[]) {
     });
 
     return p as unknown as Types.ObjectId[];
+}
+
+export function membersWithIdentifierToName(members: { identifier: string, person: Types.ObjectId }[], persons?: IPerson[]): { identifier: string, person: Types.ObjectId }[] {
+    if (!persons) return members as unknown as { identifier: string, person: Types.ObjectId }[];
+
+    const p: { identifier: string, person: Types.ObjectId }[] = [];
+    members.forEach((m) => {
+        const member = persons.find((p) => p._id === m.person);
+        if (member) p.push({ identifier: m.identifier, person: (member.firstName + " " + member.lastName) as unknown as Types.ObjectId });
+    });
+
+    return p;
 }
 
 export function objectIdToName<T extends IHotel | ICompany | IVenue | IBand>(data: T) {

@@ -7,10 +7,11 @@ const DealMemoSchema = new Schema({
         type: String,
         required: true,
         unique: true,
+        // refers to #118
+        index: true,
     },
     deal: { type: String, required: true },
     date: { type: Date, required: true },
-    fee: { type: Number },
     ticketPriceVVK: { type: Number },
     ticketPriceAK: { type: Number },
     posters: { type: Number },
@@ -21,15 +22,14 @@ const DealMemoSchema = new Schema({
         company: { type: Schema.Types.ObjectId, ref: 'Company' },
     },
     bandid: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
-    venueid: { type: Schema.Types.ObjectId, ref: 'Venue' },
-    hotelid: { type: Schema.Types.ObjectId, ref: 'Hotel' },
+    venueid: { type: Schema.Types.ObjectId, ref: 'Venue', default: null },
+    hotelid: { type: Schema.Types.ObjectId, ref: 'Hotel', default: null },
     dm: ODm,
 });
 
 export interface DealMemo {
     deal: string;
     date: Date;
-    fee: number;
     ticketPriceVVK: number;
     ticketPriceAK: number;
     posters: number;
@@ -45,7 +45,7 @@ export interface DealMemo {
 }
 
 export interface IDealMemo extends Document, DealMemo {
-    dealid: string;
+    dealid?: string; // this has to change!
     dm: IDm;
 }
 

@@ -1,5 +1,4 @@
 import { Paper, Space, Title } from "@mantine/core";
-import { BackButton } from "../../LayoutElements/BackButton";
 import { SpecificPageHeaderProps } from "../../../types";
 
 export function SpecificPageHeader({
@@ -7,15 +6,10 @@ export function SpecificPageHeader({
     titleName,
     subTitle,
     other,
-    useBackButton,
 }: SpecificPageHeaderProps) {
-    const useBack = useBackButton ?? true;
-
     return (
         <>
-            {useBack ? <BackButton /> : null}
-            <Space h="xl" />
-            <Paper shadow="xs" p="xl" radius="xs">
+            <Paper shadow="xs" p="xl" radius="sm">
                 <Title>
                     {titleName}: {title}
                 </Title>
@@ -28,7 +22,7 @@ export function SpecificPageHeader({
                     </>
                 ) : null}
             </Paper>
-            <Space h="xl" />
+            <Space h="md" />
         </>
     );
 }

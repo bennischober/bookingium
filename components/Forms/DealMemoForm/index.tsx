@@ -10,28 +10,24 @@ import {
     Space,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { DealEditFormProps, DealMemoFormProps } from "../../../types";
+import {
+    DealEditFormProps,
+    DealMemoFormProps,
+    SearchableIdProxyData,
+} from "../../../types";
 import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../../FormElements/SearchOrAdd";
 import { VenueForm } from "../VenueForm";
 import { HotelForm } from "../HotelForm";
 import {
     getFormValueObject,
-    getValueAtCombinedKey,
-    getValueAtKey,
-    loproIdToNames,
-    objectIdToName,
-    toAutocomplete,
-    toCombinedAutocomplete,
+    isPopulated,
 } from "../../../utils/appHandles";
 import { DealInput } from "../../FormInputs/DealInput";
 import { useUnsavedWarn } from "../../../hooks";
 import { DealMemo, IDealMemo } from "../../../models/deal-memo";
 import { Types } from "mongoose";
 import dayjs from "dayjs";
-import { IBand } from "../../../models/band";
-import { IVenue } from "../../../models/venue";
-import { IHotel } from "../../../models/hotel";
 import { IPerson } from "../../../models/person";
 import { ICompany } from "../../../models/company";
 
@@ -55,11 +51,10 @@ export function DealMemoForm({
         initialValues: {
             deal: "",
             date: dayjs().toDate(),
-            fee: 0,
             ticketPriceVVK: 0,
             ticketPriceAK: 0,
             posters: 0,
-            status: "pending",
+            status: "TBC",
             notes: "",
             lopro: {
                 person: "" as unknown as Types.ObjectId,
@@ -74,20 +69,10 @@ export function DealMemoForm({
     const [prompt] = useUnsavedWarn(Form);
 
     const onDealSubmit = async (values: DealMemo) => {
-        if (!bands || !venues || !hotels || !persons || !companies) {
-            console.error("No bands, venues or hotels found");
+        if (!bands || !venues || !persons || !companies) {
+            console.error("No bands, venues, persons or companies found");
             return;
         }
-
-        const band = getValueAtKey(bands, "name", values.bandid);
-        const venue = getValueAtKey(venues, "name", values.venueid);
-        const hotel = getValueAtKey(hotels, "name", values.hotelid);
-        const lopro = getValueAtCombinedKey(
-            persons,
-            ["firstName", "lastName"],
-            values.lopro.person
-        );
-        const company = getValueAtKey(companies, "name", values.lopro.company);
 
         const memoData = getFormValueObject<DealMemo>(
             values,
@@ -98,15 +83,11 @@ export function DealMemoForm({
             }
         ) as IDealMemo;
 
-        memoData.bandid = band._id;
-        memoData.venueid = venue._id;
-        memoData.hotelid = hotel._id;
-        memoData.lopro.person = lopro._id;
-        memoData.lopro.company = company._id;
+        console.log("memoData", memoData);
 
-        handleMemos(memoData);
+        // handleMemos(memoData);
 
-        Form.reset();
+        // Form.reset();
     };
 
     const closeModals = () => {
@@ -115,16 +96,30 @@ export function DealMemoForm({
         setHotelModalOpened(false);
     };
 
-    // useMemo?
-    const bandsAutoComplete = toAutocomplete(bands, "name");
-    const venuesAutoComplete = toAutocomplete(venues, "name");
-    const hotelsAutoComplete = toAutocomplete(hotels, "name");
-    const personsAutoComplete = toCombinedAutocomplete(
-        persons,
-        ["firstName", "lastName"],
-        " "
+    if (!persons || !companies || !bands || !venues) return <></>;
+
+    const bandsAutoComplete: SearchableIdProxyData[] = bands.map((b) => ({
+        display: b.name,
+        value: b._id,
+    }));
+    const venuesAutoComplete: SearchableIdProxyData[] = venues.map((v) => ({
+        display: v.name,
+        value: v._id,
+    }));
+    const hotelsAutoComplete: SearchableIdProxyData[] = hotels?.map((h) => ({
+        display: h.name,
+        value: h._id,
+    })) || [];
+    const personsAutoComplete: SearchableIdProxyData[] = persons.map((p) => ({
+        display: `${p.firstName} ${p.lastName}`,
+        value: p._id,
+    }));
+    const companiesAutoComplete: SearchableIdProxyData[] = companies.map(
+        (c) => ({
+            display: c.name,
+            value: c._id,
+        })
     );
-    const companiesAutoComplete = toAutocomplete(companies, "name");
 
     return (
         <>
@@ -145,18 +140,14 @@ export function DealMemoForm({
                         <Group grow align="top">
                             <Box>
                                 <SearchOrAdd
-                                    ac={{
-                                        data: bandsAutoComplete,
-                                        useForm: Form,
-                                        required: true,
-                                        label: "Choose a band",
-                                        placeholder: "Band name",
-                                        inputProps: "bandid",
-                                    }}
-                                    md={{
-                                        button: "Add new band",
-                                        handleOpen: setBandModalOpened,
-                                    }}
+                                    data={bandsAutoComplete}
+                                    Form={Form}
+                                    required={true}
+                                    label={"Choose a band"}
+                                    placeholder={"Band name"}
+                                    inputProps={"bandid"}
+                                    buttonLabel={"Add new band"}
+                                    handleOpen={setBandModalOpened}
                                 />
                                 <Space h="xl" />
                                 <Divider
@@ -176,33 +167,24 @@ export function DealMemoForm({
                                     labelPosition="center"
                                 />
                                 <SearchOrAdd
-                                    ac={{
-                                        data: venuesAutoComplete,
-                                        useForm: Form,
-                                        required: true,
-                                        label: "Choose a venue",
-                                        placeholder: "Venue name",
-                                        inputProps: "venueid",
-                                    }}
-                                    md={{
-                                        button: "Add new venue",
-                                        handleOpen: setVenueModalOpened,
-                                    }}
+                                    data={venuesAutoComplete}
+                                    Form={Form}
+                                    required={true}
+                                    label={"Choose a venue"}
+                                    placeholder={"Venue name"}
+                                    inputProps={"venueid"}
+                                    buttonLabel={"Add new venue"}
+                                    handleOpen={setVenueModalOpened}
                                 />
                                 <Space h="xl" />
                                 <SearchOrAdd
-                                    ac={{
-                                        data: hotelsAutoComplete,
-                                        useForm: Form,
-                                        required: false,
-                                        label: "Choose a hotel",
-                                        placeholder: "Hotel name",
-                                        inputProps: "hotelid",
-                                    }}
-                                    md={{
-                                        button: "Add new hotel",
-                                        handleOpen: setHotelModalOpened,
-                                    }}
+                                    data={hotelsAutoComplete}
+                                    Form={Form}
+                                    label={"Choose a hotel"}
+                                    placeholder={"Hotel name"}
+                                    inputProps={"hotelid"}
+                                    buttonLabel={"Add new hotel"}
+                                    handleOpen={setHotelModalOpened}
                                 />
                             </Box>
                         </Group>
@@ -225,7 +207,7 @@ export function DealMemoForm({
                     close={closeModals}
                     session={session}
                     persons={persons}
-                    companies={companiesAutoComplete}
+                    companies={companies}
                 />
             </Modal>
             <Modal
@@ -240,6 +222,7 @@ export function DealMemoForm({
                     close={closeModals}
                     session={session}
                     companies={companiesAutoComplete}
+                    persons={persons}
                 />
             </Modal>
             <Modal
@@ -270,16 +253,15 @@ export function DealEditForm({
         initialValues: {
             deal: data.deal,
             date: dayjs(data.date).toDate(),
-            fee: data.fee,
             ticketPriceVVK: data.ticketPriceVVK,
             ticketPriceAK: data.ticketPriceAK,
             posters: data.posters,
             status: data.status,
             notes: data.notes,
-            lopro: loproIdToNames(
-                data.lopro.person as unknown as IPerson,
-                data.lopro.company as unknown as ICompany
-            ),
+            lopro: {
+                person: data.lopro.person,
+                company: data.lopro.company,
+            },
             bandid: data.bandid,
             venueid: data.venueid,
             hotelid: data.hotelid,
@@ -297,15 +279,55 @@ export function DealEditForm({
                 value: data.dealid,
             }
         ) as IDealMemo;
+
+        console.log("dealMemoForm", memoData);
+
+        // clear populated fields => Note: this is not needed!
+        memoData.hotelid = memoData.hotelid?._id ?? memoData.hotelid;
+        memoData.venueid = memoData.venueid?._id ?? memoData.venueid;
+        memoData.bandid = memoData.bandid?._id ?? memoData.bandid;
+        memoData.lopro.person =
+            memoData.lopro.person?._id ?? memoData.lopro.person;
+        memoData.lopro.company =
+            memoData.lopro.company?._id ?? memoData.lopro.company;
+
         handleMemos(memoData);
     };
 
     const [prompt] = useUnsavedWarn(Form);
 
+    const p = isPopulated<IPerson>(data.lopro.person)
+        ? (data.lopro.person as IPerson)
+        : null;
+
+    const c = isPopulated<ICompany>(data.lopro.company)
+        ? (data.lopro.company as ICompany)
+        : null;
+
+    if (!c || !p) return <></>;
+
+    const personData = [
+        {
+            display: `${p.firstName} ${p.lastName}`,
+            value: p._id,
+        },
+    ];
+
+    const companyData = [
+        {
+            display: c.name,
+            value: c._id,
+        },
+    ];
+
     return (
         <>
             <form onSubmit={Form.onSubmit((values) => onDealSubmit(values))}>
-                <DealInput Form={Form} person={[]} company={[]} />
+                <DealInput
+                    Form={Form}
+                    person={personData}
+                    company={companyData}
+                />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
                     Update Deal Data

@@ -40,39 +40,18 @@ export function DealInput({ Form, person, company }: LoproInputProps) {
                         {...Form.getInputProps("status")}
                         data={[
                             {
-                                value: "pending",
-                                label: "Pending",
+                                value: "TBC",
+                                label: "TBC",
                             },
                             {
-                                value: "accepted",
-                                label: "Accepted",
+                                value: "TBA",
+                                label: "TBA",
                             },
                             {
-                                value: "rejected",
-                                label: "Rejected",
+                                value: "FIX",
+                                label: "FIX",
                             },
                         ]}
-                        required
-                    />
-                </Group>
-                <Space h="xl" />
-                <Group grow>
-                    <NumberInput
-                        label="Fee"
-                        icon="€"
-                        {...Form.getInputProps("fee")}
-                        min={0}
-                        stepHoldDelay={500}
-                        stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-                        precision={2}
-                        required
-                    />
-                    <NumberInput
-                        label="Posters"
-                        {...Form.getInputProps("posters")}
-                        min={0}
-                        stepHoldDelay={500}
-                        stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
                         required
                     />
                 </Group>
@@ -100,6 +79,15 @@ export function DealInput({ Form, person, company }: LoproInputProps) {
                     />
                 </Group>
                 <Space h="xl" />
+                <NumberInput
+                    label="Posters"
+                    {...Form.getInputProps("posters")}
+                    min={0}
+                    stepHoldDelay={500}
+                    stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
+                    required
+                />
+                <Space h="xl" />
                 <Textarea
                     label="Notes"
                     {...Form.getInputProps("notes")}
@@ -111,7 +99,11 @@ export function DealInput({ Form, person, company }: LoproInputProps) {
                     my="xl"
                     labelPosition="center"
                 />
-                <LoproInput Form={Form} person={person} company={company} />
+                <LoproInput
+                    Form={Form}
+                    person={person}
+                    company={company}
+                />
             </Box>
         </Group>
     );

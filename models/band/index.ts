@@ -2,18 +2,18 @@ import { Document, model, Model, models, Schema, Types } from 'mongoose';
 import { IDm } from '../modelTypes';
 import { ODm } from '../modelObjects';
 
-// for company with many persons: https://www.mongodb.com/community/forums/t/how-to-reference-and-populate-object-embedded-in-another-collection/169052
-// https://mongoosejs.com/docs/populate.html#populate_multiple_documents
-
 const BandSchema: Schema = new Schema({
     bandid: {
         type: String,
         required: true,
         unique: true,
+        // refers to #118
+        index: true,
     },
     name: { type: String, required: true },
-    genre: { type: String},
-    notes: { type: String },
+    genre: { type: String, default: '' },
+    founded: { type: Date, default: null },
+    notes: { type: String, default: '' },
     company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
     members: [{ type: Schema.Types.ObjectId, ref: 'Person', required: true }],
     dm: ODm,
@@ -22,6 +22,7 @@ const BandSchema: Schema = new Schema({
 export interface Band {
     name: string;
     genre: string;
+    founded?: Date;
     notes: string;
     company: Types.ObjectId;
     members: Types.ObjectId[];

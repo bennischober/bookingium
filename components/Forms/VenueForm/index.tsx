@@ -1,6 +1,8 @@
 import {
     Button,
+    Center,
     Grid,
+    Modal,
     NumberInput,
     Space,
     Textarea,
@@ -8,13 +10,15 @@ import {
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { Types } from "mongoose";
+import { useState } from "react";
 import { z } from "zod";
 import { useUnsavedWarn } from "../../../hooks";
-import { Company } from "../../../models/company";
 import { IVenue, Venue } from "../../../models/venue";
 import { VenueFormProps } from "../../../types";
-import { getFormValueObject } from "../../../utils/appHandles";
-import { Searchable } from "../../FormElements/Searchable";
+import { getFormValueObject, getNestedValue } from "../../../utils/appHandles";
+import { SearchableIdProxy } from "../../FormElements/Searchable";
+import { MemberInput } from "../../FormInputs/MemberInput";
+import { LeftAlignGroup } from "../../Layout/LeftAlignGroup";
 
 const VenueFormSchema = z.object({
     name: z
@@ -29,7 +33,11 @@ export function VenueForm({
     session,
     data,
     companies,
+    persons,
+    isEdit,
 }: VenueFormProps) {
+    const [opened, setOpened] = useState(false);
+
     const Form = useForm<Venue>({
         validate: zodResolver(VenueFormSchema),
         initialValues: {
@@ -37,6 +45,7 @@ export function VenueForm({
             capacity: data?.capacity ?? 0,
             notes: data?.notes ?? "",
             company: data?.company ?? ("" as unknown as Types.ObjectId),
+            members: data?.members ?? [],
         },
     });
 
@@ -80,19 +89,45 @@ export function VenueForm({
                         />
                     </Grid.Col>
                 </Grid>
+                <Space h="xl" />
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
                 <Space h="xl" />
-                <Searchable
-                    Form={Form}
-                    label="company"
-                    inputProps="company"
-                    autocomplete={companies ?? []}
+                <LeftAlignGroup
+                    first={
+                        <SearchableIdProxy
+                            Form={Form}
+                            label="Company"
+                            inputProps="company"
+                            data={companies}
+                        />
+                    }
+                    second={
+                        <Button
+                            onClick={() => setOpened(true)}
+                            variant="default"
+                        >
+                            Add members
+                        </Button>
+                    }
                 />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
                     {data ? "Update Venue" : "Save Venue"}
                 </Button>
+
+                <Modal
+                    opened={opened}
+                    onClose={() => setOpened(false)}
+                    size="xl"
+                >
+                    <MemberInput
+                        Form={Form}
+                        isEdit={isEdit}
+                        persons={persons}
+                    />
+                </Modal>
             </form>
+
             {prompt}
         </>
     );

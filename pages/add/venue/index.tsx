@@ -5,13 +5,14 @@ import { VenueForm } from "../../../components/Forms/VenueForm";
 import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { IVenue } from "../../../models/venue";
-import { CompanyACPageProps } from "../../../types";
-import { serverSideFetch, toAutocomplete } from "../../../utils/appHandles";
+import { BandPageProps, SearchableIdProxyData } from "../../../types";
+import { serverSideFetch } from "../../../utils/appHandles";
 
-export default function AddHotelPage({
+export default function AddVenuePage({
     session,
     companies,
-}: CompanyACPageProps) {
+    persons,
+}: BandPageProps) {
     const handleSave = async (data: IVenue) => {
         // post band data
         const ret = await axios.post(
@@ -22,7 +23,12 @@ export default function AddHotelPage({
         console.log(ret.data, ret.status);
     };
 
-    const companyAC = toAutocomplete(companies, "name");
+    const companiesAutoComplete: SearchableIdProxyData[] = companies?.map(
+        (c) => ({
+            display: c.name,
+            value: c._id,
+        })
+    );
 
     return (
         <PageTemplate title={"Add a Venue"}>
@@ -30,7 +36,8 @@ export default function AddHotelPage({
                 <VenueForm
                     session={session}
                     handleData={handleSave}
-                    companies={companyAC}
+                    companies={companiesAutoComplete}
+                    persons={persons}
                 />
             </FormContainer>
         </PageTemplate>
@@ -44,10 +51,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         userid: session?.userid,
     });
 
+    const persons = await serverSideFetch("/api/person", {
+        userid: session?.userid,
+    });
+
     return {
         props: {
             session,
             companies,
+            persons,
         },
     };
 };

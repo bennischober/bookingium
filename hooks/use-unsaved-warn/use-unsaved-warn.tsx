@@ -2,6 +2,8 @@ import Router from "next/router";
 import { useEffect, useState } from "react";
 import { UseFormReturnType } from "@mantine/form/lib/types";
 import { Prompt } from "../../components/Interactables/Prompt";
+import { Affix, Alert, Button, Transition } from "@mantine/core";
+import { MdWarning } from "react-icons/md";
 
 // Also add on Tab/Browser close?
 // optionally add some text, what form is dirty (e.g. think of layouts with multiple forms)
@@ -51,14 +53,34 @@ export function useUnsavedWarn<T>(
     }, [form.isDirty(), isAccepted, lastRoute]);
 
     const prompt = (
-        <Prompt
-            title={title}
-            message={message}
-            confirmText={confirmText}  
-            cancelText={cancelText}
-            opened={isOpened}
-            onChoose={handleConfirm}
-        />
+        <>
+            {!isOpened ? (
+                <Affix position={{ bottom: 20, right: 20 }}>
+                    <Transition transition="slide-up" mounted={form.isDirty()}>
+                        {(transitionStyles) => (
+                            <Alert
+                                //title="Warning"
+                                //icon={<MdWarning />}
+                                color="yellow"
+                                variant="outline"
+                                style={transitionStyles}
+                            >
+                                Note: You have unsaved changes!{/* <Button variant="subtle">Save now</Button> */}
+                            </Alert>
+                        )}
+                    </Transition>
+                </Affix>
+            ) : null}
+
+            <Prompt
+                title={title}
+                message={message}
+                confirmText={confirmText}
+                cancelText={cancelText}
+                opened={isOpened}
+                onChoose={handleConfirm}
+            />
+        </>
     );
 
     return [prompt];

@@ -69,43 +69,58 @@ export interface ActionButtonProps {
 	buttonColor?: string;
 }
 
-export interface SearchableInputProps {
-	Form: UseFormReturnType;
+interface SearchableProps {
+	Form: UseFormReturnType<any>;
 	label: string;
+	limit?: number;
 	placeholder?: string;
-	autocomplete: any[];
 	inputProps: string;
 	required?: boolean;
 	editChild?: React.ReactNode;
 	deleteChild?: React.ReactNode;
 	buttonChild?: React.ReactNode;
 	isIteratable?: boolean; // refers to if its a looped item or just a single item
-	index?: number; // might not be needed?
+	isDisabled?: boolean;
 }
 
-export interface SearchOrAddProps {
-	ac: {
-		data: string[];
-		useForm: UseFormReturnType<any>;
-		required?: boolean;
-		label: string;
-		placeholder: string;
-		inputProps: string;
-	};
-	md: {
-		button: string;
-		handleOpen: (state: boolean) => void;
-	};
+export interface SearchableInputProps extends SearchableProps {
+	autocomplete: any[];
+}
+
+interface SearchableIdProxyData {
+	display: string;
+	value: string;
+}
+
+interface SearchableIdProxyProps extends SearchableProps {
+	data?: SearchableIdProxyData[];
+}
+
+interface IFormEdit {
+	Form: UseFormReturnType<any>;
+	inputProps: string;
+	label?: string;
+	placeholder?: string;
+	required?: boolean;
+}
+
+export interface SearchOrAddProps extends IFormEdit {
+	data?: SearchableIdProxyData[];
+	buttonLabel: string;
+	handleOpen: (state: boolean) => void;
 }
 
 // or type to any?
 export interface InputComponentProps {
-	Form: UseFormReturnType;
+	Form: UseFormReturnType<any>;
 }
 
 export interface MemberInputProps extends InputComponentProps {
 	isEdit?: boolean;
 	persons?: IPerson[];
+	inputProps?: string;
+	firstFieldLabel?: string;
+	secondFieldLabel?: string;
 }
 
 export interface AcComponentsInputProps extends InputComponentProps {
@@ -116,12 +131,12 @@ export interface AcComponentsInputProps extends InputComponentProps {
 }
 
 export interface CompanyInputProps extends AcComponentsInputProps {
-	persons?: IPerson[];	
+	persons?: IPerson[];
 }
 
 export interface LoproInputProps extends InputComponentProps {
-	person: any[];
-	company: any[];
+	person?: SearchableIdProxyData[];
+	company?: SearchableIdProxyData[];
 }
 
 export interface BandFormProps {
@@ -175,7 +190,7 @@ export interface ControlledSliderProps {
 export interface SpecificPageHeaderProps {
 	title: string | JSX.Element;
 	titleName: string;
-	subTitle?: string;
+	subTitle?: string | JSX.Element;
 	other?: React.ReactElement;
 	useBackButton?: boolean;
 }
@@ -249,7 +264,7 @@ export interface CompleteDealMemoPageProps {
 	band?: IBand;
 	venue?: IVenue;
 	hotel?: IHotel;
-	persons?: IPerson[];
+	hotels?: IHotel[];
 }
 
 export interface SpecificBandPageProps {
@@ -271,7 +286,9 @@ export interface VenueFormProps {
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IVenue;
-	companies?: any[]; // could also be string[]
+	companies?: SearchableIdProxyData[];
+	persons?: IPerson[];
+	isEdit?: boolean;
 }
 
 export interface HotelFormProps {
@@ -324,7 +341,6 @@ export interface DealMemoListValues {
 	band: string;
 	deal: string;
 	date: string;
-	fee: number;
 	status: string;
 }
 

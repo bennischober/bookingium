@@ -1,28 +1,44 @@
-import { Autocomplete, Button, Group, Tooltip } from "@mantine/core";
+import { Button, Tooltip } from "@mantine/core";
 import { MdOutlineAdd } from "react-icons/md";
 import { SearchOrAddProps } from "../../../types";
+import { LeftAlignGroup } from "../../Layout/LeftAlignGroup";
+import { SearchableIdProxy } from "../Searchable";
 
-// make global styles file => for maxWidth e.g.
+export function SearchOrAdd({
+    Form,
+    inputProps,
+    label,
+    placeholder,
+    required,
+    data,
+    buttonLabel,
+    handleOpen,
+}: SearchOrAddProps) {
+    if (!label) label = "Search or Add";
 
-export function SearchOrAdd({ ac, md }: SearchOrAddProps) {
     return (
-        <Group align="flex-end" grow>
-            <Autocomplete
-                label={ac.label}
-                placeholder={ac.placeholder}
-                data={ac.data}
-                {...ac.useForm.getInputProps(ac.inputProps)}
-                required={ac.required ? ac.required : false}
-            />
-                <Tooltip label={md.button}>
+        <LeftAlignGroup
+            first={
+                <SearchableIdProxy
+                    Form={Form}
+                    label={label}
+                    inputProps={inputProps}
+                    placeholder={placeholder}
+                    data={data}
+                    required={required}
+                />
+            }
+            second={
+                <Tooltip label={buttonLabel}>
                     <Button
                         variant="default"
-                        onClick={() => md.handleOpen(true)}
-                        style={{maxWidth: 56}}
+                        onClick={() => handleOpen(true)}
+                        style={{ maxWidth: 56 }}
                     >
                         <MdOutlineAdd />
                     </Button>
                 </Tooltip>
-        </Group>
+            }
+        />
     );
 }

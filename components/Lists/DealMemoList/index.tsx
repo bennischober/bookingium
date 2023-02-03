@@ -67,13 +67,6 @@ export function DealMemoList({ memos }: DealMemoListProps) {
                 footer: (props) => props.column.id,
             },
             {
-                id: "fee",
-                header: "fee",
-                accessorKey: "fee",
-                cell: (props) => props.getValue(),
-                footer: (props) => props.column.id,
-            },
-            {
                 id: "status",
                 header: "status",
                 accessorKey: "status",
@@ -84,13 +77,13 @@ export function DealMemoList({ memos }: DealMemoListProps) {
         []
     );
 
+    // kinda hacky
     const rows: DealMemoListValues[] = memos.map((memo, index) => ({
-        dealid: memo.dealid,
+        dealid: memo.dealid!,
         band:
             bandData[index] && bandData[index].name ? bandData[index].name : "",
         deal: memo.deal,
         date: dayjs(memo.date).toISOString(),
-        fee: memo.fee,
         status: memo.status,
     }));
 

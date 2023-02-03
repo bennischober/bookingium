@@ -10,22 +10,20 @@ import {
     TextInput,
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
-import { BandFormProps } from "../../../types";
+import { BandFormProps, SearchableIdProxyData } from "../../../types";
 import { useUnsavedWarn } from "../../../hooks";
 import { Band, IBand } from "../../../models/band";
 import { Types } from "mongoose";
 import {
-    companyToName,
     getFormValueObject,
     getValuesAtCombinedKey,
     getValueAtKey,
-    membersIdToName,
-    toAutocomplete,
 } from "../../../utils/appHandles";
 import { useState } from "react";
 import { MemberInput } from "../../FormInputs/MemberInput";
-import { Searchable } from "../../FormElements/Searchable";
-import { ICompany } from "../../../models/company";
+import { SearchableIdProxy } from "../../FormElements/Searchable";
+import dayjs from "dayjs";
+import { DatePicker } from "@mantine/dates";
 
 const schema = z.object({
     name: z
@@ -72,20 +70,15 @@ export function BandForm({
         initialValues: {
             name: data?.name ?? "",
             genre: data?.genre ?? "",
+            founded: data?.founded ? dayjs(data.founded).toDate() : undefined,
             notes: data?.notes ?? "",
-            company: data?.company
-                ? companyToName(data.company as unknown as ICompany, companies)
-                : ("" as unknown as Types.ObjectId),
-            members: data
-                ? membersIdToName(data.members as unknown as string[], persons)
-                : [],
+            company: data?.company ?? ("" as unknown as Types.ObjectId),
+            members: data?.members ?? [],
         },
     });
 
-    const companiesAutoComplete = toAutocomplete(companies, "name");
-
     const handleSubmit = async (values: Band) => {
-        if(!companies || !persons) {
+        if (!companies || !persons) {
             console.error("No companies or persons found");
             return;
         }
@@ -93,7 +86,12 @@ export function BandForm({
         const created = data?.dm.created ?? "";
 
         const company = getValueAtKey(companies, "name", values.company);
-        const members = getValuesAtCombinedKey(persons, ["firstName", "lastName"], values.members, " " );
+        const members = getValuesAtCombinedKey(
+            persons,
+            ["firstName", "lastName"],
+            values.members,
+            " "
+        );
         const bandData = getFormValueObject<Band>(
             values,
             session.userid,
@@ -113,17 +111,25 @@ export function BandForm({
         Form.reset();
     };
 
+    const companiesAutoComplete: SearchableIdProxyData[] = companies
+        ? companies.map((c) => ({
+              display: c.name,
+              value: c._id,
+          }))
+        : [];
+
     const [prompt] = useUnsavedWarn(Form);
 
     return (
         <>
             <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
+                <TextInput
+                    label="Band Name"
+                    {...Form.getInputProps("name")}
+                    required
+                />
+                <Space h="xl" />
                 <Group grow>
-                    <TextInput
-                        label="Band Name"
-                        {...Form.getInputProps("name")}
-                        required
-                    />
                     <Select
                         label="Genre"
                         {...Form.getInputProps("genre")}
@@ -138,16 +144,24 @@ export function BandForm({
                             Form.setFieldValue("genre", query);
                         }}
                     />
+                    <DatePicker
+                        id="mantine-4wgfg5a3v"
+                        label="Founded"
+                        placeholder="Select a date"
+                        allowFreeInput
+                        inputFormat="DD.MM.YYYY"
+                        {...Form.getInputProps("founded")}
+                    />
                 </Group>
+                <Space h="xl" />
                 <Textarea label="Notes" {...Form.getInputProps("notes")} />
                 <Space h="xl" />
                 <Grid align="flex-end">
                     <Grid.Col span={6}>
-                        {/*If in "edit mode", add button with link to update company/members? or with modal? or inline? */}
-                        <Searchable
+                        <SearchableIdProxy
                             Form={Form}
-                            label="company"
-                            autocomplete={companiesAutoComplete ?? []}
+                            label="Company"
+                            data={companiesAutoComplete}
                             inputProps="company"
                         />
                     </Grid.Col>
@@ -156,7 +170,7 @@ export function BandForm({
                             onClick={() => setOpened(true)}
                             variant="default"
                         >
-                            Add members
+                            {isEdit ? "Edit" : "Add"} Members
                         </Button>
                     </Grid.Col>
                 </Grid>

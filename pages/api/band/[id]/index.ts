@@ -28,10 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'PUT':
             try {
-                const band = await Band.findByIdAndUpdate(id, req.body.data, {
-                    new: true,
-                    runValidators: true,
-                });
+                const band = await Band.updateOne({ bandid: id }, { $set: req.body.data }, { runValidators: true, });
                 if (!band) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }

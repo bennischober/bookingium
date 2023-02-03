@@ -23,7 +23,7 @@ export const OContact = {
 };
 
 export const ODm = {
-    userid: { type: String, required: true },
+    userid: { type: String, required: true, index: true },
     created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
     edited: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') }
 }

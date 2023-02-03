@@ -13,6 +13,99 @@ export function getFooterData() {
     ];
 }
 
+const routeData = {
+    "/": {
+        title: "Home",
+        icon: MdHome,
+        link: "/",
+    },
+    "/deal-memo": {
+        title: "Deal Memo",
+        icon: RiFileList3Line,
+        link: "/deal-memo",
+    },
+    "/contract": {
+        title: "Contract",
+        icon: RiFileTextLine,
+        link: "/contract",
+    },
+    "/itinerary": {
+        title: "Itinerary",
+        icon: RiFileList3Line,
+        link: "/itinerary",
+    },
+    "/invoice": {
+        title: "Invoice",
+        icon: RiFileList3Line,
+        link: "/invoice",
+    },
+    "/lists/deal-memo": {
+        title: "Deal Memo",
+        icon: MdListAlt,
+        link: "/lists/deal-memo",
+    },
+    "/lists/band": {
+        title: "Band",
+        icon: MdListAlt,
+        link: "/lists/band",
+    },
+    "/lists/contract": {
+        title: "Contract",
+        icon: MdListAlt,
+        link: "/lists/contract",
+    },
+    "/lists/itinerary": {
+        title: "Itinerary",
+        icon: MdListAlt,
+        link: "/lists/itinerary",
+    },
+    "/lists/invoice": {
+        title: "Invoice",
+        icon: MdListAlt,
+        link: "/lists/invoice",
+    },
+    "/lists/venue": {
+        title: "Venue",
+        icon: MdListAlt,
+        link: "/lists/venue",
+    },
+    "/add/band": {
+        title: "Band",
+        icon: MdPostAdd,
+        link: "/add/band",
+    },
+    "/add/company": {
+        title: "Company",
+        icon: MdPostAdd,
+        link: "/add/company",
+    },
+    "/add/hotel": {
+        title: "Hotel",
+        icon: MdPostAdd,
+        link: "/add/hotel",
+    },
+    "/add/venue": {
+        title: "Venue",
+        icon: MdPostAdd,
+        link: "/add/venue",
+    },
+    "/add/person": {
+        title: "Person",
+        icon: MdPostAdd,
+        link: "/add/person",
+    },
+    "/import": {
+        title: "Import",
+        icon: BiImport,
+        link: "/import",
+    }
+}
+
+export const getDataForRoute = (route : string) => {
+    const r = route as keyof typeof routeData;
+    return routeData[r] ?? {title: "Bookingium"};
+}
+
 // Refactor all paths!
 export function getNavbarData() {
     return [
@@ -23,8 +116,8 @@ export function getNavbarData() {
         { label: "Invoice", icon: RiFileList3Line, link: "/invoice" },
         {
             label: "Lists", icon: MdListAlt, links: [
-                { label: "Deal Memo List", icon: MdListAlt, link: "/lists/deal-memo" },
-                { label: "Band List", icon: MdListAlt, link: "/lists/band" },
+                { label: "Deal Memo", icon: MdListAlt, link: "/lists/deal-memo" },
+                { label: "Band", icon: MdListAlt, link: "/lists/band" },
             ]
         },
         {

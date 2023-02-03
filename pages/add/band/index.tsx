@@ -1,4 +1,3 @@
-import axios from "axios";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { BandForm } from "../../../components/Forms/BandForm";
@@ -6,11 +5,7 @@ import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { IBand } from "../../../models/band";
 import { BandPageProps } from "../../../types";
-import {
-    serverSideFetch,
-    toAutocomplete,
-    toCombinedAutocomplete,
-} from "../../../utils/appHandles";
+import { addData, serverSideFetch } from "../../../utils/appHandles";
 
 export default function AddBandPage({
     session,
@@ -18,21 +13,9 @@ export default function AddBandPage({
     companies,
 }: BandPageProps) {
     const handleSave = async (data: IBand) => {
-        // post band data
-        const ret = await axios.post(
-            "/api/band",
-            { data: data },
-            { params: { userid: session.userid } }
-        );
-        console.log(ret.data, ret.status);
+        const res = await addData("api/band", data, session.userid);
+        console.log(res);
     };
-
-    const personAC = toCombinedAutocomplete(
-        persons,
-        ["firstName", "lastName"],
-        " "
-    );
-    const companyAC = toAutocomplete(companies, "name");
 
     return (
         <PageTemplate title={"Add a Band"}>
@@ -40,8 +23,8 @@ export default function AddBandPage({
                 <BandForm
                     session={session}
                     handleData={handleSave}
-                    persons={personAC}
-                    companies={companyAC}
+                    persons={persons}
+                    companies={companies}
                 />
             </FormContainer>
         </PageTemplate>

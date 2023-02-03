@@ -7,7 +7,10 @@ const PersonSchema: Schema = new Schema({
         type: String,
         required: true,
         unique: true,
+        // refers to #118
+        index: true,
     },
+    // closes #148
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     birthday: { type: Date, default: null },
