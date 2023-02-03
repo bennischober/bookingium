@@ -28,7 +28,7 @@ export default NextAuth({
 							id: user.user._id,
 							name: user.user.name,
 							email: user.user.email,
-							userid: user.user.userid,
+							userid: user.user._id,
 							status: "authorized"
 						}
 					}
@@ -36,7 +36,7 @@ export default NextAuth({
 						id: user._id,
 						name: user.name,
 						username: user.email,
-						userid: user.userid,
+						userid: user._id,
 						status: "unauthorized"
 					};
 				} catch (err) {

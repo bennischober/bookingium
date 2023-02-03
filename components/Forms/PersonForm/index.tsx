@@ -28,7 +28,10 @@ export function PersonForm({
         initialValues: {
             firstName: data?.firstName ?? "",
             lastName: data?.lastName ?? "",
-            birthday: data && data.birthday ? dayjs(data.birthday).toDate() : undefined,
+            birthday:
+                data && data.birthday
+                    ? dayjs(data.birthday).toDate()
+                    : undefined,
             role: data?.role ?? "",
             notes: data?.notes ?? "",
             contact: data?.contact ?? {
@@ -52,23 +55,17 @@ export function PersonForm({
     });
 
     const handleSubmit = (values: Person) => {
-        const created = data?.dm.created ?? "";
-
         const vals = getFormValueObject<Person>(
             values,
             session.userid,
-            created,
-            {
-                createId: "personid",
-                value: data?.personid,
-            }
+            data?.created ?? ""
         ) as IPerson;
 
         handleData(vals);
 
         if (close) close();
 
-        if(!data) Form.reset();
+        if (!data) Form.reset();
 
         Form.resetDirty();
     };

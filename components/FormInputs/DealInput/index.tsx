@@ -11,7 +11,7 @@ import { DatePicker } from "@mantine/dates";
 import { LoproInputProps } from "../../../types";
 import { LoproInput } from "../LoproInput";
 
-export function DealInput({ Form, person, company }: LoproInputProps) {
+export function DealInput({ Form, person, company, isEdit }: LoproInputProps) {
     return (
         <Group grow align="top">
             <Box>
@@ -103,6 +103,7 @@ export function DealInput({ Form, person, company }: LoproInputProps) {
                     Form={Form}
                     person={person}
                     company={company}
+                    isEdit={isEdit}
                 />
             </Box>
         </Group>

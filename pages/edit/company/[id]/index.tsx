@@ -15,7 +15,7 @@ export default function EditCompanyPage({
 }: CompanyEditPageProps) {
     const handleSave = async (data: ICompany) => {
         const ret = await axios.put(
-            `/api/company/${company.companyid}`,
+            `/api/company/${company._id}`,
             { data: data },
             { params: { userid: session.userid } }
         );

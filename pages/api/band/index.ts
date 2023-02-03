@@ -18,7 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'GET':
             try {
                 // send all bands for user
-                const data = await Band.find({ 'dm.userid': userid }).exec();
+                const data = await Band.find({ 'userid': userid }).exec();
                 return res.status(200).json({ success: true, data: data });
             } catch (error) {
                 return new ApiError(res, 500).handle(error);

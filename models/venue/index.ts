@@ -7,10 +7,7 @@ const VenueSchema = new Schema({
     capacity: { type: Number },
     notes: { type: String },
     company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
-    members: [{
-        identifier: { type: String, default: '' },
-        person: { type: Schema.Types.ObjectId, ref: 'Person', default: null },
-    }],
+    members: [{ type: Schema.Types.ObjectId, ref: 'Person', required: true }],
     ...ODm,
 });
 

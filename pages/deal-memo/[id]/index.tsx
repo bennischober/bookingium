@@ -68,7 +68,7 @@ export default function CompleteDealMemoPage({
         });
 
         const res = await axios.put(
-            `http://localhost:3000/api/deal-memo/${memo.dealid}`,
+            `http://localhost:3000/api/deal-memo/${memo._id}`,
             { data: data },
             { params: { userid: session.userid } }
         );
@@ -122,8 +122,8 @@ export default function CompleteDealMemoPage({
         const m = {
             hotelid: hotel._id,
             dm: {
-                userid: memo.dm.userid,
-                created: memo.dm.created,
+                userid: memo.userid,
+                created: memo.created,
                 edited: dayjs().toISOString(),
             }
 
@@ -148,7 +148,7 @@ export default function CompleteDealMemoPage({
 
 
         // works with memo._id, but not with memo.dealid => on hoppscotch it works with dealid!
-        console.log(m, "dealid", memo.dealid);
+        console.log(m, "dealid", memo._id);
         const res = await updateData(`/api/deal-memo/${memo._id}`, m, session.userid);
         console.log(res);
 
@@ -175,11 +175,11 @@ export default function CompleteDealMemoPage({
             <PageTemplate title={`Deal Memo of ${band?.name}`}>
                 <SpecificPageHeader
                     title={
-                        <Link href={`/edit/band/${band?.bandid}`}>
+                        <Link href={`/edit/band/${band?._id}`}>
                             <Text<"a">
                                 component="a"
                                 variant="link"
-                                href={`/band/${band?.bandid}`}
+                                href={`/band/${band?._id}`}
                             >
                                 {band?.name}
                             </Text>
@@ -195,7 +195,7 @@ export default function CompleteDealMemoPage({
                             onClick={() => {
                                 router.push({
                                     pathname: "/contract",
-                                    query: { id: memo.dealid },
+                                    query: { id: memo._id },
                                 });
                             }}
                         >
@@ -215,7 +215,7 @@ export default function CompleteDealMemoPage({
                                     handleMemos={handleMemo}
                                     session={session}
                                     data={memo}
-                                    created={memo.dm.created}
+                                    created={memo.created}
                                 />
                             </FormContainer>
                         </Tabs.Panel>

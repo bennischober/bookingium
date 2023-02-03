@@ -14,7 +14,6 @@ export default function AddVenuePage({
     persons,
 }: BandPageProps) {
     const handleSave = async (data: IVenue) => {
-        // post band data
         const ret = await axios.post(
             "/api/venue",
             { data: data },

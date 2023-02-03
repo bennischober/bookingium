@@ -14,14 +14,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'GET':
             try {
                 // send populated data => needed in deal memo list
-                const dt = await Venue.find({ 'dm.userid': userid }).exec();
+                const dt = await Venue.find({ 'userid': userid }).exec();
                 return res.status(200).json({ success: true, data: dt });
             } catch (error) {
                 return new ApiError(res, 500).handle(error);
             }
         case 'POST':
             try {
-                const venue = await Venue.create(req.body.data); // create new db entry
+                const venue = await Venue.create(req.body.data);
                 return res.status(200).json({ success: true, data: venue });
             } catch (error) {
                 return new ApiError(res, 500).handle(error);

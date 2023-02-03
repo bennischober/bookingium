@@ -15,9 +15,7 @@ import { useUnsavedWarn } from "../../../hooks";
 import { Band, IBand } from "../../../models/band";
 import { Types } from "mongoose";
 import {
-    getFormValueObject,
-    getValuesAtCombinedKey,
-    getValueAtKey,
+    getFormValueObject
 } from "../../../utils/appHandles";
 import { useState } from "react";
 import { MemberInput } from "../../FormInputs/MemberInput";
@@ -78,32 +76,11 @@ export function BandForm({
     });
 
     const handleSubmit = async (values: Band) => {
-        if (!companies || !persons) {
-            console.error("No companies or persons found");
-            return;
-        }
-
-        const created = data?.dm.created ?? "";
-
-        const company = getValueAtKey(companies, "name", values.company);
-        const members = getValuesAtCombinedKey(
-            persons,
-            ["firstName", "lastName"],
-            values.members,
-            " "
-        );
         const bandData = getFormValueObject<Band>(
             values,
             session.userid,
-            created,
-            {
-                createId: "bandid",
-                value: data?.bandid,
-            }
+            data?.created ?? ""
         ) as IBand;
-
-        bandData.company = company._id;
-        bandData.members = members.map((m) => m._id);
 
         handleData(bandData);
         if (close) close();

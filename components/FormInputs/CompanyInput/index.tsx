@@ -14,7 +14,7 @@ import AddressInput from "../AddressInput";
 import ContactInput from "../ContactInput";
 import { MemberInput } from "../MemberInput";
 
-export function CompanyInput({ Form, autocomplete, isEdit, persons }: CompanyInputProps) {
+export function CompanyInput({ Form, isEdit, persons }: CompanyInputProps) {
     const [opened, setOpened] = useState(false);
 
     return (

@@ -46,16 +46,12 @@ export function HotelForm({
     const [prompt] = useUnsavedWarn(Form);
 
     const handleSubmit = (values: Hotel) => {
-        const created = data?.dm.created ?? "";
+        const created = data?.created ?? "";
 
         const hotelData = getFormValueObject<Hotel>(
             values,
             session.userid,
-            created,
-            {
-                createId: "hotelid",
-                value: data?.hotelid,
-            }
+            created
         ) as IHotel;
         console.log(hotelData);
 

@@ -8,16 +8,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     await connect();
 
+    if (!userid) return new ApiError(res).throwSpecific('access_denied');
+
     switch (method) {
         case 'GET':
-            if (!userid) return new ApiError(res).throwSpecific('access_denied');
             try {
                 // register schema/model if its not already registered
                 require('../../../models/band');
 
                 // send populated data => needed in deal memo list
                 // only populate band name? .populate('bandid', 'name')
-                const dt = await DealMemo.find({ 'dm.userid': userid }).populate('bandid').exec();
+                const dt = await DealMemo.find({ 'userid': userid }).populate('bandid').exec();
                 return res.status(200).json({ success: true, data: dt });
             } catch (error) {
                 return new ApiError(res, 500).handle(error);

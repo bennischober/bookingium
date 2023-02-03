@@ -1,3 +1,4 @@
+import axios from "axios";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { BandForm } from "../../../components/Forms/BandForm";
@@ -13,8 +14,13 @@ export default function AddBandPage({
     companies,
 }: BandPageProps) {
     const handleSave = async (data: IBand) => {
-        const res = await addData("api/band", data, session.userid);
-        console.log(res);
+        const res = await axios.post(
+            "/api/band",
+            { data: data },
+            { params: { userid: session.userid } }
+        );
+
+        console.log(res.data, res.status);
     };
 
     return (

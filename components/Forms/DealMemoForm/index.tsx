@@ -19,10 +19,7 @@ import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../../FormElements/SearchOrAdd";
 import { VenueForm } from "../VenueForm";
 import { HotelForm } from "../HotelForm";
-import {
-    getFormValueObject,
-    isPopulated,
-} from "../../../utils/appHandles";
+import { getFormValueObject, isPopulated } from "../../../utils/appHandles";
 import { DealInput } from "../../FormInputs/DealInput";
 import { useUnsavedWarn } from "../../../hooks";
 import { DealMemo, IDealMemo } from "../../../models/deal-memo";
@@ -76,18 +73,14 @@ export function DealMemoForm({
 
         const memoData = getFormValueObject<DealMemo>(
             values,
-            session.userid,
-            undefined,
-            {
-                createId: "dealid",
-            }
+            session.userid
         ) as IDealMemo;
 
-        console.log("memoData", memoData);
+        handleMemos(memoData);
 
-        // handleMemos(memoData);
+        console.log(memoData);
 
-        // Form.reset();
+        Form.reset();
     };
 
     const closeModals = () => {
@@ -106,10 +99,11 @@ export function DealMemoForm({
         display: v.name,
         value: v._id,
     }));
-    const hotelsAutoComplete: SearchableIdProxyData[] = hotels?.map((h) => ({
-        display: h.name,
-        value: h._id,
-    })) || [];
+    const hotelsAutoComplete: SearchableIdProxyData[] =
+        hotels?.map((h) => ({
+            display: h.name,
+            value: h._id,
+        })) || [];
     const personsAutoComplete: SearchableIdProxyData[] = persons.map((p) => ({
         display: `${p.firstName} ${p.lastName}`,
         value: p._id,
@@ -273,11 +267,7 @@ export function DealEditForm({
         const memoData = getFormValueObject<DealMemo>(
             values,
             session.userid,
-            created,
-            {
-                createId: "dealid",
-                value: data.dealid,
-            }
+            created
         ) as IDealMemo;
 
         console.log("dealMemoForm", memoData);
@@ -327,6 +317,7 @@ export function DealEditForm({
                     Form={Form}
                     person={personData}
                     company={companyData}
+                    isEdit={true}
                 />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">

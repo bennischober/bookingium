@@ -3,7 +3,6 @@ import { NextRouter } from "next/router";
 import dayjs from 'dayjs';
 import { SessionProps } from "../types";
 import axios from "axios";
-import { v4 } from "uuid";
 import { IPerson } from "../models/person";
 import { Types } from "mongoose";
 import { ICompany } from "../models/company";
@@ -252,30 +251,6 @@ export function isPopulated<T>(obj: T | any): obj is T {
     return obj !== null && obj !== undefined;
 }
 
-// also add this function for a single person!
-export function membersIdToName(members: string[], persons?: IPerson[]) {
-    if (!persons) return members as unknown as Types.ObjectId[];
-    const p: string[] = [];
-    members.forEach((m) => {
-        const member = persons.find((p) => p._id === m);
-        if (member) p.push(member.firstName + " " + member.lastName);
-    });
-
-    return p as unknown as Types.ObjectId[];
-}
-
-export function membersWithIdentifierToName(members: { identifier: string, person: Types.ObjectId }[], persons?: IPerson[]): { identifier: string, person: Types.ObjectId }[] {
-    if (!persons) return members as unknown as { identifier: string, person: Types.ObjectId }[];
-
-    const p: { identifier: string, person: Types.ObjectId }[] = [];
-    members.forEach((m) => {
-        const member = persons.find((p) => p._id === m.person);
-        if (member) p.push({ identifier: m.identifier, person: (member.firstName + " " + member.lastName) as unknown as Types.ObjectId });
-    });
-
-    return p;
-}
-
 export function objectIdToName<T extends IHotel | ICompany | IVenue | IBand>(data: T) {
     return data.name as unknown as Types.ObjectId;
 }
@@ -302,47 +277,6 @@ export function getKeys<T extends Object>(obj: T): (keyof T)[] {
 }
 
 /*--- FORM HANDLE ---*/
-export function getValueAtKey<T, K>(data: T[], key: keyof T, value: K): T {
-    let item = {} as T;
-    data.forEach(element => {
-        // kind of a hack, but it works
-        if (getProperty(element, key) as unknown as K === value) {
-            item = element;
-        }
-    });
-    return item;
-}
-
-/**
- * Get a item of data by going through the keys of the data. The keys values will be combined and compared with the given value.
- * @param data Data to search in
- * @param keys keys to search through
- * @param value to compare
- * @returns the item, if it was found
- */
-export function getValueAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value: K, seperator?: string): T {
-    const sep = seperator ?? " ";
-    let item = {} as T;
-    let combined;
-    data.forEach(element => {
-        combined = keys.map(key => getProperty(element, key) as unknown as K);
-        if (combined.join(sep) === value) {
-            item = element;
-        }
-    });
-    return item;
-}
-
-export function getValuesAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value: K[], seperator?: string, returnKey?: keyof T): T[] | T[keyof T][] {
-    if (returnKey) {
-        return value.map((item) => {
-            return getValueAtCombinedKey(data, keys, item, seperator)[returnKey];
-        })
-    }
-    return value.map((item) => {
-        return getValueAtCombinedKey(data, keys, item, seperator);
-    })
-}
 
 export function getNestedValue(obj: any, path: string): any {
     return path.split('.').reduce((acc, key) => acc && acc[key], obj);
@@ -352,18 +286,12 @@ export function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
     return obj[key];
 }
 
-export function getFormValueObject<T extends Object>(values: T, userid: string, created?: string, id?: { createId: string, value?: string }) {
+export function getFormValueObject<T extends Object>(values: T, userid: string, created?: string) {
     const obj: { [k: string]: any } = {
-        dm: {
-            edited: dayjs().toISOString(),
-            userid: userid,
-            created: nonEmptyString(created) ? created : dayjs().toISOString(),
-        },
+        edited: dayjs().toISOString(),
+        userid: userid,
+        created: nonEmptyString(created) ? created : dayjs().toISOString(),
     };
-
-    if (id) {
-        obj[id.createId] = id.value ?? v4();
-    }
 
     appendObject<T>(obj, values);
     return obj;

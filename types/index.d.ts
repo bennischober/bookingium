@@ -113,10 +113,10 @@ export interface SearchOrAddProps extends IFormEdit {
 // or type to any?
 export interface InputComponentProps {
 	Form: UseFormReturnType<any>;
+	isEdit?: boolean;
 }
 
 export interface MemberInputProps extends InputComponentProps {
-	isEdit?: boolean;
 	persons?: IPerson[];
 	inputProps?: string;
 	firstFieldLabel?: string;
@@ -127,7 +127,6 @@ export interface AcComponentsInputProps extends InputComponentProps {
 	autocomplete: any[];
 	label?: string;
 	inputProps?: string;
-	isEdit?: boolean;
 }
 
 export interface CompanyInputProps extends AcComponentsInputProps {
