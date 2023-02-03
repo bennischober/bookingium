@@ -1,50 +1,52 @@
-import mongoose, { Document } from 'mongoose';
-import dayjs from 'dayjs';
+import { Document, model, Model, models, Schema, Types } from 'mongoose';
+import { ODm } from '../modelObjects';
+import { IDm } from '../modelTypes';
 
-const dealMemoSchema = new mongoose.Schema({
-    dealId: {
+const DealMemoSchema = new Schema({
+    dealid: {
         type: String,
         required: true,
         unique: true,
+        // refers to #118
+        index: true,
     },
     deal: { type: String, required: true },
-    date: { type: String, required: true },
-    fee: { type: Number },
+    date: { type: Date, required: true },
     ticketPriceVVK: { type: Number },
     ticketPriceAK: { type: Number },
     posters: { type: Number },
     status: { type: String },
     notes: { type: String },
-    bandid: { type: mongoose.Schema.Types.ObjectId, ref: 'Band', required: true },
-    venueid: { type: mongoose.Schema.Types.ObjectId, ref: 'Venue' }, // equals location
-    loproid: { type: mongoose.Schema.Types.ObjectId, ref: 'Lopro' }, // equals promoter
-    hotelid: { type: mongoose.Schema.Types.ObjectId, ref: 'Hotel' },
-    dm: {
-        userid: { type: String, required: true, index: true },
-        created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
-        edited: { type: String }
-    }
-}); // , { collection: 'dealMemo' }
+    lopro: {
+        person: { type: Schema.Types.ObjectId, ref: 'Person' },
+        company: { type: Schema.Types.ObjectId, ref: 'Company' },
+    },
+    bandid: { type: Schema.Types.ObjectId, ref: 'Band', required: true },
+    venueid: { type: Schema.Types.ObjectId, ref: 'Venue', default: null },
+    hotelid: { type: Schema.Types.ObjectId, ref: 'Hotel', default: null },
+    dm: ODm,
+});
 
-export interface IDealMemo extends Document {
-    dealId: string;
+export interface DealMemo {
     deal: string;
-    date: string;
-    fee: number;
+    date: Date;
     ticketPriceVVK: number;
     ticketPriceAK: number;
     posters: number;
     status: string;
     notes: string;
-    bandid: mongoose.Types.ObjectId;
-    venueid: mongoose.Types.ObjectId;
-    loproid: mongoose.Types.ObjectId;
-    hotelid: mongoose.Types.ObjectId | null;
-    dm: {
-        userid: string;
-        created: string;
-        edited: string;
-    };
+    lopro: {
+        person: Types.ObjectId;
+        company: Types.ObjectId;
+    },
+    bandid: Types.ObjectId;
+    venueid: Types.ObjectId;
+    hotelid: Types.ObjectId | null;
 }
 
-export default mongoose.models.DealMemo || mongoose.model('DealMemo', dealMemoSchema);
+export interface IDealMemo extends Document, DealMemo {
+    dealid?: string; // this has to change!
+    dm: IDm;
+}
+
+export const DealMemo: Model<IDealMemo> = models.DealMemo || model<IDealMemo>('DealMemo', DealMemoSchema);

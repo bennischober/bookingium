@@ -3,6 +3,13 @@ import { NextRouter } from "next/router";
 import dayjs from 'dayjs';
 import { SessionProps } from "../types";
 import axios from "axios";
+import { v4 } from "uuid";
+import { IPerson } from "../models/person";
+import { Types } from "mongoose";
+import { ICompany } from "../models/company";
+import { IHotel } from "../models/hotel";
+import { IVenue } from "../models/venue";
+import { IBand } from "../models/band";
 
 // handle theme, language, and other app settings
 
@@ -52,7 +59,6 @@ export function handleSession(router: NextRouter, session: SessionProps["session
 }
 
 /*--- OTHER HANDLE ---*/
-
 export function getCurrentYear() {
     return dayjs().format("YYYY");
 }
@@ -61,8 +67,13 @@ export function getNameInitials(name: string) {
     return name.split(" ").map(word => word[0]).join("");
 }
 
-/*--- DATA STRUCTURE HANDLE ---*/
+export function clientLog(...args: any[]) {
+    if (typeof window !== "undefined") {
+        console.log(...args);
+    }
+}
 
+/*--- DATA STRUCTURE HANDLE ---*/
 // function that adds a new item to a specific index of an array and pushes the rest of the array to the end
 export function addToArray(array: any[], index: number, item: any) {
     array.splice(index, 0, item);
@@ -75,6 +86,79 @@ export function convertToType<T>(data: any): T {
 
 export function convertMantineSizeToNumber(size: MantineNumberSize) {
     return size === "xs" ? 0 : size === "sm" ? 25 : size === "md" ? 50 : size === "lg" ? 75 : size === "xl" ? 100 : 0;
+}
+
+export function appendObject<T extends Object>(obj: any, value: T) {
+    type ObjectKey = keyof typeof value;
+
+    Object.keys(value).forEach((key) => {
+        const k = key as ObjectKey;
+        obj[k] = value[k];
+    });
+    //return obj;
+}
+
+export function nonEmptyObj(obj: any) {
+    if (!obj) return false;
+    return Object.keys(obj).length > 0;
+}
+
+export function nonEmptyString(str: any) {
+    return str === null || str == undefined ? false : str.length > 0;
+}
+
+export function toAutocomplete<T>(data?: T[], identifier?: keyof T) {
+    if (!data || !identifier) return [];
+    return data.map((item) => {
+        return item[identifier];
+    });
+}
+
+export function toCombinedAutocomplete<T>(data?: T[], identifier?: (keyof T)[], seperator?: string) {
+    if (!data || !identifier) return [];
+    return data.map((item) => {
+        return identifier.map((id) => item[id]).join(seperator ?? " ");
+    });
+}
+
+export function isObjectId(id: string) {
+    // ObjectId has a length of 24
+    if (id.length === 24) {
+        // now second check: check for white spaces and it should include any number
+        if (/\s/.test(id) || !/\d/.test(id)) {
+            return false;
+        }
+        return true;
+    }
+    return false;
+};
+
+// export function arrayToMap<T>(array: T[], key: keyof T) {
+//     const m: { [id: string]: T } = {};
+//     array.forEach((item) => {
+//         m[(item[key] as unknown as string)] = item;
+//     });
+//     return m;
+// }
+
+export function arrayToMultiMap<T>(array: T[], key: keyof T) {
+    const m: { [id: string]: string } = {};
+}
+
+export function arrayToMap<T>(array: T[], key: keyof T) {
+    const map = new Map<T[keyof T], T>();
+    array.forEach((item) => {
+        map.set(item[key], item);
+    });
+    return map;
+}
+
+export function mapToArray<T>(map: Map<T[keyof T], T>) {
+    const array: T[] = [];
+    map.forEach((value) => {
+        array.push(value);
+    });
+    return array;
 }
 
 /*--- FETCH HANDLE ---*/
@@ -101,22 +185,119 @@ export const getMemos = async (session: SessionProps["session"]) => {
     return memos;
 };
 
-export const serverSideFetch = async (url: string, params?: {}) => {
+export const clientSideFetch = async <T>(url: string, params?: {}): Promise<T> => {
+    const fetch = await axios.get(url, {
+        params: params,
+    });
+    if (fetch.status !== 200) return [] as T;
+    return fetch.data.data;
+}
+
+export const serverSideFetch = async <T>(url: string, params?: {}): Promise<T> => {
     const u = url.includes("localhost") ? url : `http://localhost:3000${url}`;
     const fetch = await axios.get(u, {
         params: params,
     });
-    if (fetch.status !== 200) return [];
+    if (fetch.status !== 200) return [] as T;
     return fetch.data.data;
 }
 
-/** --- DATABASE HANDLE --- **/
+export const addData = async <T>(endpoint: string, data: T, userid?: string): Promise<number> => {
+    const url = endpoint.includes("localhost") ? endpoint : `http://localhost:3000/${endpoint}`;
+
+    const res = await axios.post(url, data, {
+        params: {
+            userid: userid,
+        },
+    });
+    return res.status;
+}
+
+export const updateData = async <T>(endpoint: string, data: T, userid?: string): Promise<number> => {
+    const url = endpoint.includes("localhost") ? endpoint : `http://localhost:3000/${endpoint}`;
+
+    const res = await axios.put(url, { data: data }, {
+        params: {
+            userid: userid,
+        },
+    });
+
+    console.log(res.data.data);
+
+    return res.status;
+}
+
+export const deleteData = async (endpoint: string, userid?: string): Promise<number> => {
+    const url = endpoint.includes("localhost") ? endpoint : `http://localhost:3000/${endpoint}`;
+
+    const res = await axios.delete(url, {
+        params: {
+            userid: userid,
+        },
+    });
+    return res.status;
+}
+
+/* --- DATABASE HANDLE --- */
+
+/**
+ * This lets typescript know, that a object is populated. Usually this would only contain an id, but mongoose populated the id, so it has actual value.
+ * 
+ * NOTE: Only use this, if the data is really populated. Otherwise it might throw an error!
+ * @param obj Object to populate
+ * @returns The populated object
+ */
 export function isPopulated<T>(obj: T | any): obj is T {
     // return (obj && obj.name && typeof obj.name === 'string');
     return obj !== null && obj !== undefined;
 }
 
-export function getKeys<T>(obj: T): (keyof T)[] {
+// also add this function for a single person!
+export function membersIdToName(members: string[], persons?: IPerson[]) {
+    if (!persons) return members as unknown as Types.ObjectId[];
+    const p: string[] = [];
+    members.forEach((m) => {
+        const member = persons.find((p) => p._id === m);
+        if (member) p.push(member.firstName + " " + member.lastName);
+    });
+
+    return p as unknown as Types.ObjectId[];
+}
+
+export function membersWithIdentifierToName(members: { identifier: string, person: Types.ObjectId }[], persons?: IPerson[]): { identifier: string, person: Types.ObjectId }[] {
+    if (!persons) return members as unknown as { identifier: string, person: Types.ObjectId }[];
+
+    const p: { identifier: string, person: Types.ObjectId }[] = [];
+    members.forEach((m) => {
+        const member = persons.find((p) => p._id === m.person);
+        if (member) p.push({ identifier: m.identifier, person: (member.firstName + " " + member.lastName) as unknown as Types.ObjectId });
+    });
+
+    return p;
+}
+
+export function objectIdToName<T extends IHotel | ICompany | IVenue | IBand>(data: T) {
+    return data.name as unknown as Types.ObjectId;
+}
+
+export function loproIdToNames(person: IPerson, company: ICompany) {
+    return {
+        person: person.firstName + " " + person.lastName as unknown as Types.ObjectId,
+        company: company.name as unknown as Types.ObjectId,
+    }
+}
+
+export function companyToName(company: ICompany, companies?: ICompany[]) {
+    if (!companies) return company as unknown as Types.ObjectId;
+    let c: string = "";
+    companies.forEach((m) => {
+        if (m._id === company) c = m.name;
+    });
+
+    return c as unknown as Types.ObjectId;
+}
+
+export function getKeys<T extends Object>(obj: T): (keyof T)[] {
     return Object.keys(obj) as (keyof T)[];
 }
 
@@ -132,6 +313,66 @@ export function getValueAtKey<T, K>(data: T[], key: keyof T, value: K): T {
     return item;
 }
 
+/**
+ * Get a item of data by going through the keys of the data. The keys values will be combined and compared with the given value.
+ * @param data Data to search in
+ * @param keys keys to search through
+ * @param value to compare
+ * @returns the item, if it was found
+ */
+export function getValueAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value: K, seperator?: string): T {
+    const sep = seperator ?? " ";
+    let item = {} as T;
+    let combined;
+    data.forEach(element => {
+        combined = keys.map(key => getProperty(element, key) as unknown as K);
+        if (combined.join(sep) === value) {
+            item = element;
+        }
+    });
+    return item;
+}
+
+export function getValuesAtCombinedKey<T, K>(data: T[], keys: (keyof T)[], value: K[], seperator?: string, returnKey?: keyof T): T[] | T[keyof T][] {
+    if (returnKey) {
+        return value.map((item) => {
+            return getValueAtCombinedKey(data, keys, item, seperator)[returnKey];
+        })
+    }
+    return value.map((item) => {
+        return getValueAtCombinedKey(data, keys, item, seperator);
+    })
+}
+
+export function getNestedValue(obj: any, path: string): any {
+    return path.split('.').reduce((acc, key) => acc && acc[key], obj);
+}
+
 export function getProperty<T, K extends keyof T>(obj: T, key: K): T[K] {
     return obj[key];
+}
+
+export function getFormValueObject<T extends Object>(values: T, userid: string, created?: string, id?: { createId: string, value?: string }) {
+    const obj: { [k: string]: any } = {
+        dm: {
+            edited: dayjs().toISOString(),
+            userid: userid,
+            created: nonEmptyString(created) ? created : dayjs().toISOString(),
+        },
+    };
+
+    if (id) {
+        obj[id.createId] = id.value ?? v4();
+    }
+
+    appendObject<T>(obj, values);
+    return obj;
+}
+
+export function someUnequal(toTest: any[], toCompare: any) {
+    if (toTest.some(element => element === undefined)) return false;
+
+    return toTest.some(item => {
+        return item !== toCompare;
+    });
 }

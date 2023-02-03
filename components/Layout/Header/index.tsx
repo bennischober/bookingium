@@ -11,6 +11,7 @@ import {
     Group,
     createStyles,
     Code,
+    Title,
 } from "@mantine/core";
 import {
     MdOutlineDarkMode,
@@ -34,6 +35,8 @@ const useStyles = createStyles((theme) => ({
     },
 }));
 import { HeaderProps } from "../../../types";
+import { BackButton } from "../../LayoutElements/BackButton";
+import { getDataForRoute } from "../../../utils/links";
 
 export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
     const { classes } = useStyles();
@@ -61,6 +64,8 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
         router.push("/auth/login");
     };
 
+    const title = getDataForRoute(router.pathname).title;
+
     return (
         <Header height={70} p="sm">
             <div
@@ -81,7 +86,8 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
                 </MediaQuery>
                 <div className={classes.container}>
                     <Group>
-                        <Text>Tools Application</Text>
+                        <BackButton useText={false} />
+                        <Title order={3}>{title}</Title>
                         <Group position="apart">
                             <Code sx={{ fontWeight: 700 }}>
                                 v{metadata.buildMajor}.{metadata.buildMinor}.

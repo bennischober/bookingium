@@ -23,16 +23,16 @@ export function DealMemoList({ memos }: DealMemoListProps) {
         setBandData(data);
     }, [memos]);
 
-    const handleDealClick = (dealId: string) => {
-        router.push(`/deal-memo/${dealId}`);
+    const handleDealClick = (dealid: string) => {
+        router.push(`/deal-memo/${dealid}`);
     };
 
     const columns = useMemo<ColumnDef<DealMemoListValues>[]>(
         () => [
             {
-                id: "dealId",
-                header: "dealId",
-                accessorKey: "dealId",
+                id: "dealid",
+                header: "dealid",
+                accessorKey: "dealid",
                 cell: (info) => (
                     <Text
                         underline
@@ -67,13 +67,6 @@ export function DealMemoList({ memos }: DealMemoListProps) {
                 footer: (props) => props.column.id,
             },
             {
-                id: "fee",
-                header: "fee",
-                accessorKey: "fee",
-                cell: (props) => props.getValue(),
-                footer: (props) => props.column.id,
-            },
-            {
                 id: "status",
                 header: "status",
                 accessorKey: "status",
@@ -84,13 +77,13 @@ export function DealMemoList({ memos }: DealMemoListProps) {
         []
     );
 
+    // kinda hacky
     const rows: DealMemoListValues[] = memos.map((memo, index) => ({
-        dealId: memo.dealId,
+        dealid: memo.dealid!,
         band:
             bandData[index] && bandData[index].name ? bandData[index].name : "",
         deal: memo.deal,
-        date: memo.date,
-        fee: memo.fee,
+        date: dayjs(memo.date).toISOString(),
         status: memo.status,
     }));
 

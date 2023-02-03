@@ -1,54 +1,56 @@
-import { Accordion, Group, Space, TextInput } from "@mantine/core";
-import { InputComponentProps } from "../../../types";
+import {
+    Button,
+    Center,
+    Divider,
+    Group,
+    Modal,
+    Space,
+    Textarea,
+    TextInput,
+} from "@mantine/core";
+import { useState } from "react";
+import { CompanyInputProps } from "../../../types";
 import AddressInput from "../AddressInput";
 import ContactInput from "../ContactInput";
+import { MemberInput } from "../MemberInput";
 
-/**
- * Form needs the following:
- * - companyName
- * - vatNumber
- * - ustNumber
- * - AddressInput, ContactInput props
- */
-export function CompanyInput({ Form }: InputComponentProps) {
+export function CompanyInput({ Form, autocomplete, isEdit, persons }: CompanyInputProps) {
+    const [opened, setOpened] = useState(false);
+
     return (
         <>
-            <Accordion>
-                <Accordion.Item value="company">
-                    <Accordion.Control>Company</Accordion.Control>
-                    <Accordion.Panel>
-                        <>
-                            <TextInput
-                                label="Company Name"
-                                {...Form.getInputProps("companyName")}
-                            />
-                            <Space h="xl" />
-                            <Group grow>
-                                <TextInput
-                                    label="VAT Number"
-                                    {...Form.getInputProps("vatNumber")}
-                                />
-                                <TextInput
-                                    label="UST Number"
-                                    {...Form.getInputProps("ustNumber")}
-                                />
-                            </Group>
-                        </>
-                    </Accordion.Panel>
-                </Accordion.Item>
-                <Accordion.Item value="company-address">
-                    <Accordion.Control>Company Address</Accordion.Control>
-                    <Accordion.Panel>
-                        <AddressInput Form={Form} />
-                    </Accordion.Panel>
-                </Accordion.Item>
-                <Accordion.Item value="company-contact">
-                    <Accordion.Control>Company Contact</Accordion.Control>
-                    <Accordion.Panel>
-                        <ContactInput Form={Form} />
-                    </Accordion.Panel>
-                </Accordion.Item>
-            </Accordion>
+            <TextInput label="Name" {...Form.getInputProps("name")} required />
+            <Textarea label="Notes" {...Form.getInputProps("notes")} />
+            <Space h="xl" />
+            <Group grow>
+                <TextInput
+                    label="VAT Number"
+                    {...Form.getInputProps("vatNumber")}
+                />
+                <TextInput
+                    label="UST Number"
+                    {...Form.getInputProps("ustNumber")}
+                />
+            </Group>
+
+            <Divider my="xl" label="Address" labelPosition="center" />
+            <AddressInput Form={Form} />
+
+            <Divider my="xl" label="Contact" labelPosition="center" />
+            <ContactInput Form={Form} />
+
+            <Divider my="xl" label="Member" labelPosition="center" />
+            <Center>
+                <Button onClick={() => setOpened(true)} variant="default">
+                    {isEdit ? "Edit Member" : "Add Member"}
+                </Button>
+            </Center>
+
+            <Divider my="xl" />
+
+            <Modal opened={opened} onClose={() => setOpened(false)} size="xl">
+                <MemberInput Form={Form} isEdit={isEdit} persons={persons} />
+            </Modal>
         </>
     );
 }

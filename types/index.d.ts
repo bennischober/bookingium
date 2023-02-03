@@ -2,10 +2,11 @@ import { MantineNumberSize } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form/lib/types";
 import { Session } from "next-auth";
 import { IconBase } from "react-icons/lib";
-import { IBand } from "../models/band";
+import { Band, IBand } from "../models/band";
+import { ICompany } from "../models/company";
 import { IDealMemo } from "../models/deal-memo";
 import { IHotel } from "../models/hotel";
-import { ILopro } from "../models/lopro";
+import { IPerson, Person } from "../models/person";
 import { IVenue } from "../models/venue";
 
 /** --- COMPONENTS --- **/
@@ -23,9 +24,9 @@ export interface AppContainerProps {
 }
 
 export interface FormContainerProps {
-    children: React.ReactNode;
-    center?: boolean;
-    sx?: {};
+	children: React.ReactNode;
+	center?: boolean;
+	sx?: {};
 }
 
 export interface HeaderProps {
@@ -61,40 +62,98 @@ export interface UserButtonProps {
 	color?: string;
 }
 
-export interface SearchOrAddProps {
-    ac: {
-        data: string[];
-        useForm: UseFormReturnType<any>;
-        required?: boolean;
-        label: string;
-        placeholder: string;
-        inputProps: string;
-    };
-    md: {
-        button: string;
-        handleOpen: (state: boolean) => void;
-    };
+export interface ActionButtonProps {
+	Icon: typeof IconBase;
+	handleOnClick: () => void;
+	tooltip?: string;
+	buttonColor?: string;
+}
+
+interface SearchableProps {
+	Form: UseFormReturnType<any>;
+	label: string;
+	limit?: number;
+	placeholder?: string;
+	inputProps: string;
+	required?: boolean;
+	editChild?: React.ReactNode;
+	deleteChild?: React.ReactNode;
+	buttonChild?: React.ReactNode;
+	isIteratable?: boolean; // refers to if its a looped item or just a single item
+	isDisabled?: boolean;
+}
+
+export interface SearchableInputProps extends SearchableProps {
+	autocomplete: any[];
+}
+
+interface SearchableIdProxyData {
+	display: string;
+	value: string;
+}
+
+interface SearchableIdProxyProps extends SearchableProps {
+	data?: SearchableIdProxyData[];
+}
+
+interface IFormEdit {
+	Form: UseFormReturnType<any>;
+	inputProps: string;
+	label?: string;
+	placeholder?: string;
+	required?: boolean;
+}
+
+export interface SearchOrAddProps extends IFormEdit {
+	data?: SearchableIdProxyData[];
+	buttonLabel: string;
+	handleOpen: (state: boolean) => void;
 }
 
 // or type to any?
 export interface InputComponentProps {
-	Form: UseFormReturnType;
+	Form: UseFormReturnType<any>;
 }
 
-export interface BandMemberInputProps extends InputComponentProps {
-	index: number;
+export interface MemberInputProps extends InputComponentProps {
+	isEdit?: boolean;
+	persons?: IPerson[];
+	inputProps?: string;
+	firstFieldLabel?: string;
+	secondFieldLabel?: string;
+}
+
+export interface AcComponentsInputProps extends InputComponentProps {
+	autocomplete: any[];
+	label?: string;
+	inputProps?: string;
+	isEdit?: boolean;
+}
+
+export interface CompanyInputProps extends AcComponentsInputProps {
+	persons?: IPerson[];
+}
+
+export interface LoproInputProps extends InputComponentProps {
+	person?: SearchableIdProxyData[];
+	company?: SearchableIdProxyData[];
 }
 
 export interface BandFormProps {
-	handleBands?: (data: {}) => void;
+	handleData: (data: IBand) => void;
 	close?: () => void;
 	session: SessionProps["session"];
+	data?: IBand;
+	persons?: IPerson[];
+	companies?: ICompany[];
+	isEdit?: boolean;
 }
 
-export interface BandEditFormProps {
+export interface PersonFormProps {
+	handleData(data: IPerson): void;
+	close?: () => void;
 	session: SessionProps["session"];
-	handleBand: (data: {}) => void;
-	data: BandFormValues;
+	data?: IPerson;
 }
 
 export interface DealMemoListProps {
@@ -129,11 +188,11 @@ export interface ControlledSliderProps {
 }
 
 export interface SpecificPageHeaderProps {
-    title: string;
-    titleName: string;
-    subTitle?: string;
-    other?: React.ReactElement;
-    useBackButton?: boolean;
+	title: string | JSX.Element;
+	titleName: string;
+	subTitle?: string | JSX.Element;
+	other?: React.ReactElement;
+	useBackButton?: boolean;
 }
 
 /** --- SSR PAGE PROPS --- **/
@@ -145,17 +204,43 @@ export interface SessionProps extends Session {
 	};
 }
 
+export interface ReqAuthProps {
+	session: SessionProps["session"];
+}
+
+export interface CompanyACPageProps extends ReqAuthProps {
+	companies: ICompany[];
+}
+
+export interface CompanyPageProps extends ReqAuthProps {
+	persons: IPerson[];
+}
+
+export interface CompanyEditPageProps extends ReqAuthProps {
+	company: ICompany;
+	persons: IPerson[];
+}
+
+export interface SingleEditPageProps<T> extends ReqAuthProps {
+	data: T;
+}
+
+export interface BandPageProps extends ReqAuthProps {
+	persons: IPerson[];
+	companies: ICompany[];
+}
+
 export interface DealMemoFormProps {
 	session: SessionProps["session"];
 	bands: IBand[];
 	venues?: IVenue[];
-	lopros?: ILopro[];
 	hotels?: IHotel[];
-	handleMemos: (data: {}) => void;
-	handleBands: (data: {}) => void;
-	handleVenues: (data: {}) => void;
-	handleLopros: (data: {}) => void;
-	handleHotels: (data: {}) => void;
+	persons?: IPerson[];
+	companies?: ICompany[];
+	handleMemos: (data: IDealMemo) => void;
+	handleBands: (data: IBand) => void;
+	handleVenues: (data: IVenue) => void;
+	handleHotels: (data: IHotel) => void;
 }
 
 export interface DealMemoProps {
@@ -168,117 +253,60 @@ export interface AddDealMemoProps {
 	bands: IBand[];
 	memos: IDealMemo[];
 	venues?: IVenue[];
-	lopros?: ILopro[];
 	hotels?: IHotel[];
+	persons?: IPerson[];
+	companies?: ICompany[];
 }
 
 export interface CompleteDealMemoPageProps {
 	session: SessionProps["session"];
 	memo: IDealMemo;
+	band?: IBand;
+	venue?: IVenue;
+	hotel?: IHotel;
+	hotels?: IHotel[];
 }
 
 export interface SpecificBandPageProps {
 	session: SessionProps["session"];
-	band: IBand;	
+	band: IBand;
+	persons: IPerson[];
+	companies: ICompany[];
 }
 
 export interface DealEditFormProps {
-	handleMemos: (data: {}) => void;
+	handleMemos: (data: IDealMemo) => void;
 	session: SessionProps["session"];
-	data: DealEditFormValues;
-	bandName: string;
+	data: IDealMemo;
 	created: string;
 }
 
 export interface VenueFormProps {
-	handleVenue: (data: {}) => void;
+	handleData: (data: IVenue) => void;
 	close?: () => void;
 	session: SessionProps["session"];
-}
-
-export interface VenueEditFormProps {
-    handleVenue: (data: {}) => void;
-    session: SessionProps["session"];
-    data: VenueFormValues;
-}
-
-export interface LoproFormProps {
-	handleLopro: (data: {}) => void;
-	close?: () => void;
-	session: SessionProps["session"];
-}
-
-export interface LoproEditFormProps {
-	handleLopro: (data: {}) => void;
-	session: SessionProps["session"];
-	data: LoproFormValues;
+	data?: IVenue;
+	companies?: SearchableIdProxyData[];
+	persons?: IPerson[];
+	isEdit?: boolean;
 }
 
 export interface HotelFormProps {
-	handleHotel: (data: {}) => void;
+	handleData: (data: IHotel) => void;
 	close?: () => void;
 	session: SessionProps["session"];
+	data?: IHotel;
 }
 
-export interface HotelEditFormProps {
-	handleHotel: (data: {}) => void;
+export interface CompanyFormProps {
+	handleData: (data: ICompany) => void;
+	close?: () => void;
 	session: SessionProps["session"];
-	data: HotelFormValues;
+	data?: ICompany;
+	persons?: IPerson[];
 }
-
 
 /** --- FORM TYPES --- **/
-
-export interface AddressInputValues {
-	streetNumber: number;
-	street: string;
-	addressSuffix: string;
-	zipCode: number;
-	city: string;
-	state: string;
-	country: string;
-	countryCode: string;
-}
-
-export interface ContactInputValues {
-	email: string;
-	phone: string;
-	mobilePhone: string;
-	homepage: string;
-}
-
-export interface CompanyInputValues extends AddressInputValues, ContactInputValues {
-	companyName: string;
-	vatNumber: string;
-	ustNumber: string;
-}
-
-export interface BandFormValues extends CompanyInputValues {
-	bandName: string;
-	notes: string;
-	members: {
-		name: string;
-		role: string;
-		email: string;
-		phone: string;
-	}[];
-}
-
-export interface DealMemoFormValues {
-	band: string;
-	date: Date;
-	deal: string;
-	fee: number;
-	ticketPriceVVK: number;
-	ticketPriceAK: number;
-	posters: number;
-	status: string;
-	notes: string;
-	venue: string;
-	lopro: string;
-	hotel?: string;
-}
-
 export interface LoginFormValues {
 	email: string;
 	password: string;
@@ -300,42 +328,6 @@ export interface RegisterHandleData {
 	accept: boolean;
 }
 
-export interface DealEditFormValues {
-	deal: string;
-	date: Date;
-	fee: number;
-	ticketPriceVVK: number;
-	ticketPriceAK: number;
-	posters: number;
-	status: string;
-	notes: string;
-}
-
-export interface VenueFormValues extends CompanyInputValues {
-	venue: string;
-	capacity: number;
-	contactPerson: {
-		name: string;
-		role: string;
-		email: string;
-		phone: string;
-	}[];
-	notes: string;
-}
-
-export interface LoproFormValues extends CompanyInputValues {
-	name: string;
-	personPhone: string;
-	personMobilePhone: string;
-	personEmail: string;
-	notes: string;
-}
-
-export interface HotelFormValues extends CompanyInputValues {
-	name: string;
-	notes: string;
-}
-
 export interface DataGridSettingsValues {
 	fontSize: MantineNumberSize;
 	verticalSpacing: MantineNumberSize;
@@ -345,18 +337,17 @@ export interface DataGridSettingsValues {
 
 /** --- DATA GRID TYPES --- **/
 export interface DealMemoListValues {
-	dealId: string;
+	dealid: string;
 	band: string;
 	deal: string;
 	date: string;
-	fee: number;
 	status: string;
 }
 
 export interface BandListValues {
 	bandId: string;
 	name: string;
-	// genre: string;
-	website: string;
-	country: string;
+	genre: string;
+	// website: string;
+	// country: string;
 }

@@ -1,26 +1,22 @@
 export interface IAddress {
     street: string;
-    streetNumber: number;
+    streetNumber: string;
     addressSuffix: string;
-    zipCode: number;
+    zipCode: string;
     city: string;
     state: string;
     country: string;
     countryCode: string;
 }
 
-export interface ICompany {
-    name: string;
-    vatNumber: string;
-    ustNumber: string;
-    address: IAddress;
-    contact: IContact;
-}
-
 export interface IContact {
+    email: string;
     phone: string;
     mobilePhone: string;
-    email: string;
+    otherNumbers: {
+        identifier: string;
+        number: string;
+    }[];
     homepage: string;
 }
 
@@ -28,11 +24,4 @@ export interface IDm {
     userid: string;
     created: string;
     edited: string;
-}
-
-export interface IContactPerson {
-    name: string;
-    role: string;
-    email: string;
-    phone: string;
 }

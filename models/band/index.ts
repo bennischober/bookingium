@@ -1,89 +1,36 @@
-import { Document, model, Model, models, Schema } from 'mongoose';
-import dayjs from 'dayjs';
+import { Document, model, Model, models, Schema, Types } from 'mongoose';
+import { IDm } from '../modelTypes';
+import { ODm } from '../modelObjects';
 
-const bandSchema: Schema = new Schema({
-    // _id: Schema.Types.ObjectId,
+const BandSchema: Schema = new Schema({
     bandid: {
         type: String,
         required: true,
         unique: true,
+        // refers to #118
+        index: true,
     },
     name: { type: String, required: true },
-    notes: { type: String },
-    company: {
-        name: { type: String },
-        vatNumber: { type: String },
-        ustNumber: { type: String },
-        address: {
-            street: { type: String },
-            streetNumber: { type: String },
-            addressSuffix: { type: String },
-            zipCode: { type: String },
-            city: { type: String },
-            state: { type: String },
-            country: { type: String },
-            countryCode: { type: String },
-        },
-        contact: {
-            phone: { type: String },
-            mobilePhone: { type: String },
-            email: { type: String },
-            homepage: { type: String },
-        },
-    },
-    members: [
-        {
-            name: { type: String },
-            role: { type: String },
-            email: { type: String },
-            phone: { type: String },
-        }
-    ],
-    dm: {
-        userid: { type: String, required: true },
-        created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
-        edited: { type: String }
-    },
+    genre: { type: String, default: '' },
+    founded: { type: Date, default: null },
+    notes: { type: String, default: '' },
+    company: { type: Schema.Types.ObjectId, ref: 'Company', required: true },
+    members: [{ type: Schema.Types.ObjectId, ref: 'Person', required: true }],
+    dm: ODm,
 });
 
-export interface IBand extends Document {
-    // _id: Schema.Types.ObjectId;
-    bandid: string;
+export interface Band {
     name: string;
+    genre: string;
+    founded?: Date;
     notes: string;
-    company: {
-        name: string;
-        vatNumber: string;
-        ustNumber: string;
-        address: {
-            street: string;
-            streetNumber: number;
-            addressSuffix: string;
-            zipCode: number;
-            city: string;
-            state: string;
-            country: string;
-            countryCode: string;
-        };
-        contact: {
-            phone: string;
-            mobilePhone: string;
-            email: string;
-            homepage: string;
-        };
-    };
-    members: {
-        name: string;
-        role: string;
-        email: string;
-        phone: string;
-    }[];
-    dm: {
-        userid: string;
-        created: string;
-        edited: string;
-    };
+    company: Types.ObjectId;
+    members: Types.ObjectId[];
 }
 
+export interface IBand extends Document, Band {
+    bandid: string;
+    dm: IDm;
+}
 
-export const Band: Model<IBand> = models.Band || model<IBand>('Band', bandSchema);
+export const Band: Model<IBand> = models.Band || model<IBand>('Band', BandSchema);

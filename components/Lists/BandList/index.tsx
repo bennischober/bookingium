@@ -11,12 +11,10 @@ export interface BandListProps {
 }
 
 export function BandList({ bands }: BandListProps) {
-    console.log(bands);
-
     const router = useRouter();
 
     const handleBandClick = (bandId: string) => {
-        router.push(`/band/${bandId}`);
+        router.push(`/edit/band/${bandId}`);
     };
 
     const columns = useMemo<ColumnDef<BandListValues>[]>(
@@ -46,27 +44,27 @@ export function BandList({ bands }: BandListProps) {
                 cell: (props) => props.getValue(),
                 footer: (props) => props.column.id,
             },
-            {
-                id: "website",
-                header: "website",
-                accessorKey: "website",
-                cell: (props) => props.getValue(),
-                footer: (props) => props.column.id,
-            },
-            {
-                id: "country",
-                header: "country",
-                accessorKey: "country",
-                cell: (props) => props.getValue(),
-                footer: (props) => props.column.id,
-            },
             // {
-            //     id: "genre",
-            //     header: "genre",
-            //     accessorKey: "genre",
+            //     id: "website",
+            //     header: "website",
+            //     accessorKey: "website",
             //     cell: (props) => props.getValue(),
             //     footer: (props) => props.column.id,
             // },
+            // {
+            //     id: "country",
+            //     header: "country",
+            //     accessorKey: "country",
+            //     cell: (props) => props.getValue(),
+            //     footer: (props) => props.column.id,
+            // },
+            {
+                id: "genre",
+                header: "genre",
+                accessorKey: "genre",
+                cell: (props) => props.getValue(),
+                footer: (props) => props.column.id,
+            },
         ],
         []
     );
@@ -75,9 +73,9 @@ export function BandList({ bands }: BandListProps) {
             bands.map((band) => ({
                 bandId: band.bandid,
                 name: band.name,
-                website: band.company.contact.homepage,
-                country: band.company.address.country,
-                //genre: band.genre,
+                // website: band.company.contact.homepage,
+                // country: band.company.address.country,
+                genre: band.genre,
             })),
         [bands]
     );

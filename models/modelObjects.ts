@@ -1,33 +1,29 @@
 import dayjs from "dayjs";
 
 export const OAddress = {
-    street: { type: String },
-    streetNumber: { type: String },
-    addressSuffix: { type: String },
-    zipCode: { type: String },
-    city: { type: String },
-    state: { type: String },
-    country: { type: String },
-    countryCode: { type: String },
+    street: { type: String, default: '' },
+    streetNumber: { type: String, default: '' },
+    addressSuffix: { type: String, default: '' },
+    zipCode: { type: String, default: '' },
+    city: { type: String, default: '' },
+    state: { type: String, default: '' },
+    country: { type: String, default: '' },
+    countryCode: { type: String, default: '' },
 };
 
 export const OContact = {
-    phone: { type: String },
-    mobilePhone: { type: String },
-    email: { type: String },
-    homepage: { type: String },
+    email: { type: String, default: '' },
+    phone: { type: String, default: '' },
+    mobilePhone: { type: String, default: '' },
+    otherNumbers: [{
+        identifier: { type: String, default: '' },
+        number: { type: String, default: '' },
+    }],
+    homepage: { type: String, default: '' },
 };
 
-export const OCompany= {
-    name: { type: String },
-    vatNumber: { type: String },
-    ustNumber: { type: String },
-    address: OAddress,
-    contact: OContact,
-}
-
 export const ODm = {
-    userid: { type: String, required: true },
+    userid: { type: String, required: true, index: true },
     created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
-    edited: { type: String }
+    edited: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') }
 }

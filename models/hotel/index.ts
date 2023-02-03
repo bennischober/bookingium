@@ -1,25 +1,32 @@
-import mongoose, { Document } from 'mongoose';
-import { OCompany, ODm } from '../modelObjects';
-import { ICompany, IDm } from '../modelTypes';
+import { Document, model, Model, models, Schema } from 'mongoose';
+import { OAddress, OContact, ODm } from '../modelObjects';
+import { IAddress, IContact, IDm } from '../modelTypes';
 
-const hotelSchema = new mongoose.Schema({
+const HotelSchema = new Schema({
     hotelid: {
         type: String,
         required: true,
         unique: true,
+        // refers to #118
+        index: true,
     },
     name: { type: String, required: true },
-    notes: { type: String },
-    company: OCompany,
+    notes: { type: String, default: '' },
+    address: OAddress,
+    contact: OContact,
     dm: ODm,
 });
 
-export interface IHotel extends Document {
-    hotelid: string;
+export interface Hotel {
     name: string;
     notes: string;
-    company: ICompany;
+    contact: IContact;
+    address: IAddress;
+}
+
+export interface IHotel extends Document, Hotel {
+    hotelid: string;
     dm: IDm;
 }
 
-export default mongoose.models.Hotel || mongoose.model('Hotel', hotelSchema);
+export const Hotel: Model<IHotel> = models.Hotel || model<IHotel>('Hotel', HotelSchema);

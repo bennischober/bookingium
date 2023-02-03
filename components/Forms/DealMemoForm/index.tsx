@@ -1,6 +1,4 @@
 import { useState } from "react";
-import dayjs from "dayjs";
-import { v4 as uuidv4 } from "uuid";
 import {
     Box,
     Button,
@@ -10,182 +8,121 @@ import {
     Modal,
     Paper,
     Space,
-    Title,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
-import { IBand } from "../../../models/band";
 import {
     DealEditFormProps,
-    DealEditFormValues,
     DealMemoFormProps,
-    DealMemoFormValues,
+    SearchableIdProxyData,
 } from "../../../types";
 import { BandForm } from "../BandForm";
 import { SearchOrAdd } from "../../FormElements/SearchOrAdd";
 import { VenueForm } from "../VenueForm";
-import { LoproForm } from "../LoproForm";
 import { HotelForm } from "../HotelForm";
-import { IVenue } from "../../../models/venue";
-import { ILopro } from "../../../models/lopro";
-import { IHotel } from "../../../models/hotel";
-import { getValueAtKey } from "../../../utils/appHandles";
+import {
+    getFormValueObject,
+    isPopulated,
+} from "../../../utils/appHandles";
 import { DealInput } from "../../FormInputs/DealInput";
 import { useUnsavedWarn } from "../../../hooks";
+import { DealMemo, IDealMemo } from "../../../models/deal-memo";
+import { Types } from "mongoose";
+import dayjs from "dayjs";
+import { IPerson } from "../../../models/person";
+import { ICompany } from "../../../models/company";
 
 export function DealMemoForm({
     bands,
     venues,
-    lopros,
     hotels,
+    persons,
+    companies,
     session,
     handleMemos,
     handleBands,
     handleVenues,
-    handleLopros,
     handleHotels,
 }: DealMemoFormProps) {
     const [bandModalOpened, setBandModalOpened] = useState(false);
     const [venueModalOpened, setVenueModalOpened] = useState(false);
-    const [loproModalOpened, setLoproModalOpened] = useState(false);
     const [hotelModalOpened, setHotelModalOpened] = useState(false);
 
-    const dealForm = useForm<DealMemoFormValues>({
+    const Form = useForm<DealMemo>({
         initialValues: {
-            band: "",
-            date: dayjs().toDate(),
             deal: "",
-            fee: 0,
+            date: dayjs().toDate(),
             ticketPriceVVK: 0,
             ticketPriceAK: 0,
             posters: 0,
-            status: "pending",
+            status: "TBC",
             notes: "",
-            venue: "",
-            lopro: "",
-            hotel: "",
+            lopro: {
+                person: "" as unknown as Types.ObjectId,
+                company: "" as unknown as Types.ObjectId,
+            },
+            bandid: "" as unknown as Types.ObjectId,
+            venueid: "" as unknown as Types.ObjectId,
+            hotelid: "" as unknown as Types.ObjectId,
         },
-        validate: (values: DealMemoFormValues) => ({
-            band: values.band.length > 0 ? undefined : "Band is required",
-            date:
-                values.date.toString().length > 0
-                    ? undefined
-                    : "Date is required",
-            deal: values.deal.length > 0 ? undefined : "Deal is required",
-            fee: values.fee >= 0 ? undefined : "Price is required",
-            ticketPriceVVK:
-                values.ticketPriceVVK >= 0 ? undefined : "Price is required",
-            ticketPriceAK:
-                values.ticketPriceAK >= 0 ? undefined : "Price is required",
-            posters: values.posters >= 0 ? undefined : "Posters is required",
-            status: values.status.length > 0 ? undefined : "Status is required",
-            venue: values.venue.length > 0 ? undefined : "Venue is required",
-            lopro: values.lopro.length > 0 ? undefined : "Lopro is required",
-        }),
     });
 
-    const onDealSubmit = async (values: DealMemoFormValues) => {
-        let band = {} as IBand;
-        bands.forEach((val) => {
-            if (val.name === values.band) {
-                band = val;
-            }
-        });
+    const [prompt] = useUnsavedWarn(Form);
 
-        if (!band) {
-            console.log("band not found, aborting save action!");
+    const onDealSubmit = async (values: DealMemo) => {
+        if (!bands || !venues || !persons || !companies) {
+            console.error("No bands, venues, persons or companies found");
             return;
         }
 
-        let venue = {} as IVenue;
-        venues?.forEach((val) => {
-            if (val.venue === values.venue) {
-                venue = val;
+        const memoData = getFormValueObject<DealMemo>(
+            values,
+            session.userid,
+            undefined,
+            {
+                createId: "dealid",
             }
-        });
+        ) as IDealMemo;
 
-        if (!venue) {
-            console.log("venue not found, aborting save action!");
-            return;
-        }
+        console.log("memoData", memoData);
 
-        let lopro = {} as ILopro;
-        lopros?.forEach((val) => {
-            if (val.name === values.lopro) {
-                lopro = val;
-            }
-        });
-        if (!lopro) {
-            console.log("lopro not found, aborting save action!");
-            return;
-        }
+        // handleMemos(memoData);
 
-        let hotel = hotels
-            ? getValueAtKey(hotels, "name", values.hotel)
-            : ({} as IHotel);
-
-        const memoData = {
-            dealId: uuidv4(),
-            deal: values.deal,
-            bandid: band._id,
-            venueid: venue._id,
-            loproid: lopro._id,
-            hotelid: hotel ? hotel._id : null,
-            date: values.date,
-            fee: values.fee,
-            ticketPriceVVK: values.ticketPriceVVK,
-            ticketPriceAK: values.ticketPriceAK,
-            posters: values.posters,
-            status: values.status,
-            notes: values.notes,
-            dm: {
-                userid: session.userid,
-                created: dayjs().toISOString(),
-                edited: dayjs().toISOString(),
-            },
-        };
-
-        handleMemos(memoData);
-
-        dealForm.reset();
+        // Form.reset();
     };
 
     const closeModals = () => {
         setBandModalOpened(false);
         setVenueModalOpened(false);
-        setLoproModalOpened(false);
         setHotelModalOpened(false);
     };
 
-    // useMemo?
-    const bandsAutoComplete = bands
-        ? bands?.map((val) => {
-              return val.name;
-          })
-        : [];
+    if (!persons || !companies || !bands || !venues) return <></>;
 
-    const venuesAutoComplete = venues
-        ? venues?.map((val) => {
-              return val.venue;
-          })
-        : [];
-
-    const loprosAutoComplete = lopros
-        ? lopros?.map((val) => {
-              return val.name;
-          })
-        : [];
-
-    const hotelsAutoComplete = hotels
-        ? hotels?.map((val) => {
-              return val.name;
-          })
-        : [];
-
-    const [prompt] = useUnsavedWarn(dealForm);
+    const bandsAutoComplete: SearchableIdProxyData[] = bands.map((b) => ({
+        display: b.name,
+        value: b._id,
+    }));
+    const venuesAutoComplete: SearchableIdProxyData[] = venues.map((v) => ({
+        display: v.name,
+        value: v._id,
+    }));
+    const hotelsAutoComplete: SearchableIdProxyData[] = hotels?.map((h) => ({
+        display: h.name,
+        value: h._id,
+    })) || [];
+    const personsAutoComplete: SearchableIdProxyData[] = persons.map((p) => ({
+        display: `${p.firstName} ${p.lastName}`,
+        value: p._id,
+    }));
+    const companiesAutoComplete: SearchableIdProxyData[] = companies.map(
+        (c) => ({
+            display: c.name,
+            value: c._id,
+        })
+    );
 
     return (
         <>
-            {/* <Title order={1}>Create a new Deal Memo</Title> */}
             <Center>
                 <Paper
                     withBorder
@@ -196,25 +133,21 @@ export function DealMemoForm({
                     sx={{ minWidth: 300, maxWidth: 750, width: "100vw" }}
                 >
                     <form
-                        onSubmit={dealForm.onSubmit((values) =>
+                        onSubmit={Form.onSubmit((values) =>
                             onDealSubmit(values)
                         )}
                     >
                         <Group grow align="top">
                             <Box>
                                 <SearchOrAdd
-                                    ac={{
-                                        data: bandsAutoComplete,
-                                        useForm: dealForm,
-                                        required: true,
-                                        label: "Choose a band",
-                                        placeholder: "Band name",
-                                        inputProps: "band",
-                                    }}
-                                    md={{
-                                        button: "Add new band",
-                                        handleOpen: setBandModalOpened,
-                                    }}
+                                    data={bandsAutoComplete}
+                                    Form={Form}
+                                    required={true}
+                                    label={"Choose a band"}
+                                    placeholder={"Band name"}
+                                    inputProps={"bandid"}
+                                    buttonLabel={"Add new band"}
+                                    handleOpen={setBandModalOpened}
                                 />
                                 <Space h="xl" />
                                 <Divider
@@ -222,7 +155,11 @@ export function DealMemoForm({
                                     label="Deal data"
                                     labelPosition="center"
                                 />
-                                <DealInput Form={dealForm} />
+                                <DealInput
+                                    Form={Form}
+                                    person={personsAutoComplete}
+                                    company={companiesAutoComplete}
+                                />
                                 <Space h="xl" />
                                 <Divider
                                     my="xl"
@@ -230,48 +167,24 @@ export function DealMemoForm({
                                     labelPosition="center"
                                 />
                                 <SearchOrAdd
-                                    ac={{
-                                        data: venuesAutoComplete,
-                                        useForm: dealForm,
-                                        required: true,
-                                        label: "Choose a venue",
-                                        placeholder: "Venue name",
-                                        inputProps: "venue",
-                                    }}
-                                    md={{
-                                        button: "Add new venue",
-                                        handleOpen: setVenueModalOpened,
-                                    }}
+                                    data={venuesAutoComplete}
+                                    Form={Form}
+                                    required={true}
+                                    label={"Choose a venue"}
+                                    placeholder={"Venue name"}
+                                    inputProps={"venueid"}
+                                    buttonLabel={"Add new venue"}
+                                    handleOpen={setVenueModalOpened}
                                 />
                                 <Space h="xl" />
                                 <SearchOrAdd
-                                    ac={{
-                                        data: loprosAutoComplete,
-                                        useForm: dealForm,
-                                        required: true,
-                                        label: "Choose a local promoter",
-                                        placeholder: "lopro name",
-                                        inputProps: "lopro",
-                                    }}
-                                    md={{
-                                        button: "Add new local promoter",
-                                        handleOpen: setLoproModalOpened,
-                                    }}
-                                />
-                                <Space h="xl" />
-                                <SearchOrAdd
-                                    ac={{
-                                        data: hotelsAutoComplete,
-                                        useForm: dealForm,
-                                        required: false,
-                                        label: "Choose a hotel",
-                                        placeholder: "Hotel name",
-                                        inputProps: "hotel",
-                                    }}
-                                    md={{
-                                        button: "Add new hotel",
-                                        handleOpen: setHotelModalOpened,
-                                    }}
+                                    data={hotelsAutoComplete}
+                                    Form={Form}
+                                    label={"Choose a hotel"}
+                                    placeholder={"Hotel name"}
+                                    inputProps={"hotelid"}
+                                    buttonLabel={"Add new hotel"}
+                                    handleOpen={setHotelModalOpened}
                                 />
                             </Box>
                         </Group>
@@ -287,13 +200,14 @@ export function DealMemoForm({
                 onClose={() => setBandModalOpened(false)}
                 title="Add a new Band"
                 size="xl"
-                overflow="inside"
                 centered
             >
                 <BandForm
-                    handleBands={handleBands}
+                    handleData={handleBands}
                     close={closeModals}
                     session={session}
+                    persons={persons}
+                    companies={companies}
                 />
             </Modal>
             <Modal
@@ -301,27 +215,14 @@ export function DealMemoForm({
                 onClose={() => setVenueModalOpened(false)}
                 title="Add a new Venue"
                 size="xl"
-                overflow="inside"
                 centered
             >
                 <VenueForm
-                    handleVenue={handleVenues}
+                    handleData={handleVenues}
                     close={closeModals}
                     session={session}
-                />
-            </Modal>
-            <Modal
-                opened={loproModalOpened}
-                onClose={() => setLoproModalOpened(false)}
-                title="Add a new Lopro"
-                size="xl"
-                overflow="inside"
-                centered
-            >
-                <LoproForm
-                    handleLopro={handleLopros}
-                    close={closeModals}
-                    session={session}
+                    companies={companiesAutoComplete}
+                    persons={persons}
                 />
             </Modal>
             <Modal
@@ -329,11 +230,10 @@ export function DealMemoForm({
                 onClose={() => setHotelModalOpened(false)}
                 title="Add a new Hotel"
                 size="xl"
-                overflow="inside"
                 centered
             >
                 <HotelForm
-                    handleHotel={handleHotels}
+                    handleData={handleHotels}
                     close={closeModals}
                     session={session}
                 />
@@ -347,45 +247,87 @@ export function DealEditForm({
     handleMemos,
     session,
     data,
-    bandName,
     created,
 }: DealEditFormProps) {
-    const Form = useForm<DealEditFormValues>({
+    const Form = useForm<DealMemo>({
         initialValues: {
             deal: data.deal,
-            date: data.date,
-            fee: data.fee,
+            date: dayjs(data.date).toDate(),
             ticketPriceVVK: data.ticketPriceVVK,
             ticketPriceAK: data.ticketPriceAK,
             posters: data.posters,
             status: data.status,
             notes: data.notes,
+            lopro: {
+                person: data.lopro.person,
+                company: data.lopro.company,
+            },
+            bandid: data.bandid,
+            venueid: data.venueid,
+            hotelid: data.hotelid,
         },
     });
 
-    const onDealSubmit = (values: DealEditFormValues) => {
-        const memoData = {
-            deal: values.deal,
-            date: values.date,
-            fee: values.fee,
-            posters: values.posters,
-            notes: values.notes,
-            dm: {
-                edited: dayjs().toISOString(),
-                userid: session.userid,
-                created: created,
-            },
-        };
+    const onDealSubmit = (values: DealMemo) => {
+        Form.resetDirty();
+        const memoData = getFormValueObject<DealMemo>(
+            values,
+            session.userid,
+            created,
+            {
+                createId: "dealid",
+                value: data.dealid,
+            }
+        ) as IDealMemo;
+
+        console.log("dealMemoForm", memoData);
+
+        // clear populated fields => Note: this is not needed!
+        memoData.hotelid = memoData.hotelid?._id ?? memoData.hotelid;
+        memoData.venueid = memoData.venueid?._id ?? memoData.venueid;
+        memoData.bandid = memoData.bandid?._id ?? memoData.bandid;
+        memoData.lopro.person =
+            memoData.lopro.person?._id ?? memoData.lopro.person;
+        memoData.lopro.company =
+            memoData.lopro.company?._id ?? memoData.lopro.company;
 
         handleMemos(memoData);
     };
 
     const [prompt] = useUnsavedWarn(Form);
 
+    const p = isPopulated<IPerson>(data.lopro.person)
+        ? (data.lopro.person as IPerson)
+        : null;
+
+    const c = isPopulated<ICompany>(data.lopro.company)
+        ? (data.lopro.company as ICompany)
+        : null;
+
+    if (!c || !p) return <></>;
+
+    const personData = [
+        {
+            display: `${p.firstName} ${p.lastName}`,
+            value: p._id,
+        },
+    ];
+
+    const companyData = [
+        {
+            display: c.name,
+            value: c._id,
+        },
+    ];
+
     return (
         <>
             <form onSubmit={Form.onSubmit((values) => onDealSubmit(values))}>
-                <DealInput Form={Form} />
+                <DealInput
+                    Form={Form}
+                    person={personData}
+                    company={companyData}
+                />
                 <Space h="xl" />
                 <Button type="submit" fullWidth mt="xl">
                     Update Deal Data
