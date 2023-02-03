@@ -43,7 +43,7 @@ export function MemberInput({
                 <ActionButton
                     Icon={MdEdit}
                     handleOnClick={() => {
-                        router.push(`/edit/person/oid/${item._id}`);
+                        router.push(`/edit/person/${item}`);
                     }}
                     tooltip="Edit field"
                 />

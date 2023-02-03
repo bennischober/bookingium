@@ -159,7 +159,7 @@ export function SearchableIdProxy({
         if (item) {
             setValue(item.value);
         }
-        console.log(item, autocomplete, Form.values, inputProps);
+        // console.log(item, autocomplete, Form.values, inputProps);
     }
 
     // standalone component

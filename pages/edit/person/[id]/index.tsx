@@ -31,7 +31,6 @@ export default function EditPersonOIDPage({ session, data }: SingleEditPageProps
 
     return (
         <PageTemplate title={`Edit ${data.firstName} ${data.lastName}`}>
-            <BackButton />
             <FormContainer>
                 <PersonForm session={session} handleData={handleSave} data={person} />
             </FormContainer>
@@ -42,7 +41,7 @@ export default function EditPersonOIDPage({ session, data }: SingleEditPageProps
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession({ req: ctx.req });
 
-    const data = await serverSideFetch<IPerson>(`/api/person/oid/${ctx.query.id}`, {
+    const data = await serverSideFetch<IPerson>(`/api/person/${ctx.query.id}`, {
         userid: session?.userid,
     });
     
