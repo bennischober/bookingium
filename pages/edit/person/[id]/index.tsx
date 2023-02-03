@@ -2,13 +2,13 @@ import axios from "axios";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useState } from "react";
-import { PersonForm } from "../../../../../components/Forms/PersonForm";
-import { FormContainer } from "../../../../../components/Layout/FormContainer";
-import { PageTemplate } from "../../../../../components/Layout/PageTemplate";
-import { BackButton } from "../../../../../components/LayoutElements/BackButton";
-import { IPerson } from "../../../../../models/person";
-import { SingleEditPageProps } from "../../../../../types";
-import { clientSideFetch, serverSideFetch } from "../../../../../utils/appHandles";
+import { PersonForm } from "../../../../components/Forms/PersonForm";
+import { FormContainer } from "../../../../components/Layout/FormContainer";
+import { PageTemplate } from "../../../../components/Layout/PageTemplate";
+import { BackButton } from "../../../../components/LayoutElements/BackButton";
+import { IPerson } from "../../../../models/person";
+import { SingleEditPageProps } from "../../../../types";
+import { clientSideFetch, serverSideFetch } from "../../../../utils/appHandles";
 
 export default function EditPersonOIDPage({ session, data }: SingleEditPageProps<IPerson>) {
     const [person, setPerson] = useState<IPerson>(data);
@@ -16,13 +16,13 @@ export default function EditPersonOIDPage({ session, data }: SingleEditPageProps
     const handleSave = async (data: IPerson) => {
         // put person data
         const ret = await axios.put(
-            `/api/person/${data.personid}`,
+            `/api/person/${data._id}`,
             { data: data },
             { params: { userid: session.userid } }
         );
         console.log(ret.data, ret.status);
 
-        const refetched = await clientSideFetch<IPerson>(`/api/person/${data.personid}`, {
+        const refetched = await clientSideFetch<IPerson>(`/api/person/${data._id}`, {
             userid: session?.userid,
         });
         console.log(refetched);
