@@ -18,7 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (method) {
         case 'GET':
             try {
-                const band = await Band.findOne({ bandid: id }).exec();
+                const band = await Band.findOne({ _id: id }).exec();
                 if (!band) {
                     return new ApiError(res, 404, `No data found for the id ${id}!`).throw();
                 }
@@ -28,7 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'PUT':
             try {
-                const band = await Band.updateOne({ bandid: id }, { $set: req.body.data }, { runValidators: true, });
+                const band = await Band.updateOne({ _id: id }, { $set: req.body.data }, { runValidators: true, });
                 if (!band) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }
@@ -38,7 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'DELETE':
             try {
-                const band = await Band.findByIdAndDelete(id);
+                const band = await Band.deleteOne({_id: id});
                 if (!band) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }

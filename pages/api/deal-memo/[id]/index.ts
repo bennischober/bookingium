@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
                 // get specific item
                 // Note: if populate('foreignDoc') id does not exist, it returns null => no error is thrown!
-                const dealMemo = await DealMemo.findOne({ dealid: id }).populate('bandid').populate('venueid').populate('hotelid').populate({
+                const dealMemo = await DealMemo.findOne({ _id: id }).populate('bandid').populate('venueid').populate('hotelid').populate({
                     path: 'lopro',
                     populate: { path: 'person company' },
                 }).exec();
@@ -42,18 +42,19 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'PUT':
             try {
                 // this updates only the given data in body
-                const dealMemo = await DealMemo.updateOne({ dealid: id }, { $set: req.body.data }, { runValidators: true }).exec();
+                console.log(req.body.data);
+                const dealMemo = await DealMemo.updateOne({ _id: id }, { $set: req.body.data }, { runValidators: true }).exec();
                 if (!dealMemo) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }
-                return res.status(200).json({ success: true, data: {dealMemo} });
+                return res.status(200).json({ success: true, data: { dealMemo } });
             } catch (error) {
                 return new ApiError(res, 500).handle(error);
             }
         case 'DELETE':
             try {
                 // delete specific item
-                const dealMemo = await DealMemo.deleteOne({ dealId: id });
+                const dealMemo = await DealMemo.deleteOne({ _id: id });
                 if (!dealMemo) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }
