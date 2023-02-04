@@ -8,11 +8,9 @@ import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { MdCheck, MdClose } from "react-icons/md";
 import {
-    clientSideFetch,
     isPopulated,
     nonEmptyObj,
     serverSideFetch,
-    toAutocomplete,
     updateData,
 } from "../../../utils/appHandles";
 import { DealEditForm } from "../../../components/Forms/DealMemoForm";

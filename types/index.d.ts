@@ -129,7 +129,7 @@ export interface AcComponentsInputProps extends InputComponentProps {
 	inputProps?: string;
 }
 
-export interface CompanyInputProps extends AcComponentsInputProps {
+export interface CompanyInputProps extends InputComponentProps {
 	persons?: IPerson[];
 }
 
