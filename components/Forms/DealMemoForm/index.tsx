@@ -59,7 +59,7 @@ export function DealMemoForm({
             },
             bandid: "" as unknown as Types.ObjectId,
             venueid: "" as unknown as Types.ObjectId,
-            hotelid: "" as unknown as Types.ObjectId,
+            hotelid: null as unknown as Types.ObjectId,
         },
     });
 
@@ -77,8 +77,6 @@ export function DealMemoForm({
         ) as IDealMemo;
 
         handleMemos(memoData);
-
-        console.log(memoData);
 
         Form.reset();
     };
@@ -179,6 +177,7 @@ export function DealMemoForm({
                                     inputProps={"hotelid"}
                                     buttonLabel={"Add new hotel"}
                                     handleOpen={setHotelModalOpened}
+                                    required={false}
                                 />
                             </Box>
                         </Group>
@@ -269,8 +268,6 @@ export function DealEditForm({
             session.userid,
             created
         ) as IDealMemo;
-
-        console.log("dealMemoForm", memoData);
 
         // clear populated fields => Note: this is not needed!
         memoData.hotelid = memoData.hotelid?._id ?? memoData.hotelid;
