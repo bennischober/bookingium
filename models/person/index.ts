@@ -3,13 +3,6 @@ import { IAddress, IContact, IDm } from '../modelTypes';
 import { OAddress, OContact, ODm } from '../modelObjects';
 
 const PersonSchema: Schema = new Schema({
-    personid: {
-        type: String,
-        required: true,
-        unique: true,
-        // refers to #118
-        index: true,
-    },
     // closes #148
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
@@ -18,7 +11,7 @@ const PersonSchema: Schema = new Schema({
     notes: { type: String, default: "" },
     contact: OContact,
     address: OAddress,
-    dm: ODm,
+    ...ODm,
 }, {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
@@ -48,9 +41,6 @@ export interface Person {
     address: IAddress;
 }
 
-export interface IPerson extends Document, Person {
-    personid: string;
-    dm: IDm;
-}
+export interface IPerson extends Document, Person, IDm { }
 
 export const Person: Model<IPerson> = models.Person || model<IPerson>('Person', PersonSchema);

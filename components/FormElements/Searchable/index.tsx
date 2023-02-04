@@ -149,17 +149,12 @@ export function SearchableIdProxy({
 
     // change initial data. can happen, if this is used in a popup and the popup closes => data is saved but the selected value is not displayed/saved
     if (value === "" && Form.getInputProps(inputProps).value !== "") {
-        console.info(
-            `Trying to set a value for ${inputProps} in SearchableIdProxy.`
-        );
-
         const item = autocomplete.find(
             (item) => item.display === Form.getInputProps(inputProps).value
         );
         if (item) {
             setValue(item.value);
         }
-        console.log(item, autocomplete, Form.values, inputProps);
     }
 
     // standalone component

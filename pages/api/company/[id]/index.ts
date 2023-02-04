@@ -17,7 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (method) {
         case 'GET':
             try {
-                const company = await Company.findOne({ companyid: id }).exec();
+                const company = await Company.findOne({ _id: id }).exec();
                 if (!company) {
                     return new ApiError(res, 404, `No data found for the id ${id}!`).throw();
                 }
@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'PUT':
             try {
-                const company = await Company.updateOne({ companyid: id }, { $set: req.body.data }, { runValidators: true });
+                const company = await Company.updateOne({ _id: id }, { $set: req.body.data }, { runValidators: true });
                 if (!company) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }
@@ -38,7 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'DELETE':
             try {
-                const company = await Company.deleteOne({ companyid: id });
+                const company = await Company.deleteOne({ _id: id });
                 if (!company) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }

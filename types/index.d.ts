@@ -113,10 +113,10 @@ export interface SearchOrAddProps extends IFormEdit {
 // or type to any?
 export interface InputComponentProps {
 	Form: UseFormReturnType<any>;
+	isEdit?: boolean;
 }
 
 export interface MemberInputProps extends InputComponentProps {
-	isEdit?: boolean;
 	persons?: IPerson[];
 	inputProps?: string;
 	firstFieldLabel?: string;
@@ -127,10 +127,9 @@ export interface AcComponentsInputProps extends InputComponentProps {
 	autocomplete: any[];
 	label?: string;
 	inputProps?: string;
-	isEdit?: boolean;
 }
 
-export interface CompanyInputProps extends AcComponentsInputProps {
+export interface CompanyInputProps extends InputComponentProps {
 	persons?: IPerson[];
 }
 
@@ -350,4 +349,17 @@ export interface BandListValues {
 	genre: string;
 	// website: string;
 	// country: string;
+}
+
+
+/** --- SPECIFIC PAGES --- **/
+export interface SpecificDealMemoPageContentProps {
+	session: SessionProps["session"];
+	memo: IDealMemo;
+	hotelState?: IHotel;
+	hotelAutocomplete: SearchableIdProxyData[];
+	handleMemo: (data: IDealMemo) => void;
+	handleHotel: (data: IHotel) => void;
+	handleSelectHotel: (id: string) => void;
+	handleAddHotel: (data: IHotel) => void;
 }

@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { connect } from '../../../../../lib/mongodb';
-import { Person } from "../../../../../models/person";
-import { ApiError } from '../../../../../types/errors';
+import { connect } from '../../../../lib/mongodb';
+import { Hotel } from "../../../../models/hotel";
+import { ApiError } from '../../../../types/errors';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     const {
@@ -11,40 +11,40 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     await connect();
 
+    // id references the band
     if (!id) return new ApiError(res).throwSpecific('missing_request_parameters');
     if (!userid) return new ApiError(res).throwSpecific('access_denied');
 
     switch (method) {
         case 'GET':
             try {
-                const person = await Person.findOne({ _id: id }).exec();
-                if (!person) {
+                const hotel = await Hotel.findOne({ _id: id }).exec();
+                if (!hotel) {
                     return new ApiError(res, 404, `No data found for the id ${id}!`).throw();
                 }
-                return res.status(200).json({ success: true, data: person });
+                return res.status(200).json({ success: true, data: hotel });
             } catch (error) {
                 return new ApiError(res, 500).handle(error);
             }
         case 'PUT':
             try {
-                const person = await Person.updateOne({ _id: id }, { $set: req.body.data }, { runValidators: true });
-                if (!person) {
+                const hotel = await Hotel.updateOne({ _id: id }, { $set: req.body.data }, { runValidators: true, });
+                if (!hotel) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }
-                return res.status(200).json({ success: true, data: person });
-            }
-            catch (error) {
+                return res.status(200).json({ success: true, data: hotel });
+            } catch (error) {
+                console.log(error, req.body.data);
                 return new ApiError(res, 500).handle(error);
             }
         case 'DELETE':
             try {
-                const person = await Person.deleteOne({ _id: id });
-                if (!person) {
+                const hotel = await Hotel.deleteOne({_id: id});
+                if (!hotel) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }
                 return res.status(200).json({ success: true, data: {} });
-            }
-            catch (error) {
+            } catch (error) {
                 return new ApiError(res, 500).handle(error);
             }
         default:

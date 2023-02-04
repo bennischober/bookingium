@@ -71,7 +71,7 @@ export function BandList({ bands }: BandListProps) {
     const rows = useMemo<BandListValues[]>(
         () =>
             bands.map((band) => ({
-                bandId: band.bandid,
+                bandId: band._id,
                 name: band.name,
                 // website: band.company.contact.homepage,
                 // country: band.company.address.country,

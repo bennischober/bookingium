@@ -79,7 +79,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
 
     // kinda hacky
     const rows: DealMemoListValues[] = memos.map((memo, index) => ({
-        dealid: memo.dealid!,
+        dealid: memo._id,
         band:
             bandData[index] && bandData[index].name ? bandData[index].name : "",
         deal: memo.deal,

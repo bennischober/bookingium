@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import dayjs from "dayjs";
 
 export const OAddress = {
@@ -23,7 +24,7 @@ export const OContact = {
 };
 
 export const ODm = {
-    userid: { type: String, required: true, index: true },
+    userid: { type: Types.ObjectId, required: true, index: true },
     created: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') },
     edited: { type: String, default: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]') }
 }

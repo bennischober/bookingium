@@ -26,6 +26,7 @@ export default function AddDealMemoPage({
 
     const handleMemos = async (data: IDealMemo) => {
         // post band data
+        console.log(data);
         const ret = await axios.post(
             "/api/deal-memo",
             { data: data },

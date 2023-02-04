@@ -3,18 +3,11 @@ import { OAddress, OContact, ODm } from '../modelObjects';
 import { IAddress, IContact, IDm } from '../modelTypes';
 
 const HotelSchema = new Schema({
-    hotelid: {
-        type: String,
-        required: true,
-        unique: true,
-        // refers to #118
-        index: true,
-    },
     name: { type: String, required: true },
     notes: { type: String, default: '' },
     address: OAddress,
     contact: OContact,
-    dm: ODm,
+    ...ODm,
 });
 
 export interface Hotel {
@@ -24,9 +17,6 @@ export interface Hotel {
     address: IAddress;
 }
 
-export interface IHotel extends Document, Hotel {
-    hotelid: string;
-    dm: IDm;
-}
+export interface IHotel extends Document, Hotel, IDm { }
 
 export const Hotel: Model<IHotel> = models.Hotel || model<IHotel>('Hotel', HotelSchema);

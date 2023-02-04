@@ -1,6 +1,5 @@
 import {
     Button,
-    Center,
     Grid,
     Modal,
     NumberInput,
@@ -15,7 +14,7 @@ import { z } from "zod";
 import { useUnsavedWarn } from "../../../hooks";
 import { IVenue, Venue } from "../../../models/venue";
 import { VenueFormProps } from "../../../types";
-import { getFormValueObject, getNestedValue } from "../../../utils/appHandles";
+import { getFormValueObject } from "../../../utils/appHandles";
 import { SearchableIdProxy } from "../../FormElements/Searchable";
 import { MemberInput } from "../../FormInputs/MemberInput";
 import { LeftAlignGroup } from "../../Layout/LeftAlignGroup";
@@ -50,16 +49,12 @@ export function VenueForm({
     });
 
     const handleSubmit = (values: Venue) => {
-        const created = data?.dm.created ?? "";
+        const created = data?.created ?? "";
 
         const venueData = getFormValueObject<Venue>(
             values,
             session.userid,
-            created,
-            {
-                createId: "venueid",
-                value: data?.venueid,
-            }
+            created
         ) as IVenue;
 
         handleData(venueData);

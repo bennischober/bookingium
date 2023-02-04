@@ -3,9 +3,6 @@ import { useForm } from "@mantine/form";
 import { useUnsavedWarn } from "../../../hooks";
 import {
     getFormValueObject,
-    getValuesAtCombinedKey,
-    membersIdToName,
-    toCombinedAutocomplete,
 } from "../../../utils/appHandles";
 import { CompanyFormProps } from "../../../types";
 import { Company, ICompany } from "../../../models/company";
@@ -41,34 +38,18 @@ export function CompanyForm({
                 otherNumbers: [],
                 homepage: "",
             },
-            members: data
-                ? membersIdToName(data.members as unknown as string[], persons)
-                : [],
+            members: data?.members ?? [],
         },
     });
 
     const handleSubmit = (values: Company) => {
-        const created = data?.dm.created ?? "";
+        const created = data?.created ?? "";
 
         const vals = getFormValueObject<Company>(
             values,
             session.userid,
-            created,
-            {
-                createId: "companyid",
-                value: data?.companyid,
-            }
+            created
         ) as ICompany;
-
-        vals.members = persons
-            ? getValuesAtCombinedKey(
-                  persons,
-                  ["firstName", "lastName"],
-                  values.members,
-                  " ",
-                  "_id"
-              )
-            : [];
 
         handleData(vals);
         if (close) close();
@@ -78,13 +59,6 @@ export function CompanyForm({
         if (!data) Form.reset();
     };
 
-    // change to useMemo?
-    const personAC = toCombinedAutocomplete(
-        persons,
-        ["firstName", "lastName"],
-        " "
-    );
-
     const [prompt] = useUnsavedWarn(Form);
 
     return (
@@ -92,7 +66,6 @@ export function CompanyForm({
             <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
                 <CompanyInput
                     Form={Form}
-                    autocomplete={personAC}
                     isEdit={data ? true : false}
                     persons={persons}
                 />

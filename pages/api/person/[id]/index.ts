@@ -17,7 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (method) {
         case 'GET':
             try {
-                const person = await Person.findOne({ personid: id }).exec();
+                const person = await Person.findOne({ _id: id }).exec();
                 if (!person) {
                     return new ApiError(res, 404, `No data found for the id ${id}!`).throw();
                 }
@@ -27,7 +27,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'PUT':
             try {
-                const person = await Person.updateOne({ personid: id }, { $set: req.body.data }, { runValidators: true });
+                const person = await Person.updateOne({ _id: id }, { $set: req.body.data }, { runValidators: true });
                 if (!person) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }
@@ -38,7 +38,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             }
         case 'DELETE':
             try {
-                const person = await Person.deleteOne({ personid: id });
+                const person = await Person.deleteOne({ _id: id });
                 if (!person) {
                     return new ApiError(res).throwSpecific('no_data_found');
                 }

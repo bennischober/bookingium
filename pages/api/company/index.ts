@@ -13,7 +13,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (method) {
         case 'GET':
             try {
-                const dt = await Company.find({ 'dm.userid': userid }).exec();
+                const dt = await Company.find({ 'userid': userid }).exec();
                 return res.status(200).json({ success: true, data: dt });
             } catch (error) {
                 return new ApiError(res, 500).handle(error);
