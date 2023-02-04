@@ -350,3 +350,16 @@ export interface BandListValues {
 	// website: string;
 	// country: string;
 }
+
+
+/** --- SPECIFIC PAGES --- **/
+export interface SpecificDealMemoPageContentProps {
+	session: SessionProps["session"];
+	memo: IDealMemo;
+	hotelState?: IHotel;
+	hotelAutocomplete: SearchableIdProxyData[];
+	handleMemo: (data: IDealMemo) => void;
+	handleHotel: (data: IHotel) => void;
+	handleSelectHotel: (id: string) => void;
+	handleAddHotel: (data: IHotel) => void;
+}
