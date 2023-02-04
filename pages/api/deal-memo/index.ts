@@ -28,6 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                 const dealMemo = await DealMemo.create(req.body.data); // create new db entry
                 return res.status(200).json({ success: true, data: dealMemo });
             } catch (error) {
+                console.log(error);
                 return new ApiError(res, 500).handle(error);
             }
         default:

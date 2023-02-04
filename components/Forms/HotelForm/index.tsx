@@ -53,8 +53,7 @@ export function HotelForm({
             session.userid,
             created
         ) as IHotel;
-        console.log(hotelData);
-
+        
         handleData(hotelData);
         if (close) close();
 
