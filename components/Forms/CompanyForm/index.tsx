@@ -3,7 +3,6 @@ import { useForm } from "@mantine/form";
 import { useUnsavedWarn } from "../../../hooks";
 import {
     getFormValueObject,
-    toCombinedAutocomplete,
 } from "../../../utils/appHandles";
 import { CompanyFormProps } from "../../../types";
 import { Company, ICompany } from "../../../models/company";
@@ -60,13 +59,6 @@ export function CompanyForm({
         if (!data) Form.reset();
     };
 
-    // change to useMemo?
-    const personAC = toCombinedAutocomplete(
-        persons,
-        ["firstName", "lastName"],
-        " "
-    );
-
     const [prompt] = useUnsavedWarn(Form);
 
     return (
@@ -74,7 +66,6 @@ export function CompanyForm({
             <form onSubmit={Form.onSubmit((values) => handleSubmit(values))}>
                 <CompanyInput
                     Form={Form}
-                    autocomplete={personAC}
                     isEdit={data ? true : false}
                     persons={persons}
                 />

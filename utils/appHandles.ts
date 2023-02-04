@@ -3,12 +3,6 @@ import { NextRouter } from "next/router";
 import dayjs from 'dayjs';
 import { SessionProps } from "../types";
 import axios from "axios";
-import { IPerson } from "../models/person";
-import { Types } from "mongoose";
-import { ICompany } from "../models/company";
-import { IHotel } from "../models/hotel";
-import { IVenue } from "../models/venue";
-import { IBand } from "../models/band";
 
 // handle theme, language, and other app settings
 
@@ -29,32 +23,8 @@ export function getLastRoute(router: NextRouter): string {
     return router.query.from === undefined ? "/" : router.query.from;
 }
 
-export function getDynamicRoute(query: string, router: NextRouter): string {
-    const r = router.pathname.replace(`[${query}]`, "");
-    const q = router.query[query] ?? "";
-    if (q === typeof Array) return r + q[q.length - 1]; // use first or last?
-    return r + q;
-}
-
 export function goToLastRoute(router: NextRouter) {
     router.push(getLastRoute(router));
-}
-
-export function changeRoute(router: NextRouter, pathname: string, query: { from?: string }) {
-    router.push({
-        pathname,
-        query
-    });
-}
-
-// rename this function! => check valid session?
-export function handleSession(router: NextRouter, session: SessionProps["session"], toPath: string, query?: { from: string }) {
-    if ((session && session.status === "unathorized") || !session) {
-        router.push({
-            pathname: toPath,
-            query
-        });
-    }
 }
 
 /*--- OTHER HANDLE ---*/
@@ -104,60 +74,6 @@ export function nonEmptyObj(obj: any) {
 
 export function nonEmptyString(str: any) {
     return str === null || str == undefined ? false : str.length > 0;
-}
-
-export function toAutocomplete<T>(data?: T[], identifier?: keyof T) {
-    if (!data || !identifier) return [];
-    return data.map((item) => {
-        return item[identifier];
-    });
-}
-
-export function toCombinedAutocomplete<T>(data?: T[], identifier?: (keyof T)[], seperator?: string) {
-    if (!data || !identifier) return [];
-    return data.map((item) => {
-        return identifier.map((id) => item[id]).join(seperator ?? " ");
-    });
-}
-
-export function isObjectId(id: string) {
-    // ObjectId has a length of 24
-    if (id.length === 24) {
-        // now second check: check for white spaces and it should include any number
-        if (/\s/.test(id) || !/\d/.test(id)) {
-            return false;
-        }
-        return true;
-    }
-    return false;
-};
-
-// export function arrayToMap<T>(array: T[], key: keyof T) {
-//     const m: { [id: string]: T } = {};
-//     array.forEach((item) => {
-//         m[(item[key] as unknown as string)] = item;
-//     });
-//     return m;
-// }
-
-export function arrayToMultiMap<T>(array: T[], key: keyof T) {
-    const m: { [id: string]: string } = {};
-}
-
-export function arrayToMap<T>(array: T[], key: keyof T) {
-    const map = new Map<T[keyof T], T>();
-    array.forEach((item) => {
-        map.set(item[key], item);
-    });
-    return map;
-}
-
-export function mapToArray<T>(map: Map<T[keyof T], T>) {
-    const array: T[] = [];
-    map.forEach((value) => {
-        array.push(value);
-    });
-    return array;
 }
 
 /*--- FETCH HANDLE ---*/
@@ -249,27 +165,6 @@ export const deleteData = async (endpoint: string, userid?: string): Promise<num
 export function isPopulated<T>(obj: T | any): obj is T {
     // return (obj && obj.name && typeof obj.name === 'string');
     return obj !== null && obj !== undefined;
-}
-
-export function objectIdToName<T extends IHotel | ICompany | IVenue | IBand>(data: T) {
-    return data.name as unknown as Types.ObjectId;
-}
-
-export function loproIdToNames(person: IPerson, company: ICompany) {
-    return {
-        person: person.firstName + " " + person.lastName as unknown as Types.ObjectId,
-        company: company.name as unknown as Types.ObjectId,
-    }
-}
-
-export function companyToName(company: ICompany, companies?: ICompany[]) {
-    if (!companies) return company as unknown as Types.ObjectId;
-    let c: string = "";
-    companies.forEach((m) => {
-        if (m._id === company) c = m.name;
-    });
-
-    return c as unknown as Types.ObjectId;
 }
 
 export function getKeys<T extends Object>(obj: T): (keyof T)[] {
