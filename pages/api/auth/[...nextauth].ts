@@ -52,7 +52,7 @@ export default NextAuth({
 		})
 	],
 	callbacks: {
-		jwt: async ({ token, user }) => {
+		jwt: async ({ token, user } : any) => {
 			if (user) {
 				token.id = user.id;
 				token.status = user.status;
@@ -60,7 +60,7 @@ export default NextAuth({
 			}
 			return token;
 		},
-		session: ({ session, token }) => {
+		session: ({ session, token } : any) => {
 			if (token) {
 				session.id = token.id;
 				session.status = token.status;
