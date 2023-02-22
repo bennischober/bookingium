@@ -75,14 +75,8 @@ export function LinksGroup({
     const [opened, setOpened] = useState(initiallyOpened || false);
     const ChevronIcon = theme.dir === "ltr" ? MdChevronRight : MdChevronLeft;
     const items = (hasLinks ? links : []).map((link) => (
-        <Link href={link.link} key={link.label}>
-            <Text<"a">
-                component="a"
-                className={classes.link}
-                href={link.link}
-            >
-                {link.label}
-            </Text>
+        <Link href={link.link} key={link.label} className={classes.link}>
+            {link.label}
         </Link>
     ));
 
