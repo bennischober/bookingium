@@ -29,28 +29,29 @@ export function useUnsavedWarn<T>(
         }
     };
 
-    useEffect(() => {
-        if (isAccepted) {
-            return () => {
-                Router.events.off("routeChangeStart", routeChangeStart);
-            };
-        }
+    // Note: this is not working anymore, need to look for a new solution
+    // useEffect(() => {
+    //     if (isAccepted) {
+    //         return () => {
+    //             Router.events.off("routeChangeStart", routeChangeStart);
+    //         };
+    //     }
 
-        const routeChangeStart = (url: string) => {
-            setLastRoute(url);
-            if (form.isDirty()) {
-                setIsOpened(true);
-                Router.events.emit("routeChangeError");
-                // search for better option than this!
-                throw "Abort route change. Please ignore this error.";
-            }
-        };
-        Router.events.on("routeChangeStart", routeChangeStart);
+    //     const routeChangeStart = (url: string) => {
+    //         setLastRoute(url);
+    //         if (form.isDirty()) {
+    //             setIsOpened(true);
+    //             Router.events.emit("routeChangeError");
+    //             // search for better option than this!
+    //             throw "Abort route change. Please ignore this error.";
+    //         }
+    //     };
+    //     Router.events.on("routeChangeStart", routeChangeStart);
 
-        return () => {
-            Router.events.off("routeChangeStart", routeChangeStart);
-        };
-    }, [form.isDirty(), isAccepted, lastRoute]);
+    //     return () => {
+    //         Router.events.off("routeChangeStart", routeChangeStart);
+    //     };
+    // }, [form.isDirty(), isAccepted, lastRoute]);
 
     const prompt = (
         <>

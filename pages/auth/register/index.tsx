@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-    Anchor,
-    Title,
-    Text,
-    Container,
-    LoadingOverlay,
-    Space,
-} from "@mantine/core";
+import { Title, Text, Container, LoadingOverlay, Space } from "@mantine/core";
 import { showNotification, cleanNotifications } from "@mantine/notifications";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -95,11 +88,7 @@ export default function RegisterPage() {
                 </Title>
                 <Text color="dimmed" size="sm" align="center" mt={5}>
                     Already have an account?{" "}
-                    <Link href="/auth/login">
-                        <Anchor<"a"> href="/auth/login" size="sm">
-                            Login
-                        </Anchor>
-                    </Link>
+                    <Link href="/auth/login">Login</Link>
                 </Text>
                 <div style={{ width: 400, position: "relative" }}>
                     <LoadingOverlay visible={visible} />
@@ -107,12 +96,7 @@ export default function RegisterPage() {
                 </div>
                 <Space h="xl" />
                 <Text color="dimmed" size="sm" align="center" mt={5}>
-                    Don't want to register?{" "}
-                    <Link href="/">
-                        <Anchor<"a"> size="sm" href="/">
-                            Back to Home
-                        </Anchor>
-                    </Link>
+                    Don't want to register? <Link href="/">Back to Home</Link>
                 </Text>
             </Container>
         </PageTemplate>

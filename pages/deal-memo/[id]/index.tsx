@@ -219,13 +219,7 @@ export default function CompleteDealMemoPage({
                 <SpecificPageHeader
                     title={
                         <Link href={`/edit/band/${band?._id}`}>
-                            <Text<"a">
-                                component="a"
-                                variant="link"
-                                href={`/band/${band?._id}`}
-                            >
-                                {band?.name}
-                            </Text>
+                            {band?.name}
                         </Link>
                     }
                     titleName={"Band"}

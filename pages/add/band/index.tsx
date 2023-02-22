@@ -5,6 +5,8 @@ import { BandForm } from "../../../components/Forms/BandForm";
 import { FormContainer } from "../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { IBand } from "../../../models/band";
+import { ICompany } from "../../../models/company";
+import { IPerson } from "../../../models/person";
 import { BandPageProps } from "../../../types";
 import { addData, serverSideFetch } from "../../../utils/appHandles";
 
@@ -40,10 +42,10 @@ export default function AddBandPage({
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const session = await getSession({ req: ctx.req });
 
-    const persons = await serverSideFetch("/api/person", {
+    const persons = await serverSideFetch<IPerson>("/api/person", {
         userid: session?.userid,
     });
-    const companies = await serverSideFetch("/api/company", {
+    const companies = await serverSideFetch<ICompany>("/api/company", {
         userid: session?.userid,
     });
 
