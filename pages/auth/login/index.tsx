@@ -118,12 +118,7 @@ export default function LoginPage({ session }: SessionProps) {
                 )}
                 <Space h="xl" />
                 <Text color="dimmed" size="sm" align="center" mt={5}>
-                    Don't want to login?{" "}
-                    <Link href="/">
-                        <Anchor<"a"> size="sm" href="/">
-                            Back to Home
-                        </Anchor>
-                    </Link>
+                    Don't want to login? <Link href="/">Back to Home</Link>
                 </Text>
             </Container>
         </>

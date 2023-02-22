@@ -1,8 +1,6 @@
 import {
-    Anchor,
     Button,
     Checkbox,
-    Group,
     Paper,
     PasswordInput,
     TextInput,
@@ -68,7 +66,7 @@ function getPasswordValidation(password: string) {
     return ret;
 }
 
-export function RegisterComponent({registerHandler}: RegisterComponentProps) {
+export function RegisterComponent({ registerHandler }: RegisterComponentProps) {
     const form = useForm<RegisterFormValues>({
         initialValues: {
             name: "",
@@ -132,36 +130,38 @@ export function RegisterComponent({registerHandler}: RegisterComponentProps) {
                 <Popover
                     opened={popoverOpened}
                     position="bottom"
-                    placement="start"
-                    withArrow
-                    styles={{ popover: { width: "100%" } }}
-                    trapFocus={false}
-                    transition="pop-top-left"
-                    onFocusCapture={() => setPopoverOpened(true)}
-                    onBlurCapture={() => setPopoverOpened(false)}
-                    target={
-                        <PasswordInput
-                            id="mantine-vkphjadj1"
-                            label="Your password"
-                            placeholder="Your password"
-                            description="Strong password should include letters in lower and uppercase, at least 1 number, at least 1 special symbol"
-                            {...form.getInputProps("password")}
-                            icon={<MdLockOutline />}
-                            required
-                        />
-                    }
+                    width="target"
+                    transition="pop"
                 >
-                    <Progress
-                        color={color}
-                        value={strength}
-                        size={5}
-                        style={{ marginBottom: 10 }}
-                    />
-                    <PasswordRequirement
-                        label="Includes at least 12 characters"
-                        meets={pwValues.length > 6}
-                    />
-                    {checks}
+                    <Popover.Target>
+                        <div
+                            onFocusCapture={() => setPopoverOpened(true)}
+                            onBlurCapture={() => setPopoverOpened(false)}
+                        >
+                            <PasswordInput
+                                id="mantine-vkphjadj1"
+                                label="Your password"
+                                placeholder="Your password"
+                                description="Strong password should include letters in lower and uppercase, at least 1 number, at least 1 special symbol"
+                                {...form.getInputProps("password")}
+                                icon={<MdLockOutline />}
+                                required
+                            />
+                        </div>
+                    </Popover.Target>
+                    <Popover.Dropdown>
+                        <Progress
+                            color={color}
+                            value={strength}
+                            size={5}
+                            style={{ marginBottom: 10 }}
+                        />
+                        <PasswordRequirement
+                            label="Includes at least 12 characters"
+                            meets={pwValues.length > 6}
+                        />
+                        {checks}
+                    </Popover.Dropdown>
                 </Popover>
                 <Space h="xs" />
                 <PasswordInput
