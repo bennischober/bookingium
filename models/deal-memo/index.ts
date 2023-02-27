@@ -7,7 +7,7 @@ const DealMemoSchema = new Schema({
     date: { type: Date, required: true },
     ticketPriceVVK: { type: Number },
     ticketPriceAK: { type: Number },
-    posters: { type: Number },
+    posters: { type: String },
     status: { type: String },
     notes: { type: String },
     lopro: {
@@ -25,7 +25,7 @@ export interface DealMemo {
     date: Date;
     ticketPriceVVK: number;
     ticketPriceAK: number;
-    posters: number;
+    posters: string;
     status: string;
     notes: string;
     lopro: {
