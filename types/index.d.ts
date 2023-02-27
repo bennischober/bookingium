@@ -271,6 +271,7 @@ export interface SpecificBandPageProps {
 	band: IBand;
 	persons: IPerson[];
 	companies: ICompany[];
+	memos: IDealMemo[];
 }
 
 export interface DealEditFormProps {
@@ -362,4 +363,16 @@ export interface SpecificDealMemoPageContentProps {
 	handleHotel: (data: IHotel) => void;
 	handleSelectHotel: (id: string) => void;
 	handleAddHotel: (data: IHotel) => void;
+}
+
+// PDF STUFF
+export interface PDFContractPageProps {
+	session: SessionProps["session"];
+	band: IBand,
+	bandCompany: ICompany,
+	bandResponsiblePerson?: IPerson,
+	loproCompany: ICompany,
+	loproPerson: IPerson,
+	venue: IVenue,
+	dealMemo: IDealMemo,
 }
