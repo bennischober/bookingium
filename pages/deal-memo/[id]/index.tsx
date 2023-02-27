@@ -1,13 +1,13 @@
 import { useState } from "react";
-import { Button, Text } from "@mantine/core";
+import { Button, Group, Tooltip } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import axios from "axios";
 import dayjs from "dayjs";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { MdCheck, MdClose } from "react-icons/md";
-import { isPopulated, serverSideFetch } from "../../../utils/appHandles";
+import { MdCheck, MdClose, MdEdit, MdFileDownload } from "react-icons/md";
+import { clientSideFetch, isPopulated, serverSideFetch } from "../../../utils/appHandles";
 import { IBand } from "../../../models/band";
 import { IDealMemo } from "../../../models/deal-memo";
 import { IHotel } from "../../../models/hotel";
@@ -198,9 +198,9 @@ export default function CompleteDealMemoPage({
 
         if (res.status === 200) {
             // fetch hotel
-            const hotel = await serverSideFetch<IHotel>(
+            const hotel = await clientSideFetch<IHotel>(
                 `/api/hotel/${id}`,
-                session.userid
+                {userid: session.userid}
             );
             setHotelState(hotel);
         }
@@ -227,17 +227,44 @@ export default function CompleteDealMemoPage({
                         "DD.MM.YYYY"
                     )} | Venue: ${venue?.name}`}
                     other={
-                        <Button
-                            variant="default"
-                            onClick={() => {
-                                router.push({
-                                    pathname: "/contract",
-                                    query: { id: memo._id },
-                                });
-                            }}
-                        >
-                            Create contract
-                        </Button>
+                        // move this to seperate component!
+                        
+                        // could use deal memo id and session
+                        // to fetch all other missing data to 
+                        // generate PDF
+                        <Button.Group>
+                            <Tooltip
+                                label="Download default PDF with deal memo values"
+                                position="bottom"
+                                color="blue"
+                                withArrow
+                            >
+                                <Button
+                                    variant="default"
+                                    leftIcon={<MdFileDownload size={20} />}
+                                >
+                                    Download contract
+                                </Button>
+                            </Tooltip>
+                            <Tooltip
+                                label="Replace default values with custom data"
+                                position="bottom"
+                                color="blue"
+                                withArrow
+                            >
+                                <Button
+                                    variant="default"
+                                    leftIcon={<MdEdit size={20} />}
+                                    onClick={() => {
+                                        router.push({
+                                            pathname: `/contract/${memo._id}`,
+                                        });
+                                    }}
+                                >
+                                    Customize contract
+                                </Button>
+                            </Tooltip>
+                        </Button.Group>
                     }
                 />
                 <ContentContainer>
