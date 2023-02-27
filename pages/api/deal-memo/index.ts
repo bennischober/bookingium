@@ -4,7 +4,7 @@ import { DealMemo } from '../../../models/deal-memo';
 import { ApiError } from '../../../types/errors';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const { method, query: { userid } } = req;
+    const { method, query: { userid, bandid } } = req;
 
     await connect();
 
@@ -15,6 +15,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
             try {
                 // register schema/model if its not already registered
                 require('../../../models/band');
+
+                if(bandid) {
+                    const dm = await DealMemo.find({ 'userid': userid, 'bandid': bandid }).populate('bandid').exec();
+                    return res.status(200).json({ success: true, data: dm });
+                }
 
                 // send populated data => needed in deal memo list
                 // only populate band name? .populate('bandid', 'name')
