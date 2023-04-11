@@ -28,7 +28,7 @@
     "dayjs": "1.11.7",
     "jsonwebtoken": "9.0.0",
     "mongoose": "6.9.3",
-    "next": "13.2.3",
+    "next": "13.3.0",
     "next-auth": "4.19.2",
     "nodemailer": "6.9.1",
     "pdf-lib": "1.17.1",
