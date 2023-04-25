@@ -27,7 +27,7 @@
     "bcryptjs": "2.4.3",
     "dayjs": "1.11.7",
     "jsonwebtoken": "9.0.0",
-    "mongoose": "6.9.3",
+    "mongoose": "7.0.5",
     "next": "13.2.3",
     "next-auth": "4.19.2",
     "nodemailer": "6.9.1",
