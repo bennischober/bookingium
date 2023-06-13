@@ -21,7 +21,7 @@
     "@mantine/prism": "5.10.4",
     "@mantine/rte": "5.10.4",
     "@mantine/spotlight": "5.10.4",
-    "@tanstack/react-table": "8.7.9",
+    "@tanstack/react-table": "8.9.2",
     "@tanstack/table-core": "8.9.1",
     "axios": "1.4.0",
     "bcryptjs": "2.4.3",
