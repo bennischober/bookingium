@@ -62,6 +62,14 @@ export default function RegisterPage() {
         try {
             const res = await axios.post("/api/user/register", userData);
             if (res.status === 200) {
+                const id = res.data.user._id;
+                const d = {
+                    name: "Default Company",
+                    users: [id],
+                    userid: id,
+                }
+                const r = await axios.post("/api/user/workplace", { data: d }, { params: { userid: id }});
+
                 signIn("credentials", {
                     username: registerData.email,
                     password: registerData.password,
@@ -75,7 +83,7 @@ export default function RegisterPage() {
     };
 
     return (
-        <PageTemplate title="Register">
+        <PageTemplate title="Register" useAuth={false}>
             <Container size={420} my={40}>
                 <Title
                     align="center"
