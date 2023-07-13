@@ -8,6 +8,7 @@ import { IDealMemo } from "../models/deal-memo";
 import { IHotel } from "../models/hotel";
 import { IPerson, Person } from "../models/person";
 import { IVenue } from "../models/venue";
+import { IWorkplace } from "../models/workplace";
 
 /** --- COMPONENTS --- **/
 export interface PageTemplateProps {
@@ -375,4 +376,5 @@ export interface PDFContractPageProps {
 	loproPerson: IPerson,
 	venue: IVenue,
 	dealMemo: IDealMemo,
+	workplace: IWorkplace,
 }

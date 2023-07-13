@@ -11,11 +11,9 @@ import { ViewerProps } from "../../../components/PDF/Viewer";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { ICompany } from "../../../models/company";
 import { IPerson } from "../../../models/person";
-
-export interface ContractPageProps {
-    memo: IDealMemo;
-    session: any;
-}
+import { IWorkplace } from "../../../models/workplace";
+import { NumberInput, TextInput } from "@mantine/core";
+import { useState } from "react";
 
 export default function ContractPage({
     session,
@@ -26,11 +24,17 @@ export default function ContractPage({
     loproPerson,
     venue,
     dealMemo,
+    workplace,
 }: PDFContractPageProps) {
     const View = dynamic<ViewerProps>(
         () => import("../../../components/PDF/Viewer"),
         { ssr: false }
     );
+
+    const [performance, setPerformance] = useState<string>("");
+    const [showDuration, setShowDuration] = useState("");
+    const [information, setInformation] = useState("");
+    const [amountOfMembers, setAmountOfMembers] = useState(0);
 
     const pdfDoc = (
         <PDFContract
@@ -41,11 +45,41 @@ export default function ContractPage({
             loproPerson={loproPerson}
             venue={venue}
             dealMemo={dealMemo}
+            workplace={workplace}
+            performance={performance}
+            duration={showDuration}
+            information={information}
+            amount={amountOfMembers}
         />
     );
 
     return (
         <>
+            <TextInput
+                label="Performance time"
+                placeholder="ca. 21 Uhr"
+                value={performance}
+                onChange={(event) => setPerformance(event.currentTarget.value)}
+            />
+            <TextInput
+                label="Show duration"
+                placeholder="90 min"
+                value={showDuration}
+                onChange={(event) => setShowDuration(event.currentTarget.value)}
+            />
+            <TextInput
+                label="Information"
+                placeholder=" es spielen 2 suppports Ghoster und Stepfather Fred"
+                value={information}
+                onChange={(event) => setInformation(event.currentTarget.value)}
+            />
+            <NumberInput
+                label="Amount of members"
+                placeholder="6"
+                value={amountOfMembers}
+                onChange={(val) => setAmountOfMembers(val!)}
+            />
+
             <View Pdf={pdfDoc} />
             <PDFDownloadLink document={pdfDoc} fileName="somename.pdf">
                 {({ blob, url, loading, error }) =>
@@ -91,6 +125,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
         ? (data.venueid as IVenue)
         : null;
 
+    const workplace = await serverSideFetch<IWorkplace>("/api/user/workplace", {
+        userid: session?.userid,
+    });
+
     return {
         props: {
             session: session,
@@ -101,6 +139,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             loproPerson: loproPerson,
             venue: venue,
             dealMemo: data,
+            workplace: workplace,
         },
     };
 };
