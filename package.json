@@ -15,7 +15,7 @@
     "@mantine/form": "6.0.10",
     "@mantine/hooks": "5.10.4",
     "@mantine/modals": "5.10.4",
-    "@mantine/next": "5.10.4",
+    "@mantine/next": "6.0.18",
     "@mantine/notifications": "5.10.4",
     "@mantine/nprogress": "5.10.4",
     "@mantine/prism": "5.10.4",
