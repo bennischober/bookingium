@@ -45,17 +45,14 @@ export default function PDFContract({
 }: PDFContractProps) {
     Font.registerHyphenationCallback((word) => [word]);
 
-    const date = new Date();
-    const dateMonth =
-        date.getMonth() > 9 ? date.getMonth() + 1 : `0${date.getMonth() + 1}`;
-    const dateStr = `${date.getDate()}.${dateMonth}.${date.getFullYear()}`;
+    const createDateString = (date: Date): string => {
+        const month = date.getMonth() + 1;
+        const dateMonth = month > 9 ? month : `0${month}`;
+        return `${date.getDate()}.${dateMonth}.${date.getFullYear()}`;
+    };
 
-    const dealDate = new Date(dealMemo.date);
-    const dealMonth =
-        dealDate.getMonth() > 9
-            ? dealDate.getMonth() + 1
-            : `0${dealDate.getMonth() + 1}`;
-    const dealDateStr = `${dealDate.getDate()}.${dealMonth}.${dealDate.getFullYear()}`;
+    const dateStr = createDateString(new Date());
+    const dealDateStr = createDateString(new Date(dealMemo.date));
 
     const styles = StyleSheet.create({
         body: {
@@ -110,6 +107,10 @@ export default function PDFContract({
             marginTop: 12,
             marginBottom: 12,
         },
+        addressIt: {
+            textAlign: "justify",
+            fontStyle: "italic",
+        },
     });
 
     const doc = (
@@ -124,23 +125,18 @@ export default function PDFContract({
                     <View style={styles.addressView}>
                         <Text
                             style={styles.address}
-                            render={() => bandName}
-                        ></Text>
-                        <Text
-                            style={styles.address}
                             render={() =>
-                                `${bandCompany.address.street} ${bandCompany.address.streetNumber} ${bandCompany.address.addressSuffix}`
+                                `${bandName} \n ${bandCompany.address.street} ${bandCompany.address.streetNumber} ${bandCompany.address.addressSuffix} \n ${bandCompany.address.zipCode} ${bandCompany.address.city}`
                             }
-                        ></Text>
-                        <Text
-                            style={styles.address}
-                            render={() =>
-                                `${bandCompany.address.zipCode} ${bandCompany.address.city}`
-                            }
-                        ></Text>
+                        />
                     </View>
                     <Text style={styles.big}>vertreten durch:</Text>
-                    <Text style={styles.address} render={() => `${workplace.name}, , ${workplace.address.street} ${workplace.address.streetNumber}, ${workplace.address.zipCode} ${workplace.address.city}`} />
+                    <Text
+                        style={styles.addressIt}
+                        render={() =>
+                            `${workplace.name}, ${workplace.address.street} ${workplace.address.streetNumber}, ${workplace.address.zipCode} ${workplace.address.city}`
+                        }
+                    />
                 </View>
 
                 <View style={styles.view}>
@@ -156,7 +152,7 @@ export default function PDFContract({
                     </View>
                     <Text style={styles.big}>vertreten durch:</Text>
                     <Text
-                        style={styles.address}
+                        style={styles.addressIt}
                         render={() =>
                             `${loproPerson.firstName} ${loproPerson.lastName}, ${loproPerson.contact.mobilePhone}, ${loproPerson.contact.email}`
                         }
@@ -164,7 +160,7 @@ export default function PDFContract({
                 </View>
 
                 <Text style={styles.text}>
-                    Künstlersozialkassen-Nummer von „VP2“(bitte eintragen -
+                    Künstlersozialkassen-Nummer von „VP2“ (bitte eintragen -
                     falls bekannt):
                 </Text>
 
@@ -234,7 +230,7 @@ export default function PDFContract({
                         <Text
                             style={styles.text}
                             render={() =>
-                                `Als Honorar ist vereinbart: ${dealMemo.deal}`
+                                `Als Honorar ist vereinbart: VP1 erhält ${dealMemo.deal}`
                             }
                         ></Text>
                     </View>
@@ -332,10 +328,9 @@ export default function PDFContract({
                     </View>
                     <View style={styles.view}>
                         <Text
-                            // hyphenationCallback={e => e}
                             style={styles.text}
                             render={() =>
-                                `Ansprechpartner VP1: Brainstorm Music Marketing AG, ${bandResponsiblePerson?.firstName} ${bandResponsiblePerson?.lastName}, ${bandResponsiblePerson?.contact.email}`
+                                `Ansprechpartner VP1:${workplace.name}, ${bandResponsiblePerson?.firstName} ${bandResponsiblePerson?.lastName}, ${bandResponsiblePerson?.contact.email}`
                             }
                         />
                     </View>
