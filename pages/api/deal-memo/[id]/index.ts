@@ -42,7 +42,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         case 'PUT':
             try {
                 // this updates only the given data in body
-                console.log(req.body.data);
                 const dealMemo = await DealMemo.updateOne({ _id: id }, { $set: req.body.data }, { runValidators: true }).exec();
                 if (!dealMemo) {
                     return new ApiError(res).throwSpecific('no_data_found');
