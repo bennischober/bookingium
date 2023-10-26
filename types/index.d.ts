@@ -230,6 +230,15 @@ export interface BandPageProps extends ReqAuthProps {
 	companies: ICompany[];
 }
 
+export interface ItineraryPageProps extends ReqAuthProps {
+    venues: IVenue[];
+    hotels: IHotel[];
+    dealMemos: IDealMemo[];
+    persons: IPerson[];
+    companies: ICompany[];
+    bands: IBand[];
+}
+
 export interface DealMemoFormProps {
 	session: SessionProps["session"];
 	bands: IBand[];
