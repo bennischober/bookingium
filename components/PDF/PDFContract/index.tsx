@@ -330,7 +330,7 @@ export default function PDFContract({
                         <Text
                             style={styles.text}
                             render={() =>
-                                `Ansprechpartner VP1:${workplace.name}, ${bandResponsiblePerson?.firstName} ${bandResponsiblePerson?.lastName}, ${bandResponsiblePerson?.contact.email}`
+                                `Ansprechpartner VP1: ${bandResponsiblePerson?.firstName} ${bandResponsiblePerson?.lastName}, ${bandResponsiblePerson?.contact.mobilePhone}, ${bandResponsiblePerson?.contact.email}`
                             }
                         />
                     </View>
@@ -704,10 +704,9 @@ export default function PDFContract({
                             Der unterzeichnete Vertrag einschließlich der
                             unterschriebenen Bühnenanweisung und der
                             unterschriebenen Cateringliste als Bestandteile des
-                            Vertrages, ein Stadtplan und ein Anfahrtsplan sind
-                            Brainstorm Music Marketing AG bis zwei Wochen nach
-                            Erhalt des Vertrag per Mail
-                            (deville@brainstorm-music-marketing.de) oder per
+                            Vertrages, ein Stadtplan und ein Anfahrtsplan sind{" "}
+                            {workplace.name} bis zwei Wochen nach Erhalt des
+                            Vertrag per Mail {workplace.contact.email} oder per
                             Post unterschrieben zurück zu senden.
                         </ListItem>
                     </View>
