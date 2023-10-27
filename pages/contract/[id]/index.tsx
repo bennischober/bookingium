@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
 import { IDealMemo } from "../../../models/deal-memo";
 import { isPopulated, serverSideFetch } from "../../../utils/appHandles";
 import { IBand } from "../../../models/band";
@@ -14,6 +13,7 @@ import { IPerson } from "../../../models/person";
 import { IWorkplace } from "../../../models/workplace";
 import { NumberInput, TextInput } from "@mantine/core";
 import { useState } from "react";
+import { auth } from "../../../auth";
 
 export default function ContractPage({
     session,
@@ -77,7 +77,7 @@ export default function ContractPage({
                 label="Amount of members"
                 placeholder="6"
                 value={amountOfMembers}
-                onChange={(val) => setAmountOfMembers(val!)}
+                onChange={(val) => setAmountOfMembers(Number(val))}
             />
 
             <View Pdf={pdfDoc} />
@@ -91,7 +91,7 @@ export default function ContractPage({
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const session = await getSession({ req: ctx.req });
+    const session = await auth(ctx);
     const id = ctx.query.id;
 
     const data = await serverSideFetch<IDealMemo>(`/api/deal-memo/${id}`, {

@@ -1,42 +1,29 @@
-import React, { useState } from "react";
-import { AppShell, useMantineTheme } from "@mantine/core";
+"use client";
+
+import React from "react";
+import { AppShell } from "@mantine/core";
 import { AppContainerProps } from "../../../types";
 import { NavbarComponent } from "../Navbar";
 import { FooterComponent } from "../Footer";
 import { HeaderComponent } from "../Header";
 
-export function AppContainer(props: AppContainerProps) {
-    const [opened, setOpened] = useState(false);
-    const [navState, setNavState] = useState(false);
-
-    const theme = useMantineTheme();
-
-    const handleNavigation = (opened: boolean) => {
-        setOpened(opened);
-        // note: needs fallback when changing back to desktop. if mobile closed navbar, desktop navbar is still closed!
-        setNavState(!opened);
-    };
-
+export function AppContainer({children, session}: AppContainerProps) {
     return (
         <AppShell
             header={{ height: 60 }}
             navbar={{
                 width: 300,
                 breakpoint: "sm",
-                collapsed: { mobile: !opened },
             }}
             padding="md"
         >
             <AppShell.Header>
-                <HeaderComponent
-                    handleNavigation={handleNavigation}
-                    opened={opened}
-                />
+                <HeaderComponent session={session}/>
             </AppShell.Header>
             <AppShell.Navbar>
-                <NavbarComponent hidden={navState} />
+                <NavbarComponent session={session} />
             </AppShell.Navbar>
-            <AppShell.Main>{props.children}</AppShell.Main>
+            <AppShell.Main>{children}</AppShell.Main>
             {/* <FooterComponent /> */}
         </AppShell>
     );

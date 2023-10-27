@@ -24,7 +24,7 @@ export function PageTemplate({
     // session can then be passed to hook => server-side session validation
 
     // remove client-side validation, because it can lead to errors on server-side api calls!
-    if(useValidation) useSessionValidation();
+    //if(useValidation) useSessionValidation();
 
     return (
         <>

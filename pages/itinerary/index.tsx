@@ -23,11 +23,11 @@ import { DealMemoForm } from "../../components/Forms/DealMemoForm";
 import { DealMemo, IDealMemo } from "../../models/deal-memo";
 import { Band, IBand } from "../../models/band";
 import { GetServerSideProps } from "next";
-import { getSession } from "next-auth/react";
 import { getFormValueObject, serverSideFetch } from "../../utils/appHandles";
 import { ICompany } from "../../models/company";
 import { IPerson } from "../../models/person";
 import { callAPI, withNotification } from "../../utils/apiHandler";
+import { auth } from "../../auth";
 
 export default function ItineraryPage({
     session,
@@ -156,25 +156,25 @@ export default function ItineraryPage({
 
     const venueAutocomplete: SearchableIdProxyData[] =
         venues?.map((b) => ({
-            display: b.name,
+            label: b.name,
             value: b._id,
         })) || [];
 
     const hotelsAutoComplete: SearchableIdProxyData[] =
         hotels?.map((h) => ({
-            display: h.name,
+            label: h.name,
             value: h._id,
         })) || [];
 
     const dealMemoAutocomplete: SearchableIdProxyData[] =
         dealMemos?.map((b) => ({
-            display: b._id,
+            label: b._id,
             value: b._id,
         })) || [];
 
     const companiesAutoComplete: SearchableIdProxyData[] =
         companies?.map((c) => ({
-            display: c.name,
+            label: c.name,
             value: c._id,
         })) || [];
 
@@ -365,7 +365,7 @@ export default function ItineraryPage({
 }
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const session = await getSession({ req: ctx.req });
+    const session = await auth(ctx);
     const id = ctx.query.id;
 
     const memos = await serverSideFetch<IDealMemo>(`/api/deal-memo/`, {

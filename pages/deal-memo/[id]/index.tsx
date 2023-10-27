@@ -162,7 +162,7 @@ export default function CompleteDealMemoPage({
 
     const hotelAutocomplete: SearchableIdProxyData[] = hotels
         ? hotels.map((c) => ({
-              display: c.name,
+              label: c.name,
               value: c._id,
           }))
         : [];
@@ -195,7 +195,7 @@ export default function CompleteDealMemoPage({
                             >
                                 <Button
                                     variant="default"
-                                    leftIcon={<MdFileDownload size={20} />}
+                                    leftSection={<MdFileDownload size={20} />}
                                 >
                                     Download contract
                                 </Button>
@@ -208,7 +208,7 @@ export default function CompleteDealMemoPage({
                             >
                                 <Button
                                     variant="default"
-                                    leftIcon={<MdEdit size={20} />}
+                                    leftSection={<MdEdit size={20} />}
                                     onClick={() => {
                                         router.push({
                                             pathname: `/contract/${memo._id}`,

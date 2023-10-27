@@ -4,6 +4,7 @@ const nextConfig = {
   output: 'standalone',
   experimental: {
     serverActions: true,
+    serverComponentsExternalPackages: ['postcss', 'postcss-preset-mantine', 'postcss-simple-vars']
   }
 }
 

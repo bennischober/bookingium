@@ -22,6 +22,7 @@ export interface PageTemplateProps {
 
 export interface AppContainerProps {
 	children: React.ReactNode;
+	session: Session;
 }
 
 export interface FormContainerProps {
@@ -30,13 +31,8 @@ export interface FormContainerProps {
 	sx?: {};
 }
 
-export interface HeaderProps {
-	handleNavigation: (opened: boolean) => void;
-	opened: boolean;
-}
-
 export interface NavbarProps {
-	hidden?: boolean;
+	session: Session;
 }
 
 export interface LinksGroupProps {
@@ -48,7 +44,6 @@ export interface LinksGroupProps {
 }
 
 export interface LoginComponentProps {
-	loginHandler: (username: string, password: string, remember: boolean) => void;
 	forgotPassword: () => void;
 }
 
@@ -88,9 +83,10 @@ export interface SearchableInputProps extends SearchableProps {
 	autocomplete: any[];
 }
 
-interface SearchableIdProxyData {
-	display: string;
+export interface SearchableIdProxyData {
+	label: string;
 	value: string;
+	disabled?: boolean;
 }
 
 interface SearchableIdProxyProps extends SearchableProps {
@@ -260,7 +256,6 @@ export interface DealMemoProps {
 export interface AddDealMemoProps {
 	session: SessionProps["session"];
 	bands: IBand[];
-	memos: IDealMemo[];
 	venues?: IVenue[];
 	hotels?: IHotel[];
 	persons?: IPerson[];

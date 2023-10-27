@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import { SessionProps } from "../types";
 import axios from "axios";
 import { MantineFontSize } from "@mantine/core";
+import { getAPIBaseUrl } from "./apiHandler";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -99,13 +100,23 @@ export const clientSideFetch = async <T>(url: string, params?: {}): Promise<T> =
     return fetch.data.data;
 }
 
-export const serverSideFetch = async <T>(url: string, params?: {}): Promise<T> => {
-    const u = url.includes("localhost") ? url : `${BASE_URL}/${url}`;
-    const fetch = await axios.get(u, {
-        params: params,
+export const serverSideFetch = async<T>(
+    route: string,
+    params: Record<string, string> = {},
+    cacheRule: RequestCache = "no-store",
+): Promise<T> => {
+    const url: URL = new URL(route, getAPIBaseUrl());
+    Object.keys(params).forEach((key) =>
+        url.searchParams.append(key, params[key])
+    );
+
+    const result = await fetch(url, {
+        cache: cacheRule
     });
-    if (fetch.status !== 200) return [] as T;
-    return fetch.data.data;
+
+    if (result.status !== 200) return [] as T;
+    const raw = await result.json();
+    return raw.data as T;
 }
 
 export const addData = async <T>(endpoint: string, data: T, userid?: string): Promise<number> => {

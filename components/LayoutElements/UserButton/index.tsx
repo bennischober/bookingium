@@ -1,5 +1,8 @@
+"use client";
+
+import classes from "./index.module.css";
 import React from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import {
     UnstyledButton,
     Group,
@@ -9,8 +12,6 @@ import {
 import { MdChevronRight } from "react-icons/md";
 import { getNameInitials } from "../../../utils/appHandles";
 import { UserButtonProps } from "../../../types";
-
-import classes from "./index.module.css"
 
 export function UserButton({ image, name, email, color }: UserButtonProps) {
     const router = useRouter();

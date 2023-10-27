@@ -15,10 +15,9 @@ import { useForm } from "@mantine/form";
 import { MdAlternateEmail, MdLockOutline } from "react-icons/md";
 import { LoginComponentProps, LoginFormValues } from "../../../types";
 import Link from "next/link";
-import { serverLogin } from "@/app/auth/login/login";
+import { serverLogin } from "@/app/auth";
 
 export default function LoginComponent({
-    loginHandler,
     forgotPassword,
 }: LoginComponentProps) {
     const form = useForm<LoginFormValues>({
@@ -43,17 +42,16 @@ export default function LoginComponent({
         <>
             <Text c="dimmed" size="sm" ta="center" mt={5}>
                 Do not have an account yet?{" "}
-                <Link href="/auth/register">
-                        Create account
-                </Link>
+                <Link href="/auth/register">Create account</Link>
             </Text>
 
             <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-                <form action={(val) => {
-                    console.log(form.values);
-                    if(!form.values) return;
-                    serverLogin(form.values.email, form.values.password);
-                }}
+                <form
+                    action={(val) => {
+                        console.log(form.values);
+                        if (!form.values) return;
+                        serverLogin(form.values.email, form.values.password);
+                    }}
                 >
                     <TextInput
                         label="Email"

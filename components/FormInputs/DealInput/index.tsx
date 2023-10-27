@@ -8,7 +8,7 @@ import {
     Textarea,
     TextInput,
 } from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
+import { DateInput, DatePicker, DatePickerInput } from "@mantine/dates";
 import { LoproInputProps } from "../../../types";
 import { LoproInput } from "../LoproInput";
 
@@ -26,13 +26,10 @@ export function DealInput({ Form, person, company, isEdit }: LoproInputProps) {
                 />
                 <Space h="xl" />
                 <Group grow>
-                    <DatePicker
-                        id="mantine-2wgfg6a6v"
+                    <DateInput
                         label="Date"
                         placeholder="Select a date"
-                        allowFreeInput
-                        clearable={false}
-                        inputFormat="DD.MM.YYYY"
+                        valueFormat="DD.MM.YYYY"
                         {...Form.getInputProps("date")}
                         required
                     />
@@ -60,22 +57,16 @@ export function DealInput({ Form, person, company, isEdit }: LoproInputProps) {
                 <Group grow>
                     <NumberInput
                         label="Ticked VVK Price"
-                        icon="€"
+                        leftSection="€"
                         {...Form.getInputProps("ticketPriceVVK")}
                         min={0}
-                        stepHoldDelay={500}
-                        stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-                        precision={2}
                         required
                     />
                     <NumberInput
                         label="Ticket AK Price"
-                        icon="€"
+                        leftSection="€"
                         {...Form.getInputProps("ticketPriceAK")}
                         min={0}
-                        stepHoldDelay={500}
-                        stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-                        precision={2}
                         required
                     />
                 </Group>

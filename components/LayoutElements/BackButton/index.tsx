@@ -1,7 +1,8 @@
+"use client";
+
 import { ActionIcon, Button, Text } from "@mantine/core";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { MdArrowBack, MdArrowBackIosNew } from "react-icons/md";
-import { goToLastRoute } from "../../../utils/appHandles";
 
 export interface BackButtonProps {
     text?: string;
@@ -17,7 +18,7 @@ export function BackButton({ text, useRoute, useText }: BackButtonProps) {
     // supress go back if leaving the app?
     const handleClick = () => {
         if (useRoute) {
-            goToLastRoute(router);
+            router.back();
             return;
         }
 
@@ -30,8 +31,8 @@ export function BackButton({ text, useRoute, useText }: BackButtonProps) {
         <>
             {hasText ? (
                 <Button
-                    leftIcon={<MdArrowBack />}
-                    variant="subtle"
+                    leftSection={<MdArrowBack />}
+                    variant="default"
                     onClick={() => handleClick()}
                 >
                     <Text>{buttonText}</Text>

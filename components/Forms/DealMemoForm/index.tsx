@@ -90,104 +90,85 @@ export function DealMemoForm({
     if (!persons || !companies || !bands || !venues) return <></>;
 
     const bandsAutoComplete: SearchableIdProxyData[] = bands.map((b) => ({
-        display: b.name,
+        label: b.name,
         value: b._id,
     }));
     const venuesAutoComplete: SearchableIdProxyData[] = venues.map((v) => ({
-        display: v.name,
+        label: v.name,
         value: v._id,
     }));
     const hotelsAutoComplete: SearchableIdProxyData[] =
         hotels?.map((h) => ({
-            display: h.name,
+            label: h.name,
             value: h._id,
         })) || [];
     const personsAutoComplete: SearchableIdProxyData[] = persons.map((p) => ({
-        display: `${p.firstName} ${p.lastName}`,
+        label: `${p.firstName} ${p.lastName}`,
         value: p._id,
     }));
     const companiesAutoComplete: SearchableIdProxyData[] = companies.map(
         (c) => ({
-            display: c.name,
+            label: c.name,
             value: c._id,
         })
     );
 
     return (
         <>
-            <Center>
-                <Paper
-                    withBorder
-                    shadow="md"
-                    p={30}
-                    mt={30}
-                    radius="xs"
-                    sx={{ minWidth: 300, maxWidth: 750, width: "100vw" }}
-                >
-                    <form
-                        onSubmit={Form.onSubmit((values) =>
-                            onDealSubmit(values)
-                        )}
-                    >
-                        <Group grow align="top">
-                            <Box>
-                                <SearchOrAdd
-                                    data={bandsAutoComplete}
-                                    Form={Form}
-                                    required={true}
-                                    label={"Choose a band"}
-                                    placeholder={"Band name"}
-                                    inputProps={"bandid"}
-                                    buttonLabel={"Add new band"}
-                                    handleOpen={setBandModalOpened}
-                                />
-                                <Space h="xl" />
-                                <Divider
-                                    my="xl"
-                                    label="Deal data"
-                                    labelPosition="center"
-                                />
-                                <DealInput
-                                    Form={Form}
-                                    person={personsAutoComplete}
-                                    company={companiesAutoComplete}
-                                />
-                                <Space h="xl" />
-                                <Divider
-                                    my="xl"
-                                    label="Other"
-                                    labelPosition="center"
-                                />
-                                <SearchOrAdd
-                                    data={venuesAutoComplete}
-                                    Form={Form}
-                                    required={true}
-                                    label={"Choose a venue"}
-                                    placeholder={"Venue name"}
-                                    inputProps={"venueid"}
-                                    buttonLabel={"Add new venue"}
-                                    handleOpen={setVenueModalOpened}
-                                />
-                                <Space h="xl" />
-                                <SearchOrAdd
-                                    data={hotelsAutoComplete}
-                                    Form={Form}
-                                    label={"Choose a hotel"}
-                                    placeholder={"Hotel name"}
-                                    inputProps={"hotelid"}
-                                    buttonLabel={"Add new hotel"}
-                                    handleOpen={setHotelModalOpened}
-                                    required={false}
-                                />
-                            </Box>
-                        </Group>
+            <form onSubmit={Form.onSubmit((values) => onDealSubmit(values))}>
+                <Group grow align="top">
+                    <Box>
+                        <SearchOrAdd
+                            data={bandsAutoComplete}
+                            Form={Form}
+                            required={true}
+                            label={"Choose a band"}
+                            placeholder={"Band name"}
+                            inputProps={"bandid"}
+                            buttonLabel={"Add new band"}
+                            handleOpen={setBandModalOpened}
+                        />
                         <Space h="xl" />
-                        <Button type="submit" fullWidth mt="xl">
-                            Submit data
-                        </Button>
-                    </form>
-                </Paper>
-            </Center>
+                        <Divider
+                            my="xl"
+                            label="Deal data"
+                            labelPosition="center"
+                        />
+                        <DealInput
+                            Form={Form}
+                            person={personsAutoComplete}
+                            company={companiesAutoComplete}
+                        />
+                        <Space h="xl" />
+                        <Divider my="xl" label="Other" labelPosition="center" />
+                        <SearchOrAdd
+                            data={venuesAutoComplete}
+                            Form={Form}
+                            required={true}
+                            label={"Choose a venue"}
+                            placeholder={"Venue name"}
+                            inputProps={"venueid"}
+                            buttonLabel={"Add new venue"}
+                            handleOpen={setVenueModalOpened}
+                        />
+                        <Space h="xl" />
+                        <SearchOrAdd
+                            data={hotelsAutoComplete}
+                            Form={Form}
+                            label={"Choose a hotel"}
+                            placeholder={"Hotel name"}
+                            inputProps={"hotelid"}
+                            buttonLabel={"Add new hotel"}
+                            handleOpen={setHotelModalOpened}
+                            required={false}
+                        />
+                    </Box>
+                </Group>
+                <Space h="xl" />
+                <Button type="submit" fullWidth mt="xl">
+                    Submit data
+                </Button>
+            </form>
             <Modal
                 opened={bandModalOpened}
                 onClose={() => setBandModalOpened(false)}
@@ -295,14 +276,14 @@ export function DealEditForm({
 
     const personData = [
         {
-            display: `${p.firstName} ${p.lastName}`,
+            label: `${p.firstName} ${p.lastName}`,
             value: p._id,
         },
     ];
 
     const companyData = [
         {
-            display: c.name,
+            label: c.name,
             value: c._id,
         },
     ];

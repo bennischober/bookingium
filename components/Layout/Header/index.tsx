@@ -1,9 +1,10 @@
+"use client";
+
+import classes from "./index.module.css";
 import React from "react";
 import {
     ActionIcon,
-    Burger,
     useMantineColorScheme,
-    useMantineTheme,
     Tooltip,
     Group,
     Code,
@@ -16,30 +17,25 @@ import {
     MdLogout,
     MdOutlineSettings,
 } from "react-icons/md";
-import { signOut, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+import { signOut } from "next-auth/react";
+import { usePathname, useRouter } from "next/navigation";
 import metadata from "../../../metadata.json";
-import { HeaderProps } from "../../../types";
 import { BackButton } from "../../LayoutElements/BackButton";
 import { getDataForRoute } from "../../../utils/links";
+import { Session } from "next-auth";
 
-import classes from "./index.module.css";
-import { useMediaQuery } from "@mantine/hooks";
+interface HeaderProps {
+    session: Session;
+}
 
-export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
-    const theme = useMantineTheme();
+export function HeaderComponent({session}: HeaderProps) {
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
-    const matches = useMediaQuery("(min-width: 36em)", true, {
-        getInitialValueInEffect: false,
-    });
-    const visible = matches ? "none" : "block";
-
     const router = useRouter();
-
-    const { data: session, status } = useSession();
+    const path = usePathname();
+    if(!path) return<></>;
 
     const handleSession = () => {
-        if (session && status && status === "authenticated") {
+        if (session && session.status && session.status === "authorized") {
             handleLogOut();
             return;
         }
@@ -54,7 +50,7 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
         router.push("/auth/login");
     };
 
-    const title = getDataForRoute(router.pathname).title;
+    const title = getDataForRoute(path).title;
 
     return (
         <div className={classes.header}>
@@ -65,15 +61,6 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
                     height: "100%",
                 }}
             >
-                <div style={{ display: visible }}>
-                    <Burger
-                        opened={opened}
-                        onClick={() => handleNavigation(!opened)}
-                        size="sm"
-                        color={theme.colors.gray[6]}
-                        mr="xl"
-                    />
-                </div>
                 <div className={classes.container}>
                     <Group>
                         <BackButton useText={false} />
@@ -108,7 +95,7 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
                                 )}
                             </ActionIcon>
                         </Tooltip>
-                        {session && status && status === "authenticated" ? (
+                        {session && session.status && session.status === "authorized" ? (
                             <Tooltip label="Settings" openDelay={500}>
                                 <ActionIcon
                                     variant="default"

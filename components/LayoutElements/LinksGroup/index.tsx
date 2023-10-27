@@ -1,3 +1,6 @@
+"use client";
+
+import classes from "./index.module.css";
 import React, { useState } from "react";
 import {
     Group,
@@ -11,8 +14,6 @@ import {
 import { MdChevronRight } from "react-icons/md";
 import Link from "next/link";
 import { LinksGroupProps } from "../../../types";
-
-import classes from "./index.module.css";
 
 export function LinksGroup({
     icon: Icon,

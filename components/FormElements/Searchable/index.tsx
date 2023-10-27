@@ -1,13 +1,6 @@
-import {
-    Autocomplete,
-    Divider,
-    Grid,
-    SelectItemProps,
-    Text,
-    TextInput,
-} from "@mantine/core";
+import { Autocomplete, Divider, Grid } from "@mantine/core";
 import { SearchableInputProps, SearchableIdProxyProps } from "../../../types";
-import { forwardRef, useEffect, useState } from "react";
+import { useState } from "react";
 
 interface GridableSearchProps {
     searchable: JSX.Element;
@@ -88,11 +81,6 @@ export function Searchable({
     );
 }
 
-export interface ItemProps extends SelectItemProps {
-    value: string; // value == id
-    display: string; // key == name
-}
-
 export function SearchableIdProxy({
     Form,
     label,
@@ -109,92 +97,37 @@ export function SearchableIdProxy({
 }: SearchableIdProxyProps) {
     const [value, setValue] = useState<string>("");
 
-    // reset value if form is reset
-    useEffect(() => {
-        if(!Form.isDirty()) {
-            setValue("");
-        }
-    }, [Form.isDirty()]);
-
-    if (!data) {
-        console.error("SearchableIdProxy: data is undefined.");
-        return <></>;
-    }
-
-    // Note: isDisabled means data has exactly one entry
-    if (isDisabled) {
-        return (
-            <>
-                <TextInput value={data[0].display} disabled={isDisabled} />
-            </>
-        );
-    }
-
-    // data for autocomplete
-    const autocomplete =
-        data?.map((item) => ({
-            ...item,
-            display: item.value,
-            value: item.display,
-        })) ?? [];
-
-    // render overwrite
-    const AutoCompleteItem = forwardRef<HTMLDivElement, ItemProps>(
-        ({ value, display, ...others }: ItemProps, ref) => (
-            <div ref={ref} {...others}>
-                <Text>{value}</Text>
-            </div>
-        )
-    );
-
-    // change initial data. can happen, if this is used in a popup and the popup closes => data is saved but the selected value is not displayed/saved
-    if (value === "" && Form.getInputProps(inputProps).value !== "") {
-        const item = autocomplete.find(
-            (item) => item.display === Form.getInputProps(inputProps).value
-        );
-        if (item) {
-            setValue(item.value);
-        }
-    }
-
-    // standalone component
     const searchable = (
-        <>
-            <Autocomplete
-                label={label}
-                placeholder={placeholder ?? "Type to search"}
-                itemComponent={AutoCompleteItem}
-                data={autocomplete}
-                limit={limit}
-                required={required ?? true}
-                filter={(value, item) =>
-                    item.value.toLowerCase().includes(value.toLowerCase())
+        <Autocomplete
+            label={label}
+            data={data}
+            placeholder={placeholder ?? "Type to search"}
+            limit={limit}
+            value={value}
+            onOptionSubmit={(value) => {
+                // handles the case, if you select an item
+                const item = data?.find(
+                    (item) => item.value === value
+                );
+                if (item && item.label) {
+                    setValue(item?.label ?? "");
+                    Form.setFieldValue(inputProps, value);
                 }
-                onItemSubmit={(value) => {
-                    // handles the case, if you select an item
-                    setValue(value.value);
-                    const item = autocomplete.find(
-                        (item) => item.value === value.value
-                    );
-                    if (item) {
-                        Form.setFieldValue(inputProps, item.display);
-                    }
-                }}
-                onChange={(value) => {
-                    // handles the case, if you want to change the input
-                    // if value is not in autocomplete, set it to empty
-                    const item = autocomplete.find(
-                        (item) => item.value === value
-                    );
-                    if (!item) {
-                        setValue("");
-                        Form.setFieldValue(inputProps, "");
-                    }
-                }}
-                value={value}
-                disabled={isDisabled}
-            />
-        </>
+            }}
+            onChange={(value) => {
+                // handles the case, if you want to change the input
+                // if value is not in autocomplete, set it to empty
+                const item = data?.find(
+                    (item) => item.label === value
+                );
+                if (!item) {
+                    setValue("");
+                    Form.setFieldValue(inputProps, "");
+                }
+            }}
+            required={required ?? true}
+            disabled={isDisabled}
+        />
     );
 
     if (!editChild && !deleteChild && !buttonChild) {

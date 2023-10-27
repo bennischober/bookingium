@@ -27,7 +27,7 @@ export default function App({
         return specialPage.includes(appPropps.router.pathname) ? (
             <Component {...pageProps} />
         ) : (
-            <AppContainer>
+            <AppContainer session={session}>
                 <Component {...pageProps} />
             </AppContainer>
         );
