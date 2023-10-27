@@ -6,7 +6,6 @@ import {
     Group,
     Box,
     Collapse,
-    Text,
     ThemeIcon,
     UnstyledButton,
     rem,
@@ -25,15 +24,9 @@ export function LinksGroup({
     const hasLinks = Array.isArray(links);
     const [opened, setOpened] = useState(initiallyOpened || false);
     const items = (hasLinks ? links : []).map((link) => (
-        <Text<"a">
-            component="a"
-            className={classes.link}
-            href={link.link}
-            key={link.label}
-            onClick={(event) => event.preventDefault()}
-        >
+        <Link href={link.link} className={classes.link} key={link.label}>
             {link.label}
-        </Text>
+        </Link>
     ));
 
     const component =

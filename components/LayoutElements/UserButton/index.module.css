@@ -2,5 +2,5 @@
     display: block;
     width: 100%;
     padding: var(--mantine-spacing-md);
-    color: light-dark(var(--mantine-colors-light), var(--mantine-colors-dark));
+    color: light-dark(var(--mantine-color-light), var(--mantine-color-dark));
 }
