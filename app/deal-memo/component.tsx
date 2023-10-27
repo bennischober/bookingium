@@ -1,10 +1,9 @@
 "use client";
 import axios from "axios";
-import { useState } from "react";
 import { DealMemoForm } from "../../components/Forms/DealMemoForm";
 import { IDealMemo } from "../../models/deal-memo";
 import { AddDealMemoProps } from "../../types";
-import { getBands } from "../../utils/appHandles";
+import { withNotification } from "@/utils/apiHandler";
 
 export default function DealMemoComponent({
     session,
@@ -14,48 +13,65 @@ export default function DealMemoComponent({
     persons,
     companies,
 }: AddDealMemoProps) {
-    // fetched data
-    // do we really need a state here?
-    const [bandsData, setBandsData] = useState(bands);
-    const [venueData, setVenueData] = useState(venues);
-    const [hotelData, setHotelData] = useState(hotels);
-
     const handleMemos = async (data: IDealMemo) => {
         // post band data
-        console.log(data);
-        const ret = await axios.post(
-            "/api/deal-memo",
-            { data: data },
-            { params: { userid: session.userid } }
+        await withNotification(
+            () =>
+                axios.post(
+                    "/api/deal-memo",
+                    { data: data },
+                    { params: { userid: session.userid } }
+                ),
+            undefined,
+            "POST"
         );
-        console.log(ret.data, ret.status);
     };
 
     const handleBands = async (data: {}) => {
-        // post band data
-        await axios.post("/api/band", { data: data });
-
-        // refetch band data
-        const bands = await getBands(session);
-        setBandsData(bands);
+        await withNotification(
+            () =>
+                axios.post(
+                    "/api/band",
+                    { data: data },
+                    { params: { userid: session.userid } }
+                ),
+            undefined,
+            "POST"
+        );
     };
 
     const handleVenues = async (data: {}) => {
-        console.log(data);
-        await axios.post("/api/venue", { data: data });
+        await withNotification(
+            () =>
+                axios.post(
+                    "/api/venue",
+                    { data: data },
+                    { params: { userid: session.userid } }
+                ),
+            undefined,
+            "POST"
+        );
     };
 
     const handleHotels = async (data: {}) => {
-        console.log(data);
-        await axios.post("/api/hotel", { data: data });
+        await withNotification(
+            () =>
+                axios.post(
+                    "/api/hotel",
+                    { data: data },
+                    { params: { userid: session.userid } }
+                ),
+            undefined,
+            "POST"
+        );
     };
 
     return (
         <DealMemoForm
             session={session}
-            bands={bandsData}
-            venues={venueData}
-            hotels={hotelData}
+            bands={bands}
+            venues={venues}
+            hotels={hotels}
             persons={persons}
             companies={companies}
             handleBands={handleBands}

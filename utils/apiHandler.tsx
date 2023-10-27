@@ -1,4 +1,4 @@
-import { showNotification, updateNotification } from "@mantine/notifications";
+import { notifications } from '@mantine/notifications';
 import { MdCheck, MdClose } from "react-icons/md";
 
 interface ApiResponse<T> {
@@ -80,7 +80,7 @@ export async function withNotification<T>(
     options = await generateDefaultOptions(options, method);
 
     // Start by showing the loading notification
-    showNotification({
+    notifications.show({
         id: options.notificationId,
         loading: true,
         title: options.loadingTitle,
@@ -93,24 +93,26 @@ export async function withNotification<T>(
         const result = await apiCall();
 
         // If the API call was successful, show the success notification
-        updateNotification({
+        notifications.update({
             id: options.notificationId,
             color: "teal",
             title: options.successTitle,
             message: options.successMessage,
             icon: <MdCheck />,
+            loading: false,
             autoClose: 2000,
         });
 
         return result;
     } catch (error: any) {
         // If there's an error, show the error notification
-        updateNotification({
+        notifications.update({
             id: options.notificationId,
             color: "red",
             title: options.errorTitle,
             message: options.errorMessage,
             icon: <MdClose />,
+            loading: false,
             autoClose: 2000,
         });
         throw error;

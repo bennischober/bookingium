@@ -2,11 +2,9 @@ import { useState } from "react";
 import {
     Box,
     Button,
-    Center,
     Divider,
     Group,
     Modal,
-    Paper,
     Space,
 } from "@mantine/core";
 import { useForm } from "@mantine/form";
