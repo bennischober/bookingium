@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import {
     TextInput,
@@ -13,6 +15,7 @@ import { useForm } from "@mantine/form";
 import { MdAlternateEmail, MdLockOutline } from "react-icons/md";
 import { LoginComponentProps, LoginFormValues } from "../../../types";
 import Link from "next/link";
+import { serverLogin } from "@/app/auth/login/login";
 
 export default function LoginComponent({
     loginHandler,
@@ -38,7 +41,7 @@ export default function LoginComponent({
 
     return (
         <>
-            <Text color="dimmed" size="sm" align="center" mt={5}>
+            <Text c="dimmed" size="sm" ta="center" mt={5}>
                 Do not have an account yet?{" "}
                 <Link href="/auth/register">
                         Create account
@@ -46,19 +49,16 @@ export default function LoginComponent({
             </Text>
 
             <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-                <form
-                    onSubmit={form.onSubmit((values) =>
-                        loginHandler(
-                            values.email,
-                            values.password,
-                            values.remember
-                        )
-                    )}
+                <form action={(val) => {
+                    console.log(form.values);
+                    if(!form.values) return;
+                    serverLogin(form.values.email, form.values.password);
+                }}
                 >
                     <TextInput
                         label="Email"
                         placeholder="email@domain.com"
-                        icon={<MdAlternateEmail />}
+                        rightSection={<MdAlternateEmail />}
                         id="mantine-tzcdl80cn"
                         {...form.getInputProps("email")}
                         required
@@ -66,13 +66,13 @@ export default function LoginComponent({
                     <PasswordInput
                         label="Password"
                         placeholder="Your password"
-                        icon={<MdLockOutline />}
+                        rightSection={<MdLockOutline />}
                         mt="md"
                         id="mantine-t51ia2aie"
                         {...form.getInputProps("password")}
                         required
                     />
-                    <Group position="apart" mt="md">
+                    <Group justify="space-between" mt="md">
                         <Checkbox
                             label="Remember me"
                             id="mantine-00vo2p68i"

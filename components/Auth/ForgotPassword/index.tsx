@@ -1,8 +1,6 @@
 import React from "react";
 import {
-    createStyles,
     Paper,
-    Title,
     Text,
     TextInput,
     Button,
@@ -14,39 +12,18 @@ import {
 } from "@mantine/core";
 import { MdArrowBack } from "react-icons/md";
 
-const useStyles = createStyles((theme) => ({
-    title: {
-        fontSize: 26,
-        fontWeight: 900,
-        fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-    },
-
-    controls: {
-        [theme.fn.smallerThan("xs")]: {
-            flexDirection: "column-reverse",
-        },
-    },
-
-    control: {
-        [theme.fn.smallerThan("xs")]: {
-            width: "100%",
-            textAlign: "center",
-        },
-    },
-}));
+import classes from "./index.module.css";
 
 export interface ForgotPasswordProps {
     forgotPassword: () => void;
 }
 
 export function ForgotPassword({ forgotPassword }: ForgotPasswordProps) {
-    const { classes } = useStyles();
-
     // ToDo: add forgot password logic; create API endpoint and db queries
 
     return (
         <Container size={460} my={30}>
-            <Text color="dimmed" size="sm" align="center">
+            <Text c="dimmed" size="sm" ta="center">
                 Enter your email to get a reset link
             </Text>
 
@@ -56,10 +33,14 @@ export function ForgotPassword({ forgotPassword }: ForgotPasswordProps) {
                     placeholder="me@mantine.dev"
                     required
                 />
-                <Group position="apart" mt="lg" className={classes.controls}>
+                <Group
+                    justify="space-between"
+                    mt="lg"
+                    className={classes.controls}
+                >
                     <Anchor
                         onClick={() => forgotPassword()}
-                        color="dimmed"
+                        c="dimmed"
                         size="sm"
                         className={classes.control}
                     >
