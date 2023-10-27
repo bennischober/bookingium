@@ -2,19 +2,32 @@ import { useForm } from "@mantine/form";
 import { ContentContainer } from "../../components/Layout/ContentContainer";
 import { FormContainer } from "../../components/Layout/FormContainer";
 import { PageTemplate } from "../../components/Layout/PageTemplate";
-import { Itinerary } from "../../models/itinerary";
+import { IItinerary, Itinerary } from "../../models/itinerary";
 import { Types } from "mongoose";
-import { Button, Modal, Space } from "@mantine/core";
+import {
+    Button,
+    Group,
+    Modal,
+    Space,
+    TextInput,
+    Textarea,
+} from "@mantine/core";
 import { SearchOrAdd } from "../../components/FormElements/SearchOrAdd";
-import { IVenue } from "../../models/venue";
-import { IHotel } from "../../models/hotel";
+import { IVenue, Venue } from "../../models/venue";
+import { Hotel, IHotel } from "../../models/hotel";
 import { ItineraryPageProps, SearchableIdProxyData } from "../../types";
 import { useState } from "react";
 import { HotelForm } from "../../components/Forms/HotelForm";
 import { VenueForm } from "../../components/Forms/VenueForm";
 import { DealMemoForm } from "../../components/Forms/DealMemoForm";
-import { IDealMemo } from "../../models/deal-memo";
-import { IBand } from "../../models/band";
+import { DealMemo, IDealMemo } from "../../models/deal-memo";
+import { Band, IBand } from "../../models/band";
+import { GetServerSideProps } from "next";
+import { getSession } from "next-auth/react";
+import { getFormValueObject, serverSideFetch } from "../../utils/appHandles";
+import { ICompany } from "../../models/company";
+import { IPerson } from "../../models/person";
+import { callAPI, withNotification } from "../../utils/apiHandler";
 
 export default function ItineraryPage({
     session,
@@ -49,24 +62,90 @@ export default function ItineraryPage({
         },
     });
 
-    const onSubmit = (itinierary: Itinerary) => {
-        console.log(Form.values);
+    const onSubmit = async (data: Itinerary) => {
+        const itinerary = getFormValueObject<Itinerary>(
+            data,
+            session.userid
+        ) as IItinerary;
+
+        await withNotification(
+            () =>
+                callAPI<IItinerary>(
+                    "/itinerary/",
+                    "POST",
+                    { data: itinerary },
+                    { userid: session.userid }
+                ),
+            undefined,
+            "POST"
+        );
     };
 
-    const handleVenues = (venue: IVenue) => {
-        // TODO: implement
+    const handleVenues = async (data: Venue) => {
+        const venue = getFormValueObject<Venue>(data, session.userid) as IVenue;
+
+        await withNotification(
+            () =>
+                callAPI<IVenue>(
+                    "/venue/",
+                    "POST",
+                    { data: venue },
+                    { userid: session.userid }
+                ),
+            undefined,
+            "POST"
+        );
     };
 
-    const handleHotels = (hotel: IHotel) => {
-        // TODO: implement
+    const handleHotels = async (data: Hotel) => {
+        const hotel = getFormValueObject<Hotel>(data, session.userid) as IHotel;
+
+        await withNotification(
+            () =>
+                callAPI<IHotel>(
+                    "/hotel/",
+                    "POST",
+                    { data: hotel },
+                    { userid: session.userid }
+                ),
+            undefined,
+            "POST"
+        );
     };
 
-    const handleMemos = (memo: IDealMemo) => {
-        // TODO: implement
+    const handleMemos = async (data: DealMemo) => {
+        const memo = getFormValueObject<DealMemo>(
+            data,
+            session.userid
+        ) as IDealMemo;
+
+        await withNotification(
+            () =>
+                callAPI<IDealMemo>(
+                    "/deal-memo/",
+                    "POST",
+                    { data: memo },
+                    { userid: session.userid }
+                ),
+            undefined,
+            "POST"
+        );
     };
 
-    const handleBands = (band: IBand) => {
-        // TODO: implement
+    const handleBands = async (data: Band) => {
+        const band = getFormValueObject<Band>(data, session.userid) as IBand;
+
+        await withNotification(
+            () =>
+                callAPI<IBand>(
+                    "/band/",
+                    "POST",
+                    { data: band },
+                    { userid: session.userid }
+                ),
+            undefined,
+            "POST"
+        );
     };
 
     const closeModals = () => {
@@ -109,6 +188,86 @@ export default function ItineraryPage({
                                 onSubmit(values)
                             )}
                         >
+                            <Group grow>
+                                <TextInput
+                                    label="Get in"
+                                    placeholder="ca. 17 Uhr"
+                                    {...Form.getInputProps("getIn")}
+                                    required
+                                />
+                                <TextInput
+                                    label="Load in"
+                                    placeholder="ca. 18 Uhr"
+                                    {...Form.getInputProps("loadIn")}
+                                    required
+                                />
+                            </Group>
+                            <Space h="xl" />
+                            <Group grow>
+                                <TextInput
+                                    label="Soundcheck Main Act"
+                                    placeholder="ca. 19 Uhr"
+                                    {...Form.getInputProps("soundcheckMainAct")}
+                                    required
+                                />
+                                <TextInput
+                                    label="Showtime Main Act"
+                                    placeholder="ca. 23 Uhr"
+                                    {...Form.getInputProps("showtimeMainAct")}
+                                    required
+                                />
+                            </Group>
+                            <Space h="xl" />
+                            <Group grow>
+                                <TextInput
+                                    label="Dinner"
+                                    placeholder="ca. 21 Uhr"
+                                    {...Form.getInputProps("dinner")}
+                                    required
+                                />
+                                <TextInput
+                                    label="Doors"
+                                    placeholder="ca. 22 Uhr"
+                                    {...Form.getInputProps("doors")}
+                                    required
+                                />
+                            </Group>
+                            <Space h="xl" />
+                            <Group grow>
+                                <TextInput
+                                    label="Curfew Stage"
+                                    placeholder="ca. 1 Uhr"
+                                    {...Form.getInputProps("curfewStage")}
+                                    required
+                                />
+                                <TextInput
+                                    label="Curfew Venue"
+                                    placeholder="ca. 2 Uhr"
+                                    {...Form.getInputProps("curfewVenue")}
+                                    required
+                                />
+                            </Group>
+                            <Space h="xl" />
+                            <TextInput
+                                label="Show length"
+                                placeholder="ca. 90 min"
+                                {...Form.getInputProps("showLength")}
+                                required
+                            />
+                            <Space h="xl" />
+                            <Group grow>
+                                <TextInput
+                                    label="Soundcheck Support"
+                                    placeholder="ca. 20 Uhr"
+                                    {...Form.getInputProps("soundcheckSupport")}
+                                />
+                                <TextInput
+                                    label="Showtime Support"
+                                    placeholder="ca. 24 Uhr"
+                                    {...Form.getInputProps("showtimeSupport")}
+                                />
+                            </Group>
+                            <Space h="xl" />
                             <SearchOrAdd
                                 data={venueAutocomplete}
                                 Form={Form}
@@ -140,6 +299,14 @@ export default function ItineraryPage({
                                 inputProps={"dealMemoId"}
                                 buttonLabel={"Add new deal memo"}
                                 handleOpen={setDealMemoModalOpen}
+                            />
+                            <Space h="xl" />
+                            <Textarea
+                                label="Notes"
+                                placeholder="Additional notes"
+                                {...Form.getInputProps("notes")}
+                                autosize
+                                minRows={3}
                             />
                             <Space h="xl" />
                             <Button type="submit" fullWidth mt="xl">
@@ -196,3 +363,44 @@ export default function ItineraryPage({
         </>
     );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+    const session = await getSession({ req: ctx.req });
+    const id = ctx.query.id;
+
+    const memos = await serverSideFetch<IDealMemo>(`/api/deal-memo/`, {
+        userid: session?.userid,
+    });
+
+    const venues = await serverSideFetch<IVenue>(`/api/venue/`, {
+        userid: session?.userid,
+    });
+
+    const hotels = await serverSideFetch<IHotel>(`/api/hotel/`, {
+        userid: session?.userid,
+    });
+
+    const persons = await serverSideFetch<IPerson>(`/api/person/`, {
+        userid: session?.userid,
+    });
+
+    const companies = await serverSideFetch<ICompany>(`/api/company/`, {
+        userid: session?.userid,
+    });
+
+    const bands = await serverSideFetch<IBand>(`/api/band/`, {
+        userid: session?.userid,
+    });
+
+    return {
+        props: {
+            session: session,
+            venues: venues,
+            hotels: hotels,
+            dealMemos: memos,
+            persons: persons,
+            companies: companies,
+            bands: bands,
+        },
+    };
+};
