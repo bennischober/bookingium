@@ -1,15 +1,11 @@
 import React from "react";
 import {
     ActionIcon,
-    Header,
-    Text,
-    MediaQuery,
     Burger,
     useMantineColorScheme,
     useMantineTheme,
     Tooltip,
     Group,
-    createStyles,
     Code,
     Title,
 } from "@mantine/core";
@@ -23,26 +19,20 @@ import {
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import metadata from "../../../metadata.json";
-
-const useStyles = createStyles((theme) => ({
-    container: {
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        padding: 0,
-        margin: 0,
-        width: "100%",
-    },
-}));
 import { HeaderProps } from "../../../types";
 import { BackButton } from "../../LayoutElements/BackButton";
 import { getDataForRoute } from "../../../utils/links";
 
-export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
-    const { classes } = useStyles();
+import classes from "./index.module.css";
+import { useMediaQuery } from "@mantine/hooks";
 
+export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
     const theme = useMantineTheme();
     const { colorScheme, toggleColorScheme } = useMantineColorScheme();
+    const matches = useMediaQuery("(min-width: 36em)", true, {
+        getInitialValueInEffect: false,
+    });
+    const visible = matches ? "none" : "block";
 
     const router = useRouter();
 
@@ -67,7 +57,7 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
     const title = getDataForRoute(router.pathname).title;
 
     return (
-        <Header height={70} p="sm">
+        <header className={classes.header}>
             <div
                 style={{
                     display: "flex",
@@ -75,7 +65,7 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
                     height: "100%",
                 }}
             >
-                <MediaQuery largerThan="sm" styles={{ display: "none" }}>
+                <div style={{ display: visible }}>
                     <Burger
                         opened={opened}
                         onClick={() => handleNavigation(!opened)}
@@ -83,23 +73,23 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
                         color={theme.colors.gray[6]}
                         mr="xl"
                     />
-                </MediaQuery>
+                </div>
                 <div className={classes.container}>
                     <Group>
                         <BackButton useText={false} />
                         <Title order={3}>{title}</Title>
-                        <Group position="apart">
-                            <Code sx={{ fontWeight: 700 }}>
+                        <Group justify="space-between">
+                            <Code style={{ fontWeight: 700 }}>
                                 v{metadata.buildMajor}.{metadata.buildMinor}.
                                 {metadata.buildRevision}-{metadata.buildTag}
                             </Code>
                         </Group>
                     </Group>
 
-                    <Group position="right" spacing="xs">
+                    <Group gap="xs">
                         <Tooltip
                             label={
-                                theme?.colorScheme === "dark"
+                                colorScheme === "dark"
                                     ? "Light Mode"
                                     : "Dark Mode"
                             }
@@ -154,6 +144,6 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
                     </Group>
                 </div>
             </div>
-        </Header>
+        </header>
     );
 }

@@ -4,29 +4,15 @@ import {
     UnstyledButton,
     Group,
     Avatar,
-    Text,
-    createStyles,
+    Text
 } from "@mantine/core";
 import { MdChevronRight } from "react-icons/md";
-import { getMenuButtonHover, getNameInitials } from "../../../utils/appHandles";
+import { getNameInitials } from "../../../utils/appHandles";
 import { UserButtonProps } from "../../../types";
 
-const useStyles = createStyles((theme) => ({
-    user: {
-        display: "block",
-        width: "100%",
-        padding: theme.spacing.md,
-        color:
-            theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.black,
-
-        "&:hover": {
-            backgroundColor: getMenuButtonHover(theme),
-        },
-    },
-}));
+import classes from "./index.module.css"
 
 export function UserButton({ image, name, email, color }: UserButtonProps) {
-    const { classes } = useStyles();
     const router = useRouter();
 
     const iniitalsFallback = getNameInitials(name);
@@ -43,7 +29,7 @@ export function UserButton({ image, name, email, color }: UserButtonProps) {
                 </Avatar>
 
                 <div style={{ flex: 1 }}>
-                    <Text size="sm" weight={500}>
+                    <Text size="sm" fw={500} fz="md">
                         {name}
                     </Text>
 

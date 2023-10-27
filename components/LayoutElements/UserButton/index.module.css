@@ -1,0 +1,10 @@
+.user {
+    display: block;
+    width: 100%;
+    padding: var(--mantine-spacing-md);
+    color: light-dark(var(--mantine-colors-light), var(--mantine-colors-dark));
+    
+    @mixin hover {
+        background-color: light-dark(var(--mantine-colors-gray-2), var(--mantine-colors-dark-7));
+    }
+}

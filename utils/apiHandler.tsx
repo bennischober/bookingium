@@ -9,7 +9,7 @@ interface ApiResponse<T> {
 
 type ApiMethod = "GET" | "POST" | "PUT" | "DELETE";
 
-const getAPIBaseUrl = () => {
+export const getAPIBaseUrl = () => {
     // If window is defined, we are on the client-side
     if (typeof window !== "undefined") {
         return process.env.NEXT_PUBLIC_HOST ?? "";
@@ -86,7 +86,7 @@ export async function withNotification<T>(
         title: options.loadingTitle,
         message: options.loadingMessage,
         autoClose: false,
-        disallowClose: true,
+        withCloseButton: false,
     });
 
     try {
@@ -117,7 +117,10 @@ export async function withNotification<T>(
     }
 }
 
-async function generateDefaultOptions(options?: IOptions, method?: ApiMethod) : Promise<IOptions> {
+async function generateDefaultOptions(
+    options?: IOptions,
+    method?: ApiMethod
+): Promise<IOptions> {
     if (options) return options;
     switch (method) {
         case "GET":
@@ -174,6 +177,6 @@ async function generateDefaultOptions(options?: IOptions, method?: ApiMethod) : 
                 successMessage: "Your data has been successfully loaded",
                 errorTitle: "An error occurred",
                 errorMessage: "Your data could not be loaded",
-            }
+            };
     }
 }

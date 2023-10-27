@@ -1,7 +1,7 @@
 import {
     Button,
     Drawer,
-    MantineNumberSize,
+    MantineFontSize,
     Space,
     Text,
     Title,
@@ -44,13 +44,13 @@ export function DataGridSettings({
 
     const handleSettingsChange = () => {
         onChangeSettings({
-            fontSize: convertToType<MantineNumberSize>(
+            fontSize: convertToType<MantineFontSize>(
                 MARKS.find((mark) => mark.value === fontValue)!.label
             ),
-            horizontalSpacing: convertToType<MantineNumberSize>(
+            horizontalSpacing: convertToType<MantineFontSize>(
                 MARKS.find((mark) => mark.value === horizontalValue)?.label
             ),
-            verticalSpacing: convertToType<MantineNumberSize>(
+            verticalSpacing: convertToType<MantineFontSize>(
                 MARKS.find((mark) => mark.value === verticalValue)?.label
             ),
         });

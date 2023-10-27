@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { AppShell, useMantineTheme } from "@mantine/core";
 import { AppContainerProps } from "../../../types";
-import { getBackgroundColor } from "../../../utils/appHandles";
 import { NavbarComponent } from "../Navbar";
 import { FooterComponent } from "../Footer";
 import { HeaderComponent } from "../Header";
@@ -20,23 +19,24 @@ export function AppContainer(props: AppContainerProps) {
 
     return (
         <AppShell
-            styles={{
-                main: {
-                    background: getBackgroundColor(theme),
-                },
+            header={{ height: 60 }}
+            navbar={{
+                width: 300,
+                breakpoint: "sm",
+                collapsed: { mobile: !opened },
             }}
-            navbarOffsetBreakpoint="sm"
-            asideOffsetBreakpoint="sm"
-            fixed
-            navbar={<NavbarComponent hidden={navState} />}
-            header={
+            padding="md"
+        >
+            <AppShell.Header>
                 <HeaderComponent
                     handleNavigation={handleNavigation}
                     opened={opened}
                 />
-            }
-        >
-            {props.children}
+            </AppShell.Header>
+            <AppShell.Navbar>
+                <NavbarComponent hidden={navState} />
+            </AppShell.Navbar>
+            <AppShell.Main>{props.children}</AppShell.Main>
             {/* <FooterComponent /> */}
         </AppShell>
     );

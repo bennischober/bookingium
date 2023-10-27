@@ -1,21 +1,10 @@
-import { MantineNumberSize, MantineTheme } from "@mantine/core";
 import { NextRouter } from "next/router";
 import dayjs from 'dayjs';
 import { SessionProps } from "../types";
 import axios from "axios";
+import { MantineFontSize } from "@mantine/core";
 
 const BASE_URL = "http://localhost:3000";
-
-// handle theme, language, and other app settings
-
-/*--- THEME HANDLE ---*/
-export function getBackgroundColor(theme: MantineTheme) {
-    return theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0];
-}
-
-export function getMenuButtonHover(theme: MantineTheme) {
-    return theme.colorScheme === "dark" ? theme.colors.dark[7] : theme.colors.gray[2];
-}
 
 /*-- ROUTING HANDLE ---*/
 export function getLastRoute(router: NextRouter): string {
@@ -55,7 +44,7 @@ export function convertToType<T>(data: any): T {
     return data as T;
 }
 
-export function convertMantineSizeToNumber(size: MantineNumberSize) {
+export function convertMantineSizeToNumber(size: MantineFontSize) {
     return size === "xs" ? 0 : size === "sm" ? 25 : size === "md" ? 50 : size === "lg" ? 75 : size === "xl" ? 100 : 0;
 }
 

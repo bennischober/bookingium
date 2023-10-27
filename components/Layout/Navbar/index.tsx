@@ -1,41 +1,13 @@
-import { Navbar, ScrollArea, createStyles } from "@mantine/core";
+import { ScrollArea } from "@mantine/core";
 import { LinksGroup } from "../../LayoutElements/LinksGroup";
-import { getBackgroundColor } from "../../../utils/appHandles";
 import { UserButton } from "../../LayoutElements/UserButton";
 import { useSession } from "next-auth/react";
 import { NavbarProps } from "../../../types";
 import { getNavbarData } from "../../../utils/links";
 
-const useStyles = createStyles((theme) => ({
-    navbar: {
-        backgroundColor: getBackgroundColor(theme),
-        paddingBottom: 0,
-    },
-
-    links: {
-        marginLeft: -theme.spacing.md,
-        marginRight: -theme.spacing.md,
-    },
-
-    linksInner: {
-        paddingTop: theme.spacing.xl,
-        paddingBottom: theme.spacing.xl,
-    },
-
-    footer: {
-        marginLeft: -theme.spacing.md,
-        marginRight: -theme.spacing.md,
-        borderTop: `1px solid ${
-            theme.colorScheme === "dark"
-                ? theme.colors.dark[4]
-                : theme.colors.gray[3]
-        }`,
-    },
-}));
+import classes from "./index.module.css";
 
 export function NavbarComponent(props: NavbarProps) {
-    const { classes } = useStyles();
-
     const links = getNavbarData().map((item, index) => {
         return <LinksGroup {...item} key={item.label} />;
     });
@@ -53,24 +25,14 @@ export function NavbarComponent(props: NavbarProps) {
     }
 
     return (
-        <Navbar
-            width={{ sm: 300 }}
-            p="md"
-            className={classes.navbar}
-            hidden={props.hidden}
-            style={{ paddingBottom: 0, paddingTop: 0 }}
-        >
-            <Navbar.Section
-                grow
-                className={classes.links}
-                component={ScrollArea}
-            >
+        <nav className={classes.navbar} hidden={props.hidden}>
+            <ScrollArea className={classes.links}>
                 <div className={classes.linksInner}>{links}</div>
-            </Navbar.Section>
+            </ScrollArea>
 
-            <Navbar.Section className={classes.footer}>
+            <div className={classes.footer}>
                 <UserButton name={name} email={email} />
-            </Navbar.Section>
-        </Navbar>
+            </div>
+        </nav>
     );
 }

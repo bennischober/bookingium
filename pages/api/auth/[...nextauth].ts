@@ -1,6 +1,7 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import axios from "axios";
+import { getAPIBaseUrl } from "../../../utils/apiHandler";
 
 export default NextAuth({
 	providers: [
@@ -14,7 +15,7 @@ export default NextAuth({
 				try {
 					const res = await axios({
 						method: "post",
-						url: "http://localhost:3000/api/user/login",
+						url: getAPIBaseUrl() + "api/user/login",
 						data: {
 							email: credentials?.username,
 							password: credentials?.password
