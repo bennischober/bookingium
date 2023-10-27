@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button, Group, Tooltip } from "@mantine/core";
+import { Button, Tooltip } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import axios from "axios";
 import dayjs from "dayjs";
@@ -51,16 +51,8 @@ export default function CompleteDealMemoPage({
                     { data: data },
                     { userid: session.userid }
                 ),
-            {
-                notificationId: "load-data",
-                loadingTitle: "Saving your data",
-                loadingMessage:
-                    "You will be notified whether your data is saved or any problem occurred",
-                successTitle: "Data saved",
-                successMessage: "Your data has been successfully updated",
-                errorTitle: "An error occurred",
-                errorMessage: "Your data could not be saved",
-            }
+            undefined,
+            "PUT"
         );
     };
 
@@ -79,16 +71,8 @@ export default function CompleteDealMemoPage({
                     { data: data },
                     { userid: session.userid }
                 ),
-            {
-                notificationId: "load-data",
-                loadingTitle: "Saving your data",
-                loadingMessage:
-                    "You will be notified whether your data is saved or any problem occurred",
-                successTitle: "Data saved",
-                successMessage: "Your data has been successfully updated",
-                errorTitle: "An error occurred",
-                errorMessage: "Your data could not be saved",
-            }
+            undefined,
+            "PUT"
         );
     };
 

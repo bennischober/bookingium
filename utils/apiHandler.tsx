@@ -38,7 +38,7 @@ export async function callAPI<T = any>(
     params: Record<string, string> = {}
 ): Promise<T> {
     const baseUrl = getAPIBaseUrl() + "/api/";
-    if(endpoint.startsWith("/")) endpoint = endpoint.substring(1);
+    if (endpoint.startsWith("/")) endpoint = endpoint.substring(1);
     const url = new URL(endpoint, baseUrl);
 
     Object.keys(params).forEach((key) =>
@@ -62,18 +62,23 @@ export async function callAPI<T = any>(
     }
 }
 
+interface IOptions {
+    notificationId: string;
+    loadingTitle: string;
+    loadingMessage: string;
+    successTitle: string;
+    successMessage: string;
+    errorTitle: string;
+    errorMessage: string;
+}
+
 export async function withNotification<T>(
     apiCall: () => Promise<T>,
-    options: {
-        notificationId: string;
-        loadingTitle: string;
-        loadingMessage: string;
-        successTitle: string;
-        successMessage: string;
-        errorTitle: string;
-        errorMessage: string;
-    }
+    options?: IOptions,
+    method?: ApiMethod
 ): Promise<T> {
+    options = await generateDefaultOptions(options, method);
+
     // Start by showing the loading notification
     showNotification({
         id: options.notificationId,
@@ -109,5 +114,66 @@ export async function withNotification<T>(
             autoClose: 2000,
         });
         throw error;
+    }
+}
+
+async function generateDefaultOptions(options?: IOptions, method?: ApiMethod) : Promise<IOptions> {
+    if (options) return options;
+    switch (method) {
+        case "GET":
+            return {
+                notificationId: "load-data",
+                loadingTitle: "Loading data",
+                loadingMessage:
+                    "You will be notified whether your data is loaded or any problem occurred",
+                successTitle: "Data loaded",
+                successMessage: "Your data has been successfully loaded",
+                errorTitle: "An error occurred",
+                errorMessage: "Your data could not be loaded",
+            };
+        case "POST":
+            return {
+                notificationId: "load-data",
+                loadingTitle: "Saving your data",
+                loadingMessage:
+                    "You will be notified whether your data is saved or any problem occurred",
+                successTitle: "Data saved",
+                successMessage: "Your data has been successfully saved",
+                errorTitle: "An error occurred",
+                errorMessage: "Your data could not be saved",
+            };
+        case "PUT":
+            return {
+                notificationId: "load-data",
+                loadingTitle: "Updating your data",
+                loadingMessage:
+                    "You will be notified whether your data is updated or any problem occurred",
+                successTitle: "Data updated",
+                successMessage: "Your data has been successfully updated",
+                errorTitle: "An error occurred",
+                errorMessage: "Your data could not be updated",
+            };
+        case "DELETE":
+            return {
+                notificationId: "load-data",
+                loadingTitle: "Deleting your data",
+                loadingMessage:
+                    "You will be notified whether your data is deleted or any problem occurred",
+                successTitle: "Data deleted",
+                successMessage: "Your data has been successfully deleted",
+                errorTitle: "An error occurred",
+                errorMessage: "Your data could not be deleted",
+            };
+        default:
+            return {
+                notificationId: "load-data",
+                loadingTitle: "Loading data",
+                loadingMessage:
+                    "You will be notified whether your data is loaded or any problem occurred",
+                successTitle: "Data loaded",
+                successMessage: "Your data has been successfully loaded",
+                errorTitle: "An error occurred",
+                errorMessage: "Your data could not be loaded",
+            }
     }
 }
