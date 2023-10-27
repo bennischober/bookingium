@@ -1,6 +1,6 @@
 import { Paper, ScrollArea, Text } from "@mantine/core";
 import { ColumnDef } from "@tanstack/table-core";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useMemo } from "react";
 import { IBand } from "../../../models/band";
 import { BandListValues } from "../../../types";
@@ -25,7 +25,7 @@ export function BandList({ bands }: BandListProps) {
                 accessorKey: "bandId",
                 cell: (info) => (
                     <Text
-                        underline
+                        td="underline"
                         variant="link"
                         style={{ cursor: "pointer", fontSize: "inherit" }}
                         onClick={() =>

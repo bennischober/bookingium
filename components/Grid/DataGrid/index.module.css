@@ -1,0 +1,50 @@
+.tableContainer {
+    & > thead > tr > th {
+        cursor: pointer;
+        border-right: 1px solid
+            light-dark(var(--mantine-color-gray-2), var(--mantine-color-gray-8));
+        &:last-child {
+            border-right: unset;
+        }
+        &:hover {
+            background-color: light-dark(
+                var(--mantine-color-gray-3),
+                var(--mantine-color-dark-4)
+            );
+        }
+    }
+    & > tbody > tr > td {
+        border-right: 1px solid
+            light-dark(var(--mantine-color-gray-2), var(--mantine-color-gray-8));
+        border-bottom: 1px solid
+            light-dark(var(--mantine-color-gray-2), var(--mantine-color-gray-8));
+        &:last-child {
+            border-right: unset;
+        }
+        padding: var(--mantine-spacing-sm) var(--mantine-spacing-md);
+    }
+
+    & > tbody > tr:last-child > td {
+        border-bottom: unset;
+    }
+
+    & > tbody > tr:nth-child(2n) > td {
+        background-color: light-dark(
+            var(--mantine-color-gray-3),
+            var(--mantine-color-dark-6)
+        );
+    }
+
+    & > tbody > tr:hover > td {
+        background-color: light-dark(
+            var(--mantine-color-gray-1),
+            var(--mantine-color-dark-4)
+        );
+    }
+
+    font-size: var(--mantine-font-size-lg);
+}
+
+.sortDirectionIcon {
+    transition: transform 200ms ease;
+}

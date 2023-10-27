@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Paper, ScrollArea, Text } from "@mantine/core";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { DealMemoListProps, DealMemoListValues } from "../../../types";
 import { DataGrid } from "../../Grid/DataGrid";
 import { ColumnDef } from "@tanstack/react-table";
@@ -35,7 +35,7 @@ export function DealMemoList({ memos }: DealMemoListProps) {
                 accessorKey: "dealid",
                 cell: (info) => (
                     <Text
-                        underline
+                        td="underline"
                         variant="link"
                         style={{ cursor: "pointer", fontSize: "inherit" }}
                         onClick={() => handleDealClick(info.getValue() as string)}

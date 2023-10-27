@@ -1,4 +1,4 @@
-import { MantineNumberSize } from "@mantine/core";
+import { MantineNumberSize, MantineSpacing } from "@mantine/core";
 import { UseFormReturnType } from "@mantine/form/lib/types";
 import { Session } from "next-auth";
 import { IconBase } from "react-icons/lib";
@@ -201,7 +201,7 @@ export interface SessionProps extends Session {
 }
 
 export interface ReqAuthProps {
-	session: SessionProps["session"];
+	session: Session;
 }
 
 export interface CompanyACPageProps extends ReqAuthProps {
@@ -335,8 +335,8 @@ export interface RegisterHandleData {
 
 export interface DataGridSettingsValues {
 	fontSize: MantineNumberSize;
-	verticalSpacing: MantineNumberSize;
-	horizontalSpacing: MantineNumberSize;
+	verticalSpacing: MantineSpacing;
+	horizontalSpacing: MantineSpacing;
 }
 
 

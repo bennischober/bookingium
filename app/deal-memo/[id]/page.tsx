@@ -43,8 +43,8 @@ export default async function Page({ params }: { params: { id: string } }) {
             : [];
 
     // check if all are not undefined
-    if (!band || !venue || !hotel) {
-        console.error("Band, Venue or Hotel is undefined");
+    if (!band || !venue) {
+        console.error("Band or Venue is undefined");
         return null;
     }
 

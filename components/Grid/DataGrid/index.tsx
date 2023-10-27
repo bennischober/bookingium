@@ -1,4 +1,7 @@
-import { createStyles, Group, Table } from "@mantine/core";
+"use client";
+
+import classes from "./index.module.css";
+import { Group, Table } from "@mantine/core";
 import {
     flexRender,
     getCoreRowModel,
@@ -28,37 +31,11 @@ import { DataGridHeader } from "../DataGridHeader";
 // any maybe
 // https://github.com/TanStack/table/tree/alpha/examples/react/row-selection
 
-const useStyles = createStyles((t) => ({
-    tableContainer: {
-        "& > thead > tr > th": {
-            cursor: "pointer",
-            borderRight: `1px solid ${
-                t.colorScheme === "dark" ? t.colors.gray[8] : t.colors.gray[2]
-            }`,
-            ":last-child": { borderRight: `unset` },
-            ":hover": {
-                backgroundColor:
-                    t.colorScheme === "dark"
-                        ? t.colors.dark[4]
-                        : t.colors.gray[3],
-            },
-        },
-        "& > tbody > tr > td": {
-            borderRight: `1px solid ${
-                t.colorScheme === "dark" ? t.colors.gray[8] : t.colors.gray[2]
-            }`,
-            ":last-child": { borderRight: `unset` },
-        },
-    },
-    sortDirectionIcon: { transition: "transform 200ms ease" },
-}));
-
 export function DataGrid({ columns, data, title }: DataGridProps) {
     const [sorting, setSorting] = useState<SortingState>([]);
     const [settings, setSettings] = useState<DataGridSettingsValues>(
         getDataGridSettings()
     );
-    const { classes } = useStyles();
 
     const table = useReactTable({
         data,
@@ -85,17 +62,18 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
             <Table
                 striped
                 highlightOnHover
-                verticalSpacing={settings.verticalSpacing}
-                horizontalSpacing={settings.horizontalSpacing}
-                fontSize={settings.fontSize}
+                //verticalSpacing={settings.verticalSpacing}
+                //horizontalSpacing={settings.horizontalSpacing}
+                //fontSize={settings.fontSize}
+                verticalSpacing="xl"
                 className={classes.tableContainer}
             >
-                <thead>
+                <Table.Thead>
                     {table.getHeaderGroups().map((headerGroup) => (
-                        <tr key={headerGroup.id}>
+                        <Table.Tr key={headerGroup.id}>
                             {headerGroup.headers.map((header) => {
                                 return (
-                                    <th
+                                    <Table.Th
                                         key={header.id}
                                         colSpan={header.colSpan}
                                     >
@@ -111,8 +89,8 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
                                                 }}
                                             >
                                                 <Group
-                                                    noWrap
-                                                    position={"apart"}
+                                                    wrap="nowrap"
+                                                    justify="space-between"
                                                 >
                                                     {flexRender(
                                                         header.column.columnDef
@@ -138,13 +116,13 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
                                                 </Group>
                                             </div>
                                         )}
-                                    </th>
+                                    </Table.Th>
                                 );
                             })}
-                        </tr>
+                        </Table.Tr>
                     ))}
-                </thead>
-                <tbody>
+                </Table.Thead>
+                <Table.Tbody>
                     {table
                         .getRowModel()
                         .rows.slice(0, 10)
@@ -164,7 +142,7 @@ export function DataGrid({ columns, data, title }: DataGridProps) {
                                 </tr>
                             );
                         })}
-                </tbody>
+                </Table.Tbody>
             </Table>
         </>
     );
