@@ -263,7 +263,7 @@ export interface AddDealMemoProps {
 }
 
 export interface CompleteDealMemoPageProps {
-	session: SessionProps["session"];
+	session: Session;
 	memo: IDealMemo;
 	band?: IBand;
 	venue?: IVenue;

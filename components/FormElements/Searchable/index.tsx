@@ -1,4 +1,4 @@
-import { Autocomplete, Divider, Grid } from "@mantine/core";
+import { Autocomplete, Divider, Grid, TextInput } from "@mantine/core";
 import { SearchableInputProps, SearchableIdProxyProps } from "../../../types";
 import { useState } from "react";
 
@@ -96,6 +96,22 @@ export function SearchableIdProxy({
     isDisabled,
 }: SearchableIdProxyProps) {
     const [value, setValue] = useState<string>("");
+
+    if (!data) {
+        console.error("SearchableIdProxy: data is undefined.");
+        return <></>;
+    }
+
+    // Note: isDisabled means data has exactly one entry
+    // this is the case, if we are at the edit page
+    // and the user is not allowed to change the value
+    if (isDisabled) {
+        return (
+            <>
+                <TextInput value={data[0].label} disabled={isDisabled} />
+            </>
+        );
+    }
 
     const searchable = (
         <Autocomplete
