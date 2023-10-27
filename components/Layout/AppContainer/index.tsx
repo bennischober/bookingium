@@ -37,7 +37,7 @@ export function AppContainer(props: AppContainerProps) {
             }
         >
             {props.children}
-            <FooterComponent />
+            {/* <FooterComponent /> */}
         </AppShell>
     );
 }

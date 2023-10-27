@@ -5,10 +5,14 @@ import { FormContainer } from "../../../../components/Layout/FormContainer";
 import { PageTemplate } from "../../../../components/Layout/PageTemplate";
 import { SpecificBandPageProps } from "../../../../types";
 import { SpecificPageHeader } from "../../../../components/Layout/SpecificPageHeader";
-import { Tabs } from "@mantine/core";
+import { Space, Tabs } from "@mantine/core";
 import { serverSideFetch, updateData } from "../../../../utils/appHandles";
 import { IBand } from "../../../../models/band";
 import { ContentContainer } from "../../../../components/Layout/ContentContainer";
+import { IDealMemo } from "../../../../models/deal-memo";
+import { ICompany } from "../../../../models/company";
+import { IPerson } from "../../../../models/person";
+import { DealMemoList } from "../../../../components/Lists/DealMemoList";
 
 // finish this page and extract to new component as soon as the depending components are finished
 // update band model and interface to have a genre and founded field!
@@ -18,6 +22,7 @@ export default function SpecificBandPage({
     band,
     persons,
     companies,
+    memos,
 }: SpecificBandPageProps) {
     const handleBandUpdate = async (bandIn: IBand) => {
         const res = await updateData(
@@ -43,7 +48,6 @@ export default function SpecificBandPage({
                     <Tabs.List>
                         <Tabs.Tab value="band-data">Band data</Tabs.Tab>
                         <Tabs.Tab value="deal-memo-data">Deal Memos</Tabs.Tab>
-                        <Tabs.Tab value="contract-data">Contracts</Tabs.Tab>
                         <Tabs.Tab value="isrc-data">ISRC Codes</Tabs.Tab>
                         <Tabs.Tab value="calender-data">Calendar</Tabs.Tab>
                     </Tabs.List>
@@ -59,13 +63,9 @@ export default function SpecificBandPage({
                             />
                         </FormContainer>
                     </Tabs.Panel>
-                    <Tabs.Panel value="contract-data">
-                        Coming soon! Uses a Grid to show all contracts for this
-                        band.
-                    </Tabs.Panel>
                     <Tabs.Panel value="deal-memo-data">
-                        Coming soon! Uses a Grid to show all deal memos for this
-                        band.
+                        <Space h="xl" />
+                        <DealMemoList memos={memos} />
                     </Tabs.Panel>
                     <Tabs.Panel value="calender-data">
                         Coming soon! Uses a calender to show all dates for this
@@ -88,11 +88,15 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     const band = await serverSideFetch<IBand>(`/api/band/${id}`, {
         userid: session?.userid,
     });
-    const persons = await serverSideFetch("/api/person", {
+    const persons = await serverSideFetch<IPerson>("/api/person", {
         userid: session?.userid,
     });
-    const companies = await serverSideFetch("/api/company", {
+    const companies = await serverSideFetch<ICompany>("/api/company", {
         userid: session?.userid,
+    });
+    const memos = await serverSideFetch<IDealMemo[]>("/api/deal-memo", {
+        userid: session?.userid,
+        bandid: band._id,
     });
 
     // edit deal memo api endpoint to have another parameter "band"
@@ -103,6 +107,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
             band: band,
             persons: persons,
             companies: companies,
+            memos: memos,
         },
     };
 };

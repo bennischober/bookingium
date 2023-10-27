@@ -12,6 +12,13 @@ export const OAddress = {
     countryCode: { type: String, default: '' },
 };
 
+export const OBank = {
+    bankName: { type: String, default: '' },
+    accountHolder: { type: String, default: '' },
+    iban: { type: String, default: '' },
+    bic: { type: String, default: '' },
+}
+
 export const OContact = {
     email: { type: String, default: '' },
     phone: { type: String, default: '' },

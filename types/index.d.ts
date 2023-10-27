@@ -8,6 +8,7 @@ import { IDealMemo } from "../models/deal-memo";
 import { IHotel } from "../models/hotel";
 import { IPerson, Person } from "../models/person";
 import { IVenue } from "../models/venue";
+import { IWorkplace } from "../models/workplace";
 
 /** --- COMPONENTS --- **/
 export interface PageTemplateProps {
@@ -229,6 +230,15 @@ export interface BandPageProps extends ReqAuthProps {
 	companies: ICompany[];
 }
 
+export interface ItineraryPageProps extends ReqAuthProps {
+    venues: IVenue[];
+    hotels: IHotel[];
+    dealMemos: IDealMemo[];
+    persons: IPerson[];
+    companies: ICompany[];
+    bands: IBand[];
+}
+
 export interface DealMemoFormProps {
 	session: SessionProps["session"];
 	bands: IBand[];
@@ -271,6 +281,7 @@ export interface SpecificBandPageProps {
 	band: IBand;
 	persons: IPerson[];
 	companies: ICompany[];
+	memos: IDealMemo[];
 }
 
 export interface DealEditFormProps {
@@ -362,4 +373,17 @@ export interface SpecificDealMemoPageContentProps {
 	handleHotel: (data: IHotel) => void;
 	handleSelectHotel: (id: string) => void;
 	handleAddHotel: (data: IHotel) => void;
+}
+
+// PDF STUFF
+export interface PDFContractPageProps {
+	session: SessionProps["session"];
+	band: IBand,
+	bandCompany: ICompany,
+	bandResponsiblePerson?: IPerson,
+	loproCompany: ICompany,
+	loproPerson: IPerson,
+	venue: IVenue,
+	dealMemo: IDealMemo,
+	workplace: IWorkplace,
 }

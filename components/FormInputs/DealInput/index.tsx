@@ -6,6 +6,7 @@ import {
     Select,
     Space,
     Textarea,
+    TextInput,
 } from "@mantine/core";
 import { DatePicker } from "@mantine/dates";
 import { LoproInputProps } from "../../../types";
@@ -79,13 +80,9 @@ export function DealInput({ Form, person, company, isEdit }: LoproInputProps) {
                     />
                 </Group>
                 <Space h="xl" />
-                <NumberInput
+                <TextInput
                     label="Posters"
                     {...Form.getInputProps("posters")}
-                    min={0}
-                    stepHoldDelay={500}
-                    stepHoldInterval={(t) => Math.max(1000 / t ** 2, 25)}
-                    required
                 />
                 <Space h="xl" />
                 <Textarea

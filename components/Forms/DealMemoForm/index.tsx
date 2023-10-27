@@ -50,7 +50,7 @@ export function DealMemoForm({
             date: dayjs().toDate(),
             ticketPriceVVK: 0,
             ticketPriceAK: 0,
-            posters: 0,
+            posters: "",
             status: "TBC",
             notes: "",
             lopro: {

@@ -19,8 +19,14 @@ export function CompanyForm({
         initialValues: {
             name: data?.name ?? "",
             notes: data?.notes ?? "",
-            vatNumber: data?.vatNumber ?? "",
-            ustNumber: data?.ustNumber ?? "",
+            bank: data?.bank ??{
+                bankName: "",
+                accountHolder: "",
+                iban: "",
+                bic: "",
+            },
+            vatNumber: "",
+            ustNumber: "",
             address: data?.address ?? {
                 streetNumber: "",
                 street: "",

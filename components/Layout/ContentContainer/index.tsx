@@ -13,7 +13,7 @@ export function ContentContainer({
 }: ContentContainerProps) {
     return (
         <>
-            <Paper shadow="xs" p="xl" radius="sm">
+            <Paper shadow="xs" p="xl" radius="sm" withBorder>
                 {children}
             </Paper>
         </>

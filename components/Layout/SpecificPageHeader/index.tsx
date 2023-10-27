@@ -9,7 +9,7 @@ export function SpecificPageHeader({
 }: SpecificPageHeaderProps) {
     return (
         <>
-            <Paper shadow="xs" p="xl" radius="sm">
+            <Paper shadow="xs" p="xl" radius="sm" withBorder>
                 <Title>
                     {titleName}: {title}
                 </Title>

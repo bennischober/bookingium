@@ -30,7 +30,7 @@ export default function AddVenuePage({
     );
 
     return (
-        <PageTemplate title={"Add a Venue"}>
+        <PageTemplate title={"Add a Venue"} useAuth={false}>
             <FormContainer>
                 <VenueForm
                     session={session}

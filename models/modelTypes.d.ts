@@ -11,6 +11,13 @@ export interface IAddress {
     countryCode: string;
 }
 
+export interface IBank {
+    bankName: string;
+    accountHolder: string;
+    iban: string;
+    bic: string;
+}
+
 export interface IContact {
     email: string;
     phone: string;

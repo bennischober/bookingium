@@ -1,13 +1,17 @@
 import { useState } from "react";
-import { Button, Text } from "@mantine/core";
+import { Button, Tooltip } from "@mantine/core";
 import { showNotification, updateNotification } from "@mantine/notifications";
 import axios from "axios";
 import dayjs from "dayjs";
 import { GetServerSideProps } from "next";
 import { getSession } from "next-auth/react";
 import { useRouter } from "next/router";
-import { MdCheck, MdClose } from "react-icons/md";
-import { isPopulated, serverSideFetch } from "../../../utils/appHandles";
+import { MdCheck, MdClose, MdEdit, MdFileDownload } from "react-icons/md";
+import {
+    clientSideFetch,
+    isPopulated,
+    serverSideFetch,
+} from "../../../utils/appHandles";
 import { IBand } from "../../../models/band";
 import { IDealMemo } from "../../../models/deal-memo";
 import { IHotel } from "../../../models/hotel";
@@ -21,6 +25,7 @@ import { SpecificPageHeader } from "../../../components/Layout/SpecificPageHeade
 import Link from "next/link";
 import { ContentContainer } from "../../../components/Layout/ContentContainer";
 import { SpecificDealMemoPageContent } from "../../../components/SpecificPages/DealMemo";
+import { callAPI, withNotification } from "../../../utils/apiHandler";
 
 export default function CompleteDealMemoPage({
     memo,
@@ -38,42 +43,17 @@ export default function CompleteDealMemoPage({
     // maybe move this to appHandles?
     // => make a function to take parameters and finish for every handle here!
     const handleMemo = async (data: IDealMemo) => {
-        showNotification({
-            id: "load-data",
-            loading: true,
-            title: "Saving your data",
-            message:
-                "You will be notified wethere your data is saved or any problem occured",
-            autoClose: false,
-            disallowClose: true,
-        });
-
-        const res = await axios.put(
-            `/api/deal-memo/${memo._id}`,
-            { data: data },
-            { params: { userid: session.userid } }
+        await withNotification(
+            () =>
+                callAPI<IDealMemo>(
+                    `/deal-memo/${memo._id}`,
+                    "PUT",
+                    { data: data },
+                    { userid: session.userid }
+                ),
+            undefined,
+            "PUT"
         );
-
-        if (res.status === 200) {
-            updateNotification({
-                id: "load-data",
-                color: "teal",
-                title: "Data saved",
-                message: "Your data has been successsfully updated",
-                icon: <MdCheck />,
-                autoClose: 2000,
-            });
-            return;
-        }
-        // an error occured, show notification
-        updateNotification({
-            id: "load-data",
-            color: "red",
-            title: "An error occured",
-            message: "Your data could not be saved",
-            icon: <MdClose />,
-            autoClose: 2000,
-        });
     };
 
     // Updates the selected hotel (hotel data) for the deal memo
@@ -83,43 +63,17 @@ export default function CompleteDealMemoPage({
             return;
         }
 
-        showNotification({
-            id: "load-data",
-            loading: true,
-            title: "Saving your data",
-            message:
-                "You will be notified wethere your data is saved or any problem occured",
-            autoClose: false,
-            disallowClose: true,
-        });
-
-        const res = await axios.put(
-            `/api/hotel/${hotelState._id}`,
-            { data: data },
-            { params: { userid: session.userid } }
+        await withNotification(
+            () =>
+                callAPI<IHotel>(
+                    `/hotel/${hotelState._id}`,
+                    "PUT",
+                    { data: data },
+                    { userid: session.userid }
+                ),
+            undefined,
+            "PUT"
         );
-
-        if (res.status === 200) {
-            updateNotification({
-                id: "load-data",
-                color: "teal",
-                title: "Data saved",
-                message: "Your data has been successsfully updated",
-                icon: <MdCheck />,
-                autoClose: 2000,
-            });
-            return;
-        }
-
-        // an error occured, show notification
-        updateNotification({
-            id: "load-data",
-            color: "red",
-            title: "An error occured",
-            message: "Your data could not be saved",
-            icon: <MdClose />,
-            autoClose: 2000,
-        });
     };
 
     // adds new hotel to db and to deal memo
@@ -198,10 +152,9 @@ export default function CompleteDealMemoPage({
 
         if (res.status === 200) {
             // fetch hotel
-            const hotel = await serverSideFetch<IHotel>(
-                `/api/hotel/${id}`,
-                session.userid
-            );
+            const hotel = await clientSideFetch<IHotel>(`/api/hotel/${id}`, {
+                userid: session.userid,
+            });
             setHotelState(hotel);
         }
     };
@@ -227,17 +180,44 @@ export default function CompleteDealMemoPage({
                         "DD.MM.YYYY"
                     )} | Venue: ${venue?.name}`}
                     other={
-                        <Button
-                            variant="default"
-                            onClick={() => {
-                                router.push({
-                                    pathname: "/contract",
-                                    query: { id: memo._id },
-                                });
-                            }}
-                        >
-                            Create contract
-                        </Button>
+                        // move this to seperate component!
+
+                        // could use deal memo id and session
+                        // to fetch all other missing data to
+                        // generate PDF
+                        <Button.Group>
+                            <Tooltip
+                                label="Download default PDF with deal memo values"
+                                position="bottom"
+                                color="blue"
+                                withArrow
+                            >
+                                <Button
+                                    variant="default"
+                                    leftIcon={<MdFileDownload size={20} />}
+                                >
+                                    Download contract
+                                </Button>
+                            </Tooltip>
+                            <Tooltip
+                                label="Replace default values with custom data"
+                                position="bottom"
+                                color="blue"
+                                withArrow
+                            >
+                                <Button
+                                    variant="default"
+                                    leftIcon={<MdEdit size={20} />}
+                                    onClick={() => {
+                                        router.push({
+                                            pathname: `/contract/${memo._id}`,
+                                        });
+                                    }}
+                                >
+                                    Customize contract
+                                </Button>
+                            </Tooltip>
+                        </Button.Group>
                     }
                 />
                 <ContentContainer>

@@ -4,6 +4,8 @@ import dayjs from 'dayjs';
 import { SessionProps } from "../types";
 import axios from "axios";
 
+const BASE_URL = "http://localhost:3000";
+
 // handle theme, language, and other app settings
 
 /*--- THEME HANDLE ---*/
@@ -109,7 +111,7 @@ export const clientSideFetch = async <T>(url: string, params?: {}): Promise<T> =
 }
 
 export const serverSideFetch = async <T>(url: string, params?: {}): Promise<T> => {
-    const u = url.includes("localhost") ? url : `http://localhost:3000${url}`;
+    const u = url.includes("localhost") ? url : `${BASE_URL}/${url}`;
     const fetch = await axios.get(u, {
         params: params,
     });
@@ -118,7 +120,7 @@ export const serverSideFetch = async <T>(url: string, params?: {}): Promise<T> =
 }
 
 export const addData = async <T>(endpoint: string, data: T, userid?: string): Promise<number> => {
-    const url = endpoint.includes("localhost") ? endpoint : `http://localhost:3000/${endpoint}`;
+    const url = endpoint.includes("localhost") ? endpoint : `${BASE_URL}/${endpoint}`;
 
     const res = await axios.post(url, data, {
         params: {
@@ -129,7 +131,7 @@ export const addData = async <T>(endpoint: string, data: T, userid?: string): Pr
 }
 
 export const updateData = async <T>(endpoint: string, data: T, userid?: string): Promise<number> => {
-    const url = endpoint.includes("localhost") ? endpoint : `http://localhost:3000/${endpoint}`;
+    const url = endpoint.includes("localhost") ? endpoint : `${BASE_URL}/${endpoint}`;
 
     const res = await axios.put(url, { data: data }, {
         params: {
@@ -143,7 +145,7 @@ export const updateData = async <T>(endpoint: string, data: T, userid?: string):
 }
 
 export const deleteData = async (endpoint: string, userid?: string): Promise<number> => {
-    const url = endpoint.includes("localhost") ? endpoint : `http://localhost:3000/${endpoint}`;
+    const url = endpoint.includes("localhost") ? endpoint : `${BASE_URL}/${endpoint}`;
 
     const res = await axios.delete(url, {
         params: {
