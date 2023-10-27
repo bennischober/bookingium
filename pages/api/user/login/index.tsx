@@ -8,7 +8,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const { method, body } = req;
 
     const registerData = {
-        email: body.email,
+        email: body.username,
         password: body.password,
     };
 

@@ -10,6 +10,8 @@ import { PageTemplate } from "../../../components/Layout/PageTemplate";
 import { RegisterComponent } from "../../../components/Auth/Register";
 import { RegisterHandleData } from "../../../types";
 
+import classes from "./index.module.css";
+
 export default function RegisterPage() {
     const [visible, setVisible] = useState(false);
 
@@ -67,8 +69,12 @@ export default function RegisterPage() {
                     name: "Default Company",
                     users: [id],
                     userid: id,
-                }
-                const r = await axios.post("/api/user/workplace", { data: d }, { params: { userid: id }});
+                };
+                const r = await axios.post(
+                    "/api/user/workplace",
+                    { data: d },
+                    { params: { userid: id } }
+                );
 
                 signIn("credentials", {
                     username: registerData.email,
@@ -85,16 +91,10 @@ export default function RegisterPage() {
     return (
         <PageTemplate title="Register" useAuth={false}>
             <Container size={420} my={40}>
-                <Title
-                    align="center"
-                    sx={(theme) => ({
-                        fontFamily: `Greycliff CF, ${theme.fontFamily}`,
-                        fontWeight: 900,
-                    })}
-                >
+                <Title ta="center" className={classes.title}>
                     Welcome back!
                 </Title>
-                <Text color="dimmed" size="sm" align="center" mt={5}>
+                <Text c="dimmed" size="sm" ta="center" mt={5}>
                     Already have an account?{" "}
                     <Link href="/auth/login">Login</Link>
                 </Text>
@@ -103,7 +103,7 @@ export default function RegisterPage() {
                     <RegisterComponent registerHandler={registerHandler} />
                 </div>
                 <Space h="xl" />
-                <Text color="dimmed" size="sm" align="center" mt={5}>
+                <Text c="dimmed" size="sm" ta="center" mt={5}>
                     Don't want to register? <Link href="/">Back to Home</Link>
                 </Text>
             </Container>
