@@ -25,7 +25,7 @@ export function NavbarComponent(props: NavbarProps) {
     }
 
     return (
-        <nav className={classes.navbar} hidden={props.hidden}>
+        <div className={classes.navbar} hidden={props.hidden}>
             <ScrollArea className={classes.links}>
                 <div className={classes.linksInner}>{links}</div>
             </ScrollArea>
@@ -33,6 +33,6 @@ export function NavbarComponent(props: NavbarProps) {
             <div className={classes.footer}>
                 <UserButton name={name} email={email} />
             </div>
-        </nav>
+        </div>
     );
 }

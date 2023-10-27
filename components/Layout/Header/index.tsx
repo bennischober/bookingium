@@ -57,7 +57,7 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
     const title = getDataForRoute(router.pathname).title;
 
     return (
-        <header className={classes.header}>
+        <div className={classes.header}>
             <div
                 style={{
                     display: "flex",
@@ -144,6 +144,6 @@ export function HeaderComponent({ handleNavigation, opened }: HeaderProps) {
                     </Group>
                 </div>
             </div>
-        </header>
+        </div>
     );
 }

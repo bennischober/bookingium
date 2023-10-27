@@ -75,7 +75,7 @@ export function LinksGroup({
                                     width: rem(16),
                                     height: rem(16),
                                     transform: opened
-                                        ? "rotate(-90deg)"
+                                        ? "rotate(90deg)"
                                         : "none",
                                 }}
                             />

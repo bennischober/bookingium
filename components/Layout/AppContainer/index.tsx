@@ -7,7 +7,7 @@ import { HeaderComponent } from "../Header";
 
 export function AppContainer(props: AppContainerProps) {
     const [opened, setOpened] = useState(false);
-    const [navState, setNavState] = useState(true);
+    const [navState, setNavState] = useState(false);
 
     const theme = useMantineTheme();
 
