@@ -11,7 +11,7 @@ export default NextAuth({
 				username: { label: "Username", type: "email", placeholder: "username" },
 				password: { label: "Password", type: "password", placeholder: "password" }
 			},
-			authorize: async (credentials) => {
+			async authorize(credentials) {
 				try {
 					const res = await axios({
 						method: "post",

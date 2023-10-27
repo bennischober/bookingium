@@ -6,11 +6,17 @@ import type { AppProps } from "next/app";
 import Head from "next/head";
 import { MantineProvider } from "@mantine/core";
 import { AppContainer } from "../components/Layout/AppContainer";
-import { SessionProvider } from "next-auth/react";
 import { theme } from "../theme";
 import { Notifications } from "@mantine/notifications";
 
-export default function App({ Component, pageProps, ...appPropps }: AppProps) {
+import { SessionProvider } from "next-auth/react";
+import type { Session } from "next-auth";
+
+export default function App({
+    Component,
+    pageProps: { session, ...pageProps },
+    ...appPropps
+}: AppProps<{ session: Session }>) {
     const specialPage: string[] = [
         "/auth/login",
         "/auth/register",
@@ -39,7 +45,7 @@ export default function App({ Component, pageProps, ...appPropps }: AppProps) {
                 </Head>
 
                 <SessionProvider
-                    session={pageProps.session}
+                    session={session}
                     refetchInterval={0}
                 >
                     <Notifications />

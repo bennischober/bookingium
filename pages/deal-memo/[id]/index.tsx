@@ -26,6 +26,7 @@ import Link from "next/link";
 import { ContentContainer } from "../../../components/Layout/ContentContainer";
 import { SpecificDealMemoPageContent } from "../../../components/SpecificPages/DealMemo";
 import { callAPI, withNotification } from "../../../utils/apiHandler";
+import { auth } from "../../../auth";
 
 export default function CompleteDealMemoPage({
     memo,
@@ -85,7 +86,7 @@ export default function CompleteDealMemoPage({
             message:
                 "You will be notified wethere your data is saved or any problem occured",
             autoClose: false,
-            disallowClose: true,
+            withCloseButton: false,
         });
 
         const res = await axios.post(
@@ -237,9 +238,9 @@ export default function CompleteDealMemoPage({
     );
 }
 
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-    const session = await getSession({ req: ctx.req });
-    const id = ctx.query.id;
+export const getServerSideProps: GetServerSideProps = async (context) => {
+    const session = await auth(context);
+    const id = context.query.id;
 
     const data = await serverSideFetch<IDealMemo>(`/api/deal-memo/${id}`, {
         userid: session?.userid,
