@@ -1,7 +1,9 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { getAPIBaseUrl } from "./utils/apiHandler";
-import type { NextAuthConfig } from "next-auth";
+import type { NextAuthConfig, Session } from "next-auth";
+import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 
 // ref: https://authjs.dev/guides/upgrade-to-v5?authentication-method=server-component#authenticating-server-side
 export const config = {
@@ -67,6 +69,14 @@ export const config = {
             }
             return session;
         },
+        signIn: async ({ user, account, profile, email, credentials }: any) => {
+            if (user?.status === "authorized") {
+                console.log("authorized");
+                return true;
+            }
+            // Return false to display a default error message
+            return false;
+        },
     },
     secret: process.env.NEXTAUTH_SECRET,
     jwt: {
@@ -78,4 +88,33 @@ export const config = {
     }
 } satisfies NextAuthConfig
 
-export const { handlers, auth, signIn, signOut } = NextAuth(config)
+const { handlers, auth, signIn, signOut } = NextAuth(config);
+
+/**
+ * This function returns the session or redirects to the auth page,
+ * if no session is found.
+ * @description This requires a middleware.ts to access the requested pathname
+ * @returns the session if it exists, otherwise it returns null
+ */
+const authOrRedirect = async () => {
+    const session = await auth();
+
+    // if we are on the /auth/login page, do not redirect
+    const headerList = headers();
+    const url = headerList.get("x-url") || "";
+    if (url.includes("/auth/")) {
+        // this will be null, but it is
+        // allright, because we want to login
+        return session as Session;
+    }
+
+    // if no session is found and we are not on login or register,
+    // redirect to login
+    if (!session) {
+        redirect("/auth/login");
+    }
+    return session;
+}
+
+
+export { handlers, auth, authOrRedirect, signIn, signOut };

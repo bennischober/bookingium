@@ -15,9 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         name: body.name,
         email: body.email,
         password: body.password,
-        log: {
-            created: dayjs().format(),
-        },
+        created: dayjs().format('YYYY-MM-DDTHH:mm:ssZ[Z]'),
     };
 
     await connect();

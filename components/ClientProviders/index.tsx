@@ -23,6 +23,7 @@ export function ClientProviders({ children, session = null }: ClientProvidersPro
     if (pathName?.includes("/auth/")) {
         return (
             <MantineProvider defaultColorScheme="dark" theme={theme}>
+                <Notifications />
                 {children}
             </MantineProvider>
         );

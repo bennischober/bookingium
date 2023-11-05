@@ -6,10 +6,11 @@ import "@mantine/dates/styles.css";
 import { ColorSchemeScript } from "@mantine/core";
 import { auth } from "@/auth";
 import { ClientProviders } from "@/components/ClientProviders";
+import { getAppName } from "@/utils/appConfig";
 
 export const metadata = {
-    title: "Mantine Next.js template",
-    description: "I am using Mantine with Next.js!",
+    title: "Home | " + getAppName(),
+    description: "Welcome to " + getAppName() + ", a booking application for the music industry.",
 };
 
 export default async function RootLayout({

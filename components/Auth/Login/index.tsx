@@ -11,32 +11,48 @@ import {
     Group,
     Button,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
-import { MdAlternateEmail, MdLockOutline } from "react-icons/md";
+import { useForm, zodResolver } from "@mantine/form";
+import { MdAlternateEmail } from "react-icons/md";
 import { LoginComponentProps, LoginFormValues } from "../../../types";
 import Link from "next/link";
-import { serverLogin } from "@/app/auth";
+import { serverLogin } from "@/app/auth/actions";
+import { z } from "zod";
+import { notifications } from "@mantine/notifications";
+
+const schema = z.object({
+    email: z.string().email(),
+    password: z.string().min(6),
+});
 
 export default function LoginComponent({
     forgotPassword,
 }: LoginComponentProps) {
     const form = useForm<LoginFormValues>({
+        validateInputOnBlur: true,
         initialValues: {
             email: "",
             password: "",
             remember: false,
         },
-        validate: (values: LoginFormValues) => ({
-            email: /^\S+@\S+$/.test(values.email) ? null : "Invalid email",
-            password:
-                values.password.length >= 6
-                    ? null
-                    : "Password must be at least 6 characters",
-        }),
+        validate: zodResolver(schema),
     });
 
     // Rember me checkbox
     // https://github.com/nextauthjs/next-auth/issues/974
+
+    const handleSubmit = async (values: LoginFormValues) => {
+        const successfull = await serverLogin(values.email, values.password);
+        if (successfull === false) {
+            notifications.show({
+                id: "login-failed",
+                title: "Login failed",
+                message: "Please check your credentials",
+                color: "red",
+                autoClose: 5000,
+                withCloseButton: true,
+            });
+        }
+    };
 
     return (
         <>
@@ -47,33 +63,25 @@ export default function LoginComponent({
 
             <Paper withBorder shadow="md" p={30} mt={30} radius="md">
                 <form
-                    action={(val) => {
-                        console.log(form.values);
-                        if (!form.values) return;
-                        serverLogin(form.values.email, form.values.password);
-                    }}
+                    onSubmit={form.onSubmit((values) => handleSubmit(values))}
                 >
                     <TextInput
                         label="Email"
                         placeholder="email@domain.com"
+                        withAsterisk
                         rightSection={<MdAlternateEmail />}
-                        id="mantine-tzcdl80cn"
                         {...form.getInputProps("email")}
-                        required
                     />
                     <PasswordInput
                         label="Password"
                         placeholder="Your password"
-                        rightSection={<MdLockOutline />}
                         mt="md"
-                        id="mantine-t51ia2aie"
+                        withAsterisk
                         {...form.getInputProps("password")}
-                        required
                     />
                     <Group justify="space-between" mt="md">
                         <Checkbox
                             label="Remember me"
-                            id="mantine-00vo2p68i"
                             {...form.getInputProps("remember", {
                                 type: "checkbox",
                             })}

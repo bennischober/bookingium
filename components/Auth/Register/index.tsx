@@ -9,16 +9,13 @@ import {
     Progress,
     Popover,
     Space,
+    Input,
 } from "@mantine/core";
-import { useForm } from "@mantine/form";
+import { useForm, zodResolver } from "@mantine/form";
 import { useState } from "react";
-import {
-    MdCheck,
-    MdClose,
-    MdAlternateEmail,
-    MdLockOutline,
-} from "react-icons/md";
+import { MdCheck, MdClose, MdAlternateEmail } from "react-icons/md";
 import { RegisterComponentProps, RegisterFormValues } from "../../../types";
+import { z } from "zod";
 
 function PasswordRequirement({
     meets,
@@ -29,8 +26,8 @@ function PasswordRequirement({
 }) {
     return (
         <Text
-            color={meets ? "teal" : "red"}
-            sx={{ display: "flex", alignItems: "center" }}
+            c={meets ? "teal" : "red"}
+            style={{ display: "flex", alignItems: "center" }}
             mt={7}
             size="sm"
         >
@@ -58,13 +55,47 @@ function getStrength(password: string) {
     return Math.max(100 - (100 / (requirements.length + 1)) * multiplier, 10);
 }
 
-function getPasswordValidation(password: string) {
-    let ret = false;
-    requirements.forEach((requirement) => {
-        ret = requirement.re.test(password);
+const schema = z
+    .object({
+        name: z
+            .string()
+            .min(2, { message: "Name should have at least 2 letters" }),
+        email: z.string().email({ message: "Invalid email" }),
+        password: z
+            .string()
+            .regex(new RegExp(/[0-9]/), "Includes at least one number")
+            .regex(
+                new RegExp(/[a-z]/),
+                "Includes at least one lowercase letter"
+            )
+            .regex(
+                new RegExp(/[A-Z]/),
+                "Includes at least one uppercase letter"
+            )
+            .regex(
+                new RegExp(/[$&+,:;=?@#|'<>.^*()%!-]/),
+                "Includes at least one special symbol"
+            )
+            .min(6, "Password must be at least 6 characters"),
+        passwordConfirmation: z
+            .string()
+            .min(6, "Password must be at least 6 characters"),
+        accept: z.literal<boolean>(true, {
+            errorMap: () => ({
+                message: "You must accept terms and conditions",
+            }),
+        }),
+    })
+    .superRefine(({ password, passwordConfirmation }, ctx) => {
+        if (password !== passwordConfirmation) {
+            ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "Passwords must match",
+                path: ["passwordConfirmation"],
+            });
+        }
+        return ctx;
     });
-    return ret;
-}
 
 export function RegisterComponent({ registerHandler }: RegisterComponentProps) {
     const form = useForm<RegisterFormValues>({
@@ -75,20 +106,7 @@ export function RegisterComponent({ registerHandler }: RegisterComponentProps) {
             passwordConfirmation: "",
             accept: false,
         },
-        validate: (values: RegisterFormValues) => ({
-            name: values.name.length > 0 ? null : "Name is required",
-            email: /^\S+@\S+$/.test(values.email) ? null : "Invalid email",
-            password: getPasswordValidation(values.password)
-                ? null
-                : "Password must be at least 6 characters",
-            passwordConfirmation:
-                values.passwordConfirmation === values.password
-                    ? null
-                    : "Password confirmation does not match",
-            accept: values.accept
-                ? null
-                : "You must accept the terms and conditions",
-        }),
+        validate: zodResolver(schema),
     });
 
     let pwValues = Object.values({
@@ -111,19 +129,17 @@ export function RegisterComponent({ registerHandler }: RegisterComponentProps) {
         <Paper withBorder shadow="md" p={30} mt={30} radius="md">
             <form onSubmit={form.onSubmit((values) => registerHandler(values))}>
                 <TextInput
-                    id="mantine-2wgfg6a6v"
                     label="Name"
                     placeholder="Your name"
-                    required
+                    withAsterisk
                     {...form.getInputProps("name")}
                 />
                 <Space h="xl" />
                 <TextInput
-                    id="mantine-38qkp3wbl"
                     label="Email"
                     placeholder="you@mantine.dev"
-                    required
-                    icon={<MdAlternateEmail />}
+                    withAsterisk
+                    rightSection={<MdAlternateEmail />}
                     {...form.getInputProps("email")}
                 />
                 <Space h="xl" />
@@ -131,7 +147,7 @@ export function RegisterComponent({ registerHandler }: RegisterComponentProps) {
                     opened={popoverOpened}
                     position="bottom"
                     width="target"
-                    transition="pop"
+                    transitionProps={{ transition: "pop" }}
                 >
                     <Popover.Target>
                         <div
@@ -139,13 +155,11 @@ export function RegisterComponent({ registerHandler }: RegisterComponentProps) {
                             onBlurCapture={() => setPopoverOpened(false)}
                         >
                             <PasswordInput
-                                id="mantine-vkphjadj1"
                                 label="Your password"
                                 placeholder="Your password"
                                 description="Strong password should include letters in lower and uppercase, at least 1 number, at least 1 special symbol"
                                 {...form.getInputProps("password")}
-                                icon={<MdLockOutline />}
-                                required
+                                withAsterisk
                             />
                         </div>
                     </Popover.Target>
@@ -157,29 +171,27 @@ export function RegisterComponent({ registerHandler }: RegisterComponentProps) {
                             style={{ marginBottom: 10 }}
                         />
                         <PasswordRequirement
-                            label="Includes at least 12 characters"
-                            meets={pwValues.length > 6}
+                            label="Includes at least 6 characters"
+                            meets={pwValues.length >= 6}
                         />
                         {checks}
                     </Popover.Dropdown>
                 </Popover>
                 <Space h="xs" />
                 <PasswordInput
-                    id="mantine-b9nkkwv5u"
                     label="Confirm password"
                     placeholder="Your password"
-                    icon={<MdLockOutline />}
                     {...form.getInputProps("passwordConfirmation")}
-                    required
+                    withAsterisk
                 />
                 <Space h="xl" />
                 <Space h="xl" />
-                <Checkbox
-                    id="mantine-y200hmiyi"
-                    label="I accept the terms and conditions"
-                    {...form.getInputProps("accept")}
-                    required
-                />
+                <Input.Wrapper label="Terms and conditions" withAsterisk>
+                    <Checkbox
+                        label="I accept the terms and conditions"
+                        {...form.getInputProps("accept")}
+                    />
+                </Input.Wrapper>
                 <Button type="submit" fullWidth mt="xl">
                     Register
                 </Button>
