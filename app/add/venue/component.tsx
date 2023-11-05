@@ -22,7 +22,7 @@ export default function VenueComponent({
         await withNotification<IVenue>(
             () =>
                 callAPI<IVenue>(
-                    "/api/venue",
+                    "/venue",
                     "POST",
                     { data: data },
                     { userid: session.userid }

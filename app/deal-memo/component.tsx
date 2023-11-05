@@ -17,7 +17,7 @@ export default function DealMemoComponent({
         await withNotification(
             () =>
                 callAPI(
-                    "/api/deal-memo",
+                    "/deal-memo",
                     "POST",
                     { data: data },
                     { userid: session.userid }
@@ -31,7 +31,7 @@ export default function DealMemoComponent({
         await withNotification(
             () =>
                 callAPI(
-                    "/api/band",
+                    "/band",
                     "POST",
                     { data: data },
                     { userid: session.userid }
@@ -45,7 +45,7 @@ export default function DealMemoComponent({
         await withNotification(
             () =>
                 callAPI(
-                    "/api/venue",
+                    "/venue",
                     "POST",
                     { data: data },
                     { userid: session.userid }
@@ -59,7 +59,7 @@ export default function DealMemoComponent({
         await withNotification(
             () =>
                 callAPI(
-                    "/api/hotel",
+                    "/hotel",
                     "POST",
                     { data: data },
                     { userid: session.userid }

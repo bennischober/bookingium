@@ -22,7 +22,7 @@ export default function BandComponent({
         await withNotification<IBand>(
             () =>
                 callAPI(
-                    "/api/band",
+                    "/band",
                     "POST",
                     { data: data },
                     { userid: session.userid }

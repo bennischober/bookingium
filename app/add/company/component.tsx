@@ -19,7 +19,7 @@ export default function CompanyComponent({
         await withNotification<ICompany>(
             () =>
                 callAPI(
-                    "/api/company",
+                    "/company",
                     "POST",
                     { data: data },
                     { userid: session.userid }

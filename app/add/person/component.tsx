@@ -14,7 +14,7 @@ export default function PersonComponent({ session }: PersonComponentProps) {
         await withNotification<IPerson>(
             () =>
                 callAPI<IPerson>(
-                    "/api/person",
+                    "/person",
                     "POST",
                     { data: data },
                     { userid: session.userid }

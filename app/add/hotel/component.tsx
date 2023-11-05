@@ -14,7 +14,7 @@ export default function HotelComponent({ session }: HotelComponentProps) {
         await withNotification(
             () =>
                 callAPI(
-                    "/api/hotel",
+                    "/hotel",
                     "POST",
                     { data: data },
                     { userid: session.userid }
