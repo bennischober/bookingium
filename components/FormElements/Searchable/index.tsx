@@ -102,18 +102,13 @@ export function SearchableIdProxy({
         return <></>;
     }
 
-    // Note: isDisabled means data has exactly one entry
-    // this is the case, if we are at the edit page
-    // and the user is not allowed to change the value
-    if (isDisabled) {
-        return (
-            <>
-                <TextInput value={data[0].label} disabled={isDisabled} />
-            </>
-        );
-    }
-
-    const searchable = (
+    const searchable = isDisabled ? (
+        // Note: isDisabled means data has exactly one entry
+        // this is the case, if we are at the edit page
+        // and the user is not allowed to change the value
+        <TextInput value={data[0].label} disabled={isDisabled} />
+    ) : (
+        // if data has more than one entry, we can use autocomplete
         <Autocomplete
             label={label}
             data={data}
@@ -122,9 +117,7 @@ export function SearchableIdProxy({
             value={value}
             onOptionSubmit={(value) => {
                 // handles the case, if you select an item
-                const item = data?.find(
-                    (item) => item.value === value
-                );
+                const item = data?.find((item) => item.value === value);
                 if (item && item.label) {
                     setValue(item?.label ?? "");
                     Form.setFieldValue(inputProps, value);
@@ -133,9 +126,7 @@ export function SearchableIdProxy({
             onChange={(value) => {
                 // handles the case, if you want to change the input
                 // if value is not in autocomplete, set it to empty
-                const item = data?.find(
-                    (item) => item.label === value
-                );
+                const item = data?.find((item) => item.label === value);
                 if (!item) {
                     setValue("");
                     Form.setFieldValue(inputProps, "");

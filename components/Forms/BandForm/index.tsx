@@ -16,9 +16,7 @@ import { BandFormProps, SearchableIdProxyData } from "../../../types";
 // import { useUnsavedWarn } from "../../../hooks";
 import { Band, IBand } from "../../../models/band";
 import { Types } from "mongoose";
-import {
-    getFormValueObject
-} from "../../../utils/appHandles";
+import { getFormValueObject } from "../../../utils/appHandles";
 import { useState } from "react";
 import { MemberInput } from "../../FormInputs/MemberInput";
 import { SearchableIdProxy } from "../../FormElements/Searchable";
@@ -60,6 +58,7 @@ export function BandForm({
     session,
     data,
     persons,
+    existingMembers,
     companies,
     isEdit,
 }: BandFormProps) {
@@ -118,7 +117,6 @@ export function BandForm({
                         searchable
                     />
                     <DateInput
-                        // id="mantine-4wgfg5a3v"
                         label="Founded"
                         placeholder="Select a date"
                         valueFormat="DD.MM.YYYY"
@@ -135,6 +133,7 @@ export function BandForm({
                             label="Company"
                             data={companiesAutoComplete}
                             inputProps="company"
+                            isDisabled={isEdit}
                         />
                     </Grid.Col>
                     <Grid.Col span={6}>
@@ -159,6 +158,7 @@ export function BandForm({
                         Form={Form}
                         isEdit={isEdit}
                         persons={persons}
+                        existingMembers={existingMembers}
                     />
                 </Modal>
             </form>

@@ -114,6 +114,7 @@ export interface InputComponentProps {
 }
 
 export interface MemberInputProps extends InputComponentProps {
+	existingMembers?: IPerson[];
 	persons?: IPerson[];
 	inputProps?: string;
 	firstFieldLabel?: string;
@@ -141,6 +142,7 @@ export interface BandFormProps {
 	session: SessionProps["session"];
 	data?: IBand;
 	persons?: IPerson[];
+	existingMembers?: IPerson[];
 	companies?: ICompany[];
 	isEdit?: boolean;
 }

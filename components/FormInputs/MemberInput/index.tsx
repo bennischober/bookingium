@@ -13,6 +13,7 @@ export function MemberInput({
     Form,
     isEdit,
     persons,
+    existingMembers,
     inputProps,
     firstFieldLabel,
     secondFieldLabel,
@@ -25,6 +26,8 @@ export function MemberInput({
     const ffl = firstFieldLabel ?? "Role";
     const sfl = secondFieldLabel ?? "Person";
 
+    // TODO: Add a way to remove members from the list, if they are already selected
+    // maybe this complete component and possibly others need refactoring!
     const personAutocomplete: SearchableIdProxyData[] = persons.map((p) => ({
         label: p.firstName + " " + p.lastName,
         value: p._id,
@@ -52,6 +55,16 @@ export function MemberInput({
             ) : null;
 
             const role = persons.find((p) => p._id === item)?.role;
+            let state = false;
+            if (existingMembers) {
+                for (const member of existingMembers) {
+                    if (member._id === item) {
+                        state = true;
+                    }
+                }
+            }
+
+            const isSearchableDisabled = isEdit && state;
 
             return (
                 <LeftAlignGroup
@@ -73,6 +86,7 @@ export function MemberInput({
                             editChild={edit}
                             deleteChild={del}
                             required={false}
+                            isDisabled={isSearchableDisabled}
                         />
                     }
                     isIterable
