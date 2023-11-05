@@ -1,3 +1,5 @@
+"use client";
+
 import z from "zod";
 import {
     Button,
@@ -11,7 +13,7 @@ import {
 } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";
 import { BandFormProps, SearchableIdProxyData } from "../../../types";
-import { useUnsavedWarn } from "../../../hooks";
+// import { useUnsavedWarn } from "../../../hooks";
 import { Band, IBand } from "../../../models/band";
 import { Types } from "mongoose";
 import {
@@ -21,7 +23,7 @@ import { useState } from "react";
 import { MemberInput } from "../../FormInputs/MemberInput";
 import { SearchableIdProxy } from "../../FormElements/Searchable";
 import dayjs from "dayjs";
-import { DatePicker } from "@mantine/dates";
+import { DateInput } from "@mantine/dates";
 
 const schema = z.object({
     name: z
@@ -90,12 +92,12 @@ export function BandForm({
 
     const companiesAutoComplete: SearchableIdProxyData[] = companies
         ? companies.map((c) => ({
-              display: c.name,
+              label: c.name,
               value: c._id,
           }))
         : [];
 
-    const [prompt] = useUnsavedWarn(Form);
+    // const [prompt] = useUnsavedWarn(Form);
 
     return (
         <>
@@ -112,21 +114,14 @@ export function BandForm({
                         {...Form.getInputProps("genre")}
                         data={music_genres}
                         placeholder="Select genre"
-                        nothingFound="Genre not found"
+                        nothingFoundMessage="Genre not found"
                         searchable
-                        creatable
-                        getCreateLabel={(query) => `+ Create ${query}`}
-                        onCreate={(query) => {
-                            music_genres.push(query);
-                            Form.setFieldValue("genre", query);
-                        }}
                     />
-                    <DatePicker
-                        id="mantine-4wgfg5a3v"
+                    <DateInput
+                        // id="mantine-4wgfg5a3v"
                         label="Founded"
                         placeholder="Select a date"
-                        allowFreeInput
-                        inputFormat="DD.MM.YYYY"
+                        valueFormat="DD.MM.YYYY"
                         {...Form.getInputProps("founded")}
                     />
                 </Group>
@@ -167,7 +162,7 @@ export function BandForm({
                     />
                 </Modal>
             </form>
-            {prompt}
+            {/* {prompt} */}
         </>
     );
 }

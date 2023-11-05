@@ -1,8 +1,10 @@
+"uses client";
+
 import React, { useState } from "react";
 import { Title, Text, Container, LoadingOverlay, Space } from "@mantine/core";
 import { showNotification, cleanNotifications } from "@mantine/notifications";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import axios from "axios";
 import bcrypt from "bcryptjs";

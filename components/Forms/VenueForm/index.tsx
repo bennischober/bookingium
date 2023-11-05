@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Button,
     Grid,
@@ -13,7 +15,7 @@ import { useState } from "react";
 import { z } from "zod";
 import { useUnsavedWarn } from "../../../hooks";
 import { IVenue, Venue } from "../../../models/venue";
-import { VenueFormProps } from "../../../types";
+import { SearchableIdProxyData, VenueFormProps } from "../../../types";
 import { getFormValueObject } from "../../../utils/appHandles";
 import { SearchableIdProxy } from "../../FormElements/Searchable";
 import { MemberInput } from "../../FormInputs/MemberInput";
@@ -63,6 +65,13 @@ export function VenueForm({
         Form.reset();
     };
 
+    const companieAutoComplete: SearchableIdProxyData[] = companies?.map(
+        (c) => ({
+            label: c.name,
+            value: c._id,
+        })
+    ) ?? [];
+
     const [prompt] = useUnsavedWarn(Form);
 
     return (
@@ -93,7 +102,7 @@ export function VenueForm({
                             Form={Form}
                             label="Company"
                             inputProps="company"
-                            data={companies}
+                            data={companieAutoComplete}
                         />
                     }
                     second={

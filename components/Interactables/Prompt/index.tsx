@@ -49,7 +49,7 @@ export function Prompt({
                     <Text>{message ?? "Are you sure you want to leave this page? Your data will be lost."}</Text>
                 </Center>
                 <Space h="xl" />
-                <Group position="center" grow>
+                <Group justify="center" grow>
                     <Button onClick={() => handleDiscard()}>
                         {confirmText ?? "Discard"}
                     </Button>

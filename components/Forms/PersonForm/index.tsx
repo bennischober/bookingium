@@ -1,3 +1,5 @@
+"use client";
+
 import {
     Box,
     Button,
@@ -7,7 +9,7 @@ import {
     Textarea,
     TextInput,
 } from "@mantine/core";
-import { DatePicker } from "@mantine/dates";
+import { DateInput, DatePicker, DatePickerInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import dayjs from "dayjs";
 import { MdCalendarToday } from "react-icons/md";
@@ -94,14 +96,13 @@ export function PersonForm({
                         <Space h="xl" />
 
                         <Group grow align="flex-end">
-                            <DatePicker
-                                id="mantine-2wgfg6a6v"
+                            <DateInput
+                                // id="mantine-2wgfg6a6v"
                                 label="Birthday"
                                 placeholder="Select a date"
-                                allowFreeInput
-                                inputFormat="DD.MM.YYYY"
+                                valueFormat="DD.MM.YYYY"
+                                rightSection={<MdCalendarToday />}
                                 {...Form.getInputProps("birthday")}
-                                icon={<MdCalendarToday />}
                             />
                             <TextInput
                                 label="Role"

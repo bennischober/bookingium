@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { useUnsavedWarn } from "../../../hooks";

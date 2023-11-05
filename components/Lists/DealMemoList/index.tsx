@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useMemo, useState } from "react";
 import { Paper, ScrollArea, Text } from "@mantine/core";
 import { useRouter } from "next/navigation";

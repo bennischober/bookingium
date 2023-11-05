@@ -291,7 +291,7 @@ export interface VenueFormProps {
 	close?: () => void;
 	session: SessionProps["session"];
 	data?: IVenue;
-	companies?: SearchableIdProxyData[];
+	companies?: ICompany[];
 	persons?: IPerson[];
 	isEdit?: boolean;
 }

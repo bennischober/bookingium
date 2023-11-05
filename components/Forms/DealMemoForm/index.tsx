@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import {
     Box,
@@ -19,7 +21,6 @@ import { VenueForm } from "../VenueForm";
 import { HotelForm } from "../HotelForm";
 import { getFormValueObject, isPopulated } from "../../../utils/appHandles";
 import { DealInput } from "../../FormInputs/DealInput";
-import { useUnsavedWarn } from "../../../hooks";
 import { DealMemo, IDealMemo } from "../../../models/deal-memo";
 import { Types } from "mongoose";
 import dayjs from "dayjs";
@@ -60,8 +61,6 @@ export function DealMemoForm({
             hotelid: null as unknown as Types.ObjectId,
         },
     });
-
-    const [prompt] = useUnsavedWarn(Form);
 
     const onDealSubmit = async (values: DealMemo) => {
         if (!bands || !venues || !persons || !companies) {
@@ -193,7 +192,7 @@ export function DealMemoForm({
                     handleData={handleVenues}
                     close={closeModals}
                     session={session}
-                    companies={companiesAutoComplete}
+                    companies={companies}
                     persons={persons}
                 />
             </Modal>
@@ -210,7 +209,6 @@ export function DealMemoForm({
                     session={session}
                 />
             </Modal>
-            {prompt}
         </>
     );
 }
@@ -260,8 +258,6 @@ export function DealEditForm({
         handleMemos(memoData);
     };
 
-    const [prompt] = useUnsavedWarn(Form);
-
     const p = isPopulated<IPerson>(data.lopro.person)
         ? (data.lopro.person as IPerson)
         : null;
@@ -300,7 +296,6 @@ export function DealEditForm({
                     Update Deal Data
                 </Button>
             </form>
-            {prompt}
         </>
     );
 }

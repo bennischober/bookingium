@@ -1,3 +1,5 @@
+"use client";
+
 import { z } from "zod";
 import { Button, Divider, Space, Textarea, TextInput } from "@mantine/core";
 import { useForm, zodResolver } from "@mantine/form";

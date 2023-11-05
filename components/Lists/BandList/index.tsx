@@ -1,3 +1,5 @@
+"use client";
+
 import { Paper, ScrollArea, Text } from "@mantine/core";
 import { ColumnDef } from "@tanstack/table-core";
 import { useRouter } from "next/navigation";

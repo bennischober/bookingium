@@ -1,5 +1,7 @@
+"use client";
+
 import { Button, Center, Space, TextInput, Title } from "@mantine/core";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { MemberInputProps, SearchableIdProxyData } from "../../../types";
 import { ActionButton } from "../../Core/Buttons/ActionButton";
 import { MdDelete, MdEdit } from "react-icons/md";
@@ -24,7 +26,7 @@ export function MemberInput({
     const sfl = secondFieldLabel ?? "Person";
 
     const personAutocomplete: SearchableIdProxyData[] = persons.map((p) => ({
-        display: p.firstName + " " + p.lastName,
+        label: p.firstName + " " + p.lastName,
         value: p._id,
     }));
 
