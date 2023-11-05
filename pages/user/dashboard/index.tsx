@@ -173,14 +173,14 @@ export default function UserDashboard({
                                             label="Company Logo"
                                             placeholder="Upload image"
                                             accept="image/png,image/jpeg"
-                                            icon={<MdUpload />}
+                                            leftSection={<MdUpload />}
                                             {...Form.getInputProps("logo")}
                                         />
                                         <FileInput
                                             label="Signature"
                                             placeholder="Upload image"
                                             accept="image/png,image/jpeg"
-                                            icon={<MdUpload />}
+                                            leftSection={<MdUpload />}
                                             {...Form.getInputProps("signature")}
                                         />
                                     </Group>

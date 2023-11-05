@@ -1,4 +1,4 @@
-import { auth } from "@/auth";
+import { authOrRedirect } from "@/auth";
 import { Metadata } from "next";
 import DealMemoComponent from "./component";
 import { IBand } from "@/models/band";
@@ -16,8 +16,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function Page() {
-    const session = await auth();
-    if (!session) return null;
+    const session = await authOrRedirect();
 
     const bands = await serverSideFetch<IBand[]>("/api/band", {
         userid: session.userid,
