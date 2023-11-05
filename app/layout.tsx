@@ -3,7 +3,6 @@ import "@mantine/core/styles.css";
 import "@mantine/notifications/styles.css";
 import "@mantine/dates/styles.css";
 
-import React from "react";
 import { ColorSchemeScript } from "@mantine/core";
 import { auth } from "@/auth";
 import { ClientProviders } from "@/components/ClientProviders";
@@ -13,9 +12,11 @@ export const metadata = {
     description: "I am using Mantine with Next.js!",
 };
 
-export default async function RootLayout({ children }: { children: any }) {
+export default async function RootLayout({
+    children,
+}: React.PropsWithChildren) {
     const session = await auth();
-    if (!session) return null;
+
     return (
         <html lang="en">
             <head>

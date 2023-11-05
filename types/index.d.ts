@@ -22,7 +22,7 @@ export interface PageTemplateProps {
 
 export interface AppContainerProps {
 	children: React.ReactNode;
-	session: Session;
+	session: Session | null;
 }
 
 export interface FormContainerProps {
@@ -32,7 +32,7 @@ export interface FormContainerProps {
 }
 
 export interface NavbarProps {
-	session: Session;
+	session: Session | null;
 }
 
 export interface LinksGroupProps {

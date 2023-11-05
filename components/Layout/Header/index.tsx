@@ -25,7 +25,7 @@ import { getDataForRoute } from "../../../utils/links";
 import { Session } from "next-auth";
 
 interface HeaderProps {
-    session: Session;
+    session: Session | null;
 }
 
 export function HeaderComponent({session}: HeaderProps) {

@@ -1,4 +1,3 @@
-import { NextRouter } from "next/router";
 import dayjs from 'dayjs';
 import { SessionProps } from "../types";
 import axios from "axios";
@@ -6,18 +5,6 @@ import { MantineFontSize } from "@mantine/core";
 import { getAPIBaseUrl } from "./apiHandler";
 
 const BASE_URL = "http://localhost:3000";
-
-/*-- ROUTING HANDLE ---*/
-export function getLastRoute(router: NextRouter): string {
-    if (Array.isArray(router.query.from)) {
-        return router.query.from[router.query.from.length - 1];
-    }
-    return router.query.from === undefined ? "/" : router.query.from;
-}
-
-export function goToLastRoute(router: NextRouter) {
-    router.push(getLastRoute(router));
-}
 
 /*--- OTHER HANDLE ---*/
 export function getCurrentYear() {
