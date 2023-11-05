@@ -1,6 +1,4 @@
 import dayjs from 'dayjs';
-import { SessionProps } from "../types";
-import axios from "axios";
 import { MantineFontSize } from "@mantine/core";
 import { getAPIBaseUrl } from "./apiHandler";
 
@@ -55,36 +53,20 @@ export function nonEmptyString(str: any) {
     return str === null || str == undefined ? false : str.length > 0;
 }
 
-/*--- FETCH HANDLE ---*/
-export const getBands = async (session: SessionProps["session"]) => {
-    // get url form links.ts
-    const res = await axios.get("http://localhost:3000/api/band", {
-        params: {
-            userid: session.userid,
-        },
-    });
-    const bands = await res.data.data;
-    if (res.status !== 200) return;
-    return bands
-};
 
-export const getMemos = async (session: SessionProps["session"]) => {
-    const res = await axios.get("http://localhost:3000/api/deal-memo", {
-        params: {
-            userid: session.userid,
-        },
-    });
-    if (res.status !== 200) return;
-    const memos = await res.data.data;
-    return memos;
-};
+export const clientSideFetch = async <T>(route: string, params: Record<string, string> = {}): Promise<T> => {
+    const url: URL = new URL(route, getAPIBaseUrl());
+    Object.keys(params).forEach((key) =>
+        url.searchParams.append(key, params[key])
+    );
 
-export const clientSideFetch = async <T>(url: string, params?: {}): Promise<T> => {
-    const fetch = await axios.get(url, {
-        params: params,
+    const result = await fetch(url, {
+        cache: "no-store"
     });
-    if (fetch.status !== 200) return [] as T;
-    return fetch.data.data;
+
+    if (result.status !== 200) return [] as T;
+    const raw = await result.json();
+    return raw.data as T;
 }
 
 export const serverSideFetch = async<T>(
@@ -106,41 +88,6 @@ export const serverSideFetch = async<T>(
     return raw.data as T;
 }
 
-export const addData = async <T>(endpoint: string, data: T, userid?: string): Promise<number> => {
-    const url = endpoint.includes("localhost") ? endpoint : `${BASE_URL}/${endpoint}`;
-
-    const res = await axios.post(url, data, {
-        params: {
-            userid: userid,
-        },
-    });
-    return res.status;
-}
-
-export const updateData = async <T>(endpoint: string, data: T, userid?: string): Promise<number> => {
-    const url = endpoint.includes("localhost") ? endpoint : `${BASE_URL}/${endpoint}`;
-
-    const res = await axios.put(url, { data: data }, {
-        params: {
-            userid: userid,
-        },
-    });
-
-    console.log(res.data.data);
-
-    return res.status;
-}
-
-export const deleteData = async (endpoint: string, userid?: string): Promise<number> => {
-    const url = endpoint.includes("localhost") ? endpoint : `${BASE_URL}/${endpoint}`;
-
-    const res = await axios.delete(url, {
-        params: {
-            userid: userid,
-        },
-    });
-    return res.status;
-}
 
 /* --- DATABASE HANDLE --- */
 
