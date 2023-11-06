@@ -52,6 +52,7 @@ export default async function Page({ params }: { params: { id: string } }) {
         <>
             <SpecificDealMemoComponent
                 session={session}
+                id={params.id}
                 memo={memo}
                 band={band}
                 venue={venue}

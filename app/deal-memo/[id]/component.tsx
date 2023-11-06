@@ -8,23 +8,37 @@ import { SpecificPageHeader } from "../../../components/Layout/SpecificPageHeade
 import Link from "next/link";
 import { ContentContainer } from "../../../components/Layout/ContentContainer";
 import { SpecificDealMemoPageContent } from "../../../components/SpecificPages/DealMemo";
-import { CompleteDealMemoPageProps, SearchableIdProxyData } from "@/types";
-import { callAPI, withNotification } from "@/utils/apiHandler";
+import { SearchableIdProxyData } from "@/types";
+import { callAPI, getAPIBaseUrl, withNotification } from "@/utils/apiHandler";
 import { IDealMemo } from "@/models/deal-memo";
 import { useRouter } from "next/navigation";
 import { IHotel } from "@/models/hotel";
 import { notifications } from "@mantine/notifications";
-import axios from "axios";
 import { clientSideFetch } from "@/utils/appHandles";
+import { Session } from "next-auth";
+import { IBand } from "@/models/band";
+import { IVenue } from "@/models/venue";
+
+interface SpecificDealMemoComponentProps {
+    session: Session;
+    id: string;
+    memo: IDealMemo;
+    band?: IBand;
+    venue?: IVenue;
+    hotel?: IHotel;
+    hotels?: IHotel[];
+}
 
 export default function SpecificDealMemoComponent({
     session,
+    id,
     memo,
     band,
     venue,
     hotel,
     hotels,
-}: CompleteDealMemoPageProps) {
+}: SpecificDealMemoComponentProps) {
+    // replace with signals in future!
     const [hotelState, setHotelState] = useState(hotel);
 
     const router = useRouter();
@@ -77,49 +91,63 @@ export default function SpecificDealMemoComponent({
             withCloseButton: false,
         });
 
-        const res = await axios.post(
-            `/api/hotel`,
-            { data: data },
-            { params: { userid: session.userid } }
-        );
+        // could be replaced with clientSideFetch
+        try {
+            const hotelUrl: URL = new URL("/api/hotel", getAPIBaseUrl());
+            hotelUrl.searchParams.append("userid", session.userid);
+            const res = await fetch(hotelUrl, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ data: data }),
+            });
 
-        if (res.status === 200) {
+            if (!res.ok) throw new Error("Failed to save hotel data");
+
+            const resData = await res.json();
             // add hotel to deal memo
-            const res2 = await axios.put(
+            const dealUrl: URL = new URL(
                 `/api/deal-memo/${memo._id}`,
-                {
+                getAPIBaseUrl()
+            );
+            dealUrl.searchParams.append("userid", session.userid);
+            const res2 = await fetch(dealUrl, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
                     data: {
-                        hotelid: res.data.data._id,
+                        hotelid: resData.data._id,
                         edited: dayjs().toISOString(),
                     },
-                },
-                { params: { userid: session.userid } }
-            );
+                }),
+            });
 
-            if (res2.status === 200) {
-                notifications.update({
-                    id: "load-data",
-                    color: "teal",
-                    title: "Data saved",
-                    message: "Your data has been successsfully updated",
-                    icon: <MdCheck />,
-                    loading: false,
-                    autoClose: 2000,
-                });
-                return;
-            }
+            if (!res2.ok) throw new Error("Failed to save deal memo data");
+
+            notifications.update({
+                id: "load-data",
+                color: "teal",
+                title: "Data saved",
+                message: "Your data has been successsfully updated",
+                icon: <MdCheck />,
+                loading: false,
+                autoClose: 2000,
+            });
+        } catch (error: unknown) {
+            // log to server with e.g. sentry
+            notifications.update({
+                id: "load-data",
+                color: "red",
+                title: "An error occured",
+                message: "Your data could not be saved",
+                icon: <MdClose />,
+                loading: false,
+                autoClose: 2000,
+            });
         }
-
-        // an error occured, show notification
-        notifications.update({
-            id: "load-data",
-            color: "red",
-            title: "An error occured",
-            message: "Your data could not be saved",
-            icon: <MdClose />,
-            loading: false,
-            autoClose: 2000,
-        });
     };
 
     // select a hotel, if not initially selected
@@ -130,23 +158,32 @@ export default function SpecificDealMemoComponent({
             return;
         }
 
-        const res = await axios.put(
-            `/api/deal-memo/${memo._id}`,
-            {
-                data: {
-                    hotelid: id,
-                    edited: dayjs().toISOString(),
-                },
-            },
-            { params: { userid: session.userid } }
-        );
+        try {
+            await withNotification<IDealMemo>(
+                () =>
+                    callAPI(
+                        `/deal-memo/${memo._id}`,
+                        "PUT",
+                        {
+                            data: {
+                                hotelid: id,
+                                edited: dayjs().toISOString(),
+                            },
+                        },
+                        { userid: session.userid }
+                    ),
+                undefined,
+                "PUT"
+            );
 
-        if (res.status === 200) {
             // fetch hotel
             const hotel = await clientSideFetch<IHotel>(`/api/hotel/${id}`, {
                 userid: session.userid,
             });
             setHotelState(hotel);
+        } catch (error: unknown) {
+            // remove in prod, replace with logging to server e.g. sentry
+            console.log(error);
         }
     };
 
@@ -203,6 +240,11 @@ export default function SpecificDealMemoComponent({
                                 Customize contract
                             </Button>
                         </Tooltip>
+                        <Link href={`/itinerary/${id}`}>
+                            <Button variant="default">
+                                Create an Itinerary
+                            </Button>
+                        </Link>
                     </Button.Group>
                 }
             />
