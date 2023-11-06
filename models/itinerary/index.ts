@@ -9,12 +9,12 @@ const ItinerarySchema: Schema = new Schema({
     dealMemoId: { type: Schema.Types.ObjectId, ref: 'DealMemo', required: true },
     getIn: { type: String, default: '' },
     loadIn: { type: String, default: '' },
-    souncheckMainAct: { type: String, default: '' },
-    soundcheckSupport: { type: String, default: '' },
+    soundCheckMainAct: { type: String, default: '' },
+    soundCheckSupport: { type: String, default: '' },
     dinner: { type: String, default: '' },
     doors: { type: String, default: '' },
-    showtimeMainAct: { type: String, default: '' },
-    showtimeSupport: { type: String, default: '' },
+    showTimeMainAct: { type: String, default: '' },
+    showTimeSupport: { type: String, default: '' },
     curfewStage: { type: String, default: '' },
     curfewVenue: { type: String, default: '' },
     showLength: { type: String, default: '' },
@@ -28,12 +28,12 @@ export interface Itinerary {
     dealMemoId: Types.ObjectId;
     getIn: string;
     loadIn: string;
-    soundcheckMainAct: string;
-    soundcheckSupport: string;
+    soundCheckMainAct: string;
+    soundCheckSupport: string;
     dinner: string;
     doors: string;
-    showtimeMainAct: string;
-    showtimeSupport: string;
+    showTimeMainAct: string;
+    showTimeSupport: string;
     curfewStage: string;
     curfewVenue: string;
     showLength: string;
