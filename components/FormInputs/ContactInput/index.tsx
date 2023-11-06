@@ -16,11 +16,8 @@ import { InputComponentProps } from "../../../types";
 import { getNestedValue } from "../../../utils/appHandles";
 
 // Note: This is no standalone component, this needs to be paired with a functional form component!
-export default function ContactInput({
-    Form,
-}: InputComponentProps) {
+export default function ContactInput({ Form }: InputComponentProps) {
     const [opened, setOpened] = useState(false);
-
 
     const email = "contact.email";
     const homepage = "contact.homepage";
@@ -49,7 +46,7 @@ export default function ContactInput({
                                 )}
                             />
                         </Grid.Col>
-                        <Grid.Col span={2} sx={{ alignSelf: "flex-end" }}>
+                        <Grid.Col span={2} style={{ alignSelf: "flex-end" }}>
                             <Button
                                 onClick={() =>
                                     Form.removeListItem(otherNumbers, index)
@@ -78,12 +75,12 @@ export default function ContactInput({
                         {...Form.getInputProps(mobilePhone)}
                     />
                 </Grid.Col>
-                <Grid.Col span={2} sx={{ alignSelf: "flex-end" }}>
+                <Grid.Col span={2} style={{ alignSelf: "flex-end" }}>
                     <Tooltip label="Add more phone numbers">
                         <Button
                             onClick={() => setOpened(true)}
                             variant="default"
-                            sx={{ float: "right" }}
+                            style={{ float: "right" }}
                         >
                             <MdOutlineAdd />
                         </Button>
