@@ -9,7 +9,7 @@ import {
     Textarea,
     TextInput,
 } from "@mantine/core";
-import { DateInput, DatePicker, DatePickerInput } from "@mantine/dates";
+import { DateInput } from "@mantine/dates";
 import { useForm } from "@mantine/form";
 import dayjs from "dayjs";
 import { MdCalendarToday } from "react-icons/md";
