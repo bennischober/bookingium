@@ -1,3 +1,5 @@
+"use client";
+
 import { PersonForm } from "@/components/Forms/PersonForm";
 import { IPerson } from "@/models/person";
 import { callAPI, withNotification } from "@/utils/apiHandler";

@@ -1,3 +1,5 @@
+"use client";
+
 import { CompanyForm } from "@/components/Forms/CompanyForm";
 import { ICompany } from "@/models/company";
 import { IPerson } from "@/models/person";

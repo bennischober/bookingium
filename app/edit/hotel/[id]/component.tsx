@@ -1,3 +1,5 @@
+"use client";
+
 import { HotelForm } from "@/components/Forms/HotelForm";
 import { IHotel } from "@/models/hotel";
 import { callAPI, withNotification } from "@/utils/apiHandler";
