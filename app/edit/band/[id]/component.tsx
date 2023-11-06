@@ -9,7 +9,7 @@ import { IBand } from "@/models/band";
 import { ICompany } from "@/models/company";
 import { IDealMemo } from "@/models/deal-memo";
 import { IPerson } from "@/models/person";
-import { getAPIBaseUrl, withNotification } from "@/utils/apiHandler";
+import { callAPI, getAPIBaseUrl, withNotification } from "@/utils/apiHandler";
 import { Space, Tabs } from "@mantine/core";
 import { Session } from "next-auth";
 
@@ -32,22 +32,13 @@ export default function SpecificBandComponent({
 }: SpecificBandComponentProps) {
     const handleUpdate = async (data: IBand) => {
         await withNotification(
-            () => {
-                const url: URL = new URL(
-                    `/api/band/${band._id}`,
-                    getAPIBaseUrl()
-                );
-                url.searchParams.append("userid", session.userid);
-
-                return fetch(url, {
-                    method: "PUT",
-                    body: JSON.stringify(data),
-                    headers: {
-                        "Content-Type": "application/json",
-                        userid: session.userid,
-                    },
-                });
-            },
+            () =>
+                callAPI(
+                    `/band/${data._id}`,
+                    "PUT",
+                    { data: data },
+                    { userid: session.userid }
+                ),
             {
                 notificationId: "update-band",
                 loadingTitle: "Updating Band",
