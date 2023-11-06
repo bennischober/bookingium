@@ -72,6 +72,7 @@ interface SearchableProps {
 	placeholder?: string;
 	inputProps: string;
 	required?: boolean;
+	withAsterisk?: boolean;
 	editChild?: React.ReactNode;
 	deleteChild?: React.ReactNode;
 	buttonChild?: React.ReactNode;

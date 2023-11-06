@@ -89,6 +89,7 @@ export function SearchableIdProxy({
     data,
     inputProps,
     required,
+    withAsterisk,
     editChild,
     deleteChild,
     buttonChild,
@@ -132,7 +133,8 @@ export function SearchableIdProxy({
                     Form.setFieldValue(inputProps, "");
                 }
             }}
-            required={required ?? true}
+            required={required}
+            withAsterisk={withAsterisk}
             disabled={isDisabled}
         />
     );
