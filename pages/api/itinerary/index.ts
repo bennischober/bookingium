@@ -4,7 +4,7 @@ import { ApiError } from "../../../types/errors";
 import { Itinerary } from "../../../models/itinerary";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-    const { method, query: { userid } } = req;
+    const { method, query: { userid, memoid } } = req;
 
     await connect();
 
@@ -13,6 +13,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     switch (method) {
         case 'GET':
             try {
+                // get specific based on memoid
+                if (memoid) {
+                    const data = await Itinerary.findOne({ 'userid': userid, 'dealMemoId': memoid }).exec();
+                    console.log(data);
+                    return res.status(200).json({ success: true, data: data });
+                }
                 // send all bands for user
                 const data = await Itinerary.find({ 'userid': userid }).exec();
                 return res.status(200).json({ success: true, data: data });

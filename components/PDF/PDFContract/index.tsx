@@ -208,11 +208,11 @@ export default function PDFContract({
                         <Text>Es handelt sich um folgendes Programm:</Text>
                         <Text
                             style={[styles.address, styles.big]}
-                            render={() => `Auftrittszeit: ${performance}`}
+                            render={() => `Auftrittszeit: ${performance} Uhr`}
                         />
                         <Text
                             style={[styles.address, styles.big]}
-                            render={() => `Spieldauer: ${duration}`}
+                            render={() => `Spieldauer: ${duration} Minuten`}
                         />
                         <Text
                             style={[styles.address, styles.big]}
@@ -705,8 +705,8 @@ export default function PDFContract({
                             unterschriebenen Bühnenanweisung und der
                             unterschriebenen Cateringliste als Bestandteile des
                             Vertrages, ein Stadtplan und ein Anfahrtsplan sind{" "}
-                            {workplace.name} bis zwei Wochen nach Erhalt des
-                            Vertrag per Mail {workplace.contact.email} oder per
+                            {workplace?.name} bis zwei Wochen nach Erhalt des
+                            Vertrag per Mail {workplace?.contact?.email} oder per
                             Post unterschrieben zurück zu senden.
                         </ListItem>
                     </View>

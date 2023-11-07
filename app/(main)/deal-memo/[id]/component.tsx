@@ -1,13 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Tooltip } from "@mantine/core";
+import { Button, Modal, Tooltip } from "@mantine/core";
 import dayjs from "dayjs";
-import { MdCheck, MdClose, MdEdit, MdFileDownload } from "react-icons/md";
-import { SpecificPageHeader } from "../../../components/Layout/SpecificPageHeader";
+import { MdCheck, MdClose, MdSettings, MdOutlineNoteAdd } from "react-icons/md";
+import { SpecificPageHeader } from "@/components/Layout/SpecificPageHeader";
 import Link from "next/link";
-import { ContentContainer } from "../../../components/Layout/ContentContainer";
-import { SpecificDealMemoPageContent } from "../../../components/SpecificPages/DealMemo";
+import { ContentContainer } from "@/components/Layout/ContentContainer";
+import { SpecificDealMemoPageContent } from "@/components/SpecificPages/DealMemo";
 import { SearchableIdProxyData } from "@/types";
 import { callAPI, getAPIBaseUrl, withNotification } from "@/utils/apiHandler";
 import { IDealMemo } from "@/models/deal-memo";
@@ -18,6 +18,7 @@ import { clientSideFetch } from "@/utils/appHandles";
 import { Session } from "next-auth";
 import { IBand } from "@/models/band";
 import { IVenue } from "@/models/venue";
+import { ContractPdfForm } from "@/components/Forms/ContractPdfForm";
 
 interface SpecificDealMemoComponentProps {
     session: Session;
@@ -40,6 +41,7 @@ export default function SpecificDealMemoComponent({
 }: SpecificDealMemoComponentProps) {
     // replace with signals in future!
     const [hotelState, setHotelState] = useState(hotel);
+    const [modalOpen, setModalOpen] = useState(false);
 
     const router = useRouter();
 
@@ -187,6 +189,10 @@ export default function SpecificDealMemoComponent({
         }
     };
 
+    const onPdfView = () => {
+        router.push(`/contract/${memo._id}`);
+    };
+
     const hotelAutocomplete: SearchableIdProxyData[] = hotels
         ? hotels.map((c) => ({
               label: c.name,
@@ -212,19 +218,6 @@ export default function SpecificDealMemoComponent({
                     // generate PDF
                     <Button.Group>
                         <Tooltip
-                            label="Download default PDF with deal memo values"
-                            position="bottom"
-                            color="blue"
-                            withArrow
-                        >
-                            <Button
-                                variant="default"
-                                leftSection={<MdFileDownload size={20} />}
-                            >
-                                Download contract
-                            </Button>
-                        </Tooltip>
-                        <Tooltip
                             label="Replace default values with custom data"
                             position="bottom"
                             color="blue"
@@ -232,16 +225,17 @@ export default function SpecificDealMemoComponent({
                         >
                             <Button
                                 variant="default"
-                                leftSection={<MdEdit size={20} />}
-                                onClick={() => {
-                                    router.push(`/contract/${memo._id}`);
-                                }}
+                                leftSection={<MdSettings size={20} />}
+                                onClick={() => setModalOpen(true)}
                             >
-                                Customize contract
+                                Contract settings
                             </Button>
                         </Tooltip>
                         <Link href={`/itinerary/${id}`}>
-                            <Button variant="default">
+                            <Button
+                                variant="default"
+                                leftSection={<MdOutlineNoteAdd size={20} />}
+                            >
                                 Create an Itinerary
                             </Button>
                         </Link>
@@ -260,6 +254,20 @@ export default function SpecificDealMemoComponent({
                     handleAddHotel={handleAddHotel}
                 />
             </ContentContainer>
+            <Modal
+                opened={modalOpen}
+                onClose={() => setModalOpen(false)}
+                title="Update contract data"
+                size="xl"
+                centered
+            >
+                <ContractPdfForm
+                    onClose={() => {
+                        setModalOpen(false);
+                    }}
+                    onPdfView={onPdfView}
+                />
+            </Modal>
         </>
     );
 }

@@ -1,7 +1,7 @@
 "use client";
-import { DealMemoForm } from "../../components/Forms/DealMemoForm";
-import { IDealMemo } from "../../models/deal-memo";
-import { AddDealMemoProps } from "../../types";
+import { DealMemoForm } from "@/components/Forms/DealMemoForm";
+import { IDealMemo } from "@/models/deal-memo";
+import { AddDealMemoProps } from "@/types";
 import { callAPI, withNotification } from "@/utils/apiHandler";
 
 export default function DealMemoComponent({

@@ -27,9 +27,6 @@ export default function ItineraryComponent({
             session.userid
         ) as IItinerary;
 
-        console.log(data, itinerary);
-        return;
-
         await withNotification(
             () =>
                 callAPI<IItinerary>(
