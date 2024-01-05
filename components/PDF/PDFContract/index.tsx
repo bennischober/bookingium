@@ -23,10 +23,6 @@ export interface PDFContractProps {
     venue: IVenue;
     dealMemo: IDealMemo;
     workplace: IWorkplace;
-    performance?: string;
-    duration?: string;
-    information?: string;
-    amount?: number;
 }
 
 export default function PDFContract({
@@ -38,10 +34,6 @@ export default function PDFContract({
     venue,
     dealMemo,
     workplace,
-    performance,
-    duration,
-    information,
-    amount,
 }: PDFContractProps) {
     Font.registerHyphenationCallback((word) => [word]);
 
@@ -208,16 +200,20 @@ export default function PDFContract({
                         <Text>Es handelt sich um folgendes Programm:</Text>
                         <Text
                             style={[styles.address, styles.big]}
-                            render={() => `Auftrittszeit: ${performance} Uhr`}
-                        />
-                        <Text
-                            style={[styles.address, styles.big]}
-                            render={() => `Spieldauer: ${duration} Minuten`}
+                            render={() =>
+                                `Auftrittszeit: ${dealMemo.performanceTime} Uhr`
+                            }
                         />
                         <Text
                             style={[styles.address, styles.big]}
                             render={() =>
-                                information ? `Info: ${information}` : ""
+                                `Spieldauer: ${dealMemo.performanceDuration} Minuten`
+                            }
+                        />
+                        <Text
+                            style={[styles.address, styles.big]}
+                            render={() =>
+                                `Sonstiges: ${dealMemo.performanceInformation}`
                             }
                         />
                     </View>
@@ -379,7 +375,7 @@ export default function PDFContract({
                         <Text
                             style={styles.text}
                             render={() =>
-                                `VP2 stellt und trägt die Kosten für Übernachtung mit Frühstück für ${amount} Personen.`
+                                `VP2 stellt und trägt die Kosten für Übernachtung mit Frühstück für ${dealMemo.amountOfPeople} Personen mit den folgenden Zimmern: ${dealMemo.roomInformation}.`
                             }
                         />
                     </View>
@@ -512,14 +508,12 @@ export default function PDFContract({
                         </Text>
                     </View>
                     <View style={styles.view}>
-                        <Text style={styles.text}>
-                            Plakate: "VP2" bestellt(e) folgende Stückzahl an
-                            Postern:{" "}
-                            <Text
-                                style={styles.text}
-                                render={() => dealMemo.posters}
-                            />
-                        </Text>
+                        <Text
+                            style={styles.text}
+                            render={() =>
+                                `Plakate: "VP2" bestellt(e) folgende Stückzahl an Postern: ${dealMemo.posters}`
+                            }
+                        />
                     </View>
                 </View>
                 <View style={styles.view}>
@@ -706,8 +700,8 @@ export default function PDFContract({
                             unterschriebenen Cateringliste als Bestandteile des
                             Vertrages, ein Stadtplan und ein Anfahrtsplan sind{" "}
                             {workplace?.name} bis zwei Wochen nach Erhalt des
-                            Vertrag per Mail {workplace?.contact?.email} oder per
-                            Post unterschrieben zurück zu senden.
+                            Vertrag per Mail {workplace?.contact?.email} oder
+                            per Post unterschrieben zurück zu senden.
                         </ListItem>
                     </View>
                 </View>

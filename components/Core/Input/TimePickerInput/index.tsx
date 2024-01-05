@@ -8,6 +8,7 @@ import { UseFormReturnType } from "@mantine/form";
 
 interface TimePickerInputProps {
     label: string;
+    description?: string;
     required?: boolean;
     withAsterisk?: boolean;
     propsName?: string;
@@ -17,6 +18,7 @@ interface TimePickerInputProps {
 }
 export function TimePickerInput({
     label,
+    description,
     required,
     withAsterisk,
     propsName,
@@ -44,6 +46,7 @@ export function TimePickerInput({
         return (
             <TimeInput
                 label={label}
+                description={description}
                 ref={ref}
                 rightSection={pickerControl}
                 {...Form?.getInputProps(propsName)}
@@ -57,6 +60,7 @@ export function TimePickerInput({
         return (
             <TimeInput
                 label={label}
+                description={description}
                 ref={ref}
                 rightSection={pickerControl}
                 value={value}
@@ -70,6 +74,7 @@ export function TimePickerInput({
     return (
         <TimeInput
             label={label}
+            description={description}
             ref={ref}
             rightSection={pickerControl}
             required={required}

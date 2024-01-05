@@ -10,6 +10,11 @@ const DealMemoSchema = new Schema({
     posters: { type: String },
     status: { type: String },
     notes: { type: String },
+    amountOfPeople: { type: Number, default: 0 },
+    roomInformation: { type: String, default: '' },
+    performanceDuration: { type: String },
+    performanceTime: { type: String },
+    performanceInformation: { type: String },
     lopro: {
         person: { type: Schema.Types.ObjectId, ref: 'Person' },
         company: { type: Schema.Types.ObjectId, ref: 'Company' },
@@ -28,6 +33,11 @@ export interface DealMemo {
     posters: string;
     status: string;
     notes: string;
+    amountOfPeople: number;
+    roomInformation: string;
+    performanceDuration: string;
+    performanceTime: string;
+    performanceInformation: string;
     lopro: {
         person: Types.ObjectId;
         company: Types.ObjectId;

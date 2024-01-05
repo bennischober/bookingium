@@ -1,14 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-    Box,
-    Button,
-    Divider,
-    Group,
-    Modal,
-    Space,
-} from "@mantine/core";
+import { Box, Button, Divider, Group, Modal, Space } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import {
     DealEditFormProps,
@@ -52,6 +45,11 @@ export function DealMemoForm({
             posters: "",
             status: "TBC",
             notes: "",
+            amountOfPeople: 0,
+            roomInformation: "",
+            performanceDuration: "",
+            performanceTime: "",
+            performanceInformation: "",
             lopro: {
                 person: "" as unknown as Types.ObjectId,
                 company: "" as unknown as Types.ObjectId,
@@ -228,6 +226,11 @@ export function DealEditForm({
             posters: data.posters,
             status: data.status,
             notes: data.notes,
+            amountOfPeople: data.amountOfPeople,
+            roomInformation: data.roomInformation,
+            performanceDuration: "",
+            performanceTime: "",
+            performanceInformation: "",
             lopro: {
                 person: data.lopro.person,
                 company: data.lopro.company,
