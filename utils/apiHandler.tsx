@@ -37,18 +37,26 @@ export async function callAPI<T = any>(
     body: any = null,
     params: Record<string, string> = {}
 ): Promise<T> {
+    console.log(endpoint, method, body, params)
+
     const baseUrl = getAPIBaseUrl() + "/api/";
     if (endpoint.startsWith("/")) endpoint = endpoint.substring(1);
     const url = new URL(endpoint, baseUrl);
 
-    Object.keys(params).forEach((key) =>
+    let userid = "";
+
+    Object.keys(params).forEach((key) => {
+        if(key === "userid") userid = params[key]
         url.searchParams.append(key, params[key])
-    );
+    });
 
     const response = await fetch(url.toString(), {
         method: method,
         headers: {
             "Content-Type": "application/json",
+            // add authorization header with token
+            // later, pass jwt, currently pass userid
+            "Authorization": userid,
         },
         body: body ? JSON.stringify(body) : undefined,
     });

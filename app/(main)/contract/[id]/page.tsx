@@ -9,7 +9,6 @@ import { getAppName } from "@/utils/appConfig";
 import { isPopulated, serverSideFetch } from "@/utils/appHandles";
 import { Metadata } from "next";
 import SpecificContractComponent from "./component";
-import { IItinerary } from "@/models/itinerary";
 
 export const metadata: Metadata = {
     title: "View contract | " + getAppName(),
@@ -25,11 +24,6 @@ export default async function Page({ params }: { params: { id: string } }) {
         }
     );
 
-    const it = await serverSideFetch<IItinerary>("/api/itinerary/", {
-        userid: session?.userid,
-        memoid: params.id,
-    });
-
     const band = isPopulated<IBand>(deal.bandid)
         ? (deal.bandid as IBand)
         : ({} as IBand);
@@ -41,13 +35,25 @@ export default async function Page({ params }: { params: { id: string } }) {
         }
     );
 
-    // this needs to be fixed! the responsible person as TL as role!
-    // if this role is not provided, use the first member of the band
-    const bandResponsiblePerson = band?.members[0]
-        ? await serverSideFetch<IPerson>(`api/person/${band?.members[0]}`, {
-              userid: session?.userid,
-          })
-        : ({} as IPerson);
+    // current task:
+    // port this to the /deal-memo/[id] to directly be able to download the contract there
+    // add filter query to the API endpoint (optional)
+
+    var bandResponsiblePerson = null;
+    // instead of the foreach, add a filter to the query?
+    band?.members.forEach(async (member) => {
+        const person = await serverSideFetch<IPerson>(`api/person/${member}`, {
+            userid: session?.userid,
+        });
+        if (person?.role.includes("TL")) {
+            bandResponsiblePerson = person;
+        }
+    });
+    if(!bandResponsiblePerson) {
+        bandResponsiblePerson = await serverSideFetch<IPerson>(`api/person/${band?.members[0]}`, {
+            userid: session?.userid,
+        });
+    }
 
     const loproCompany = isPopulated<ICompany>(deal.lopro.company)
         ? (deal.lopro.company as ICompany)
@@ -74,7 +80,6 @@ export default async function Page({ params }: { params: { id: string } }) {
             venue={venue}
             dealMemo={deal}
             workplace={workplace}
-            itinerary={it}
         />
     );
 }

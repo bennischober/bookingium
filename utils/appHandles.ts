@@ -53,7 +53,9 @@ export function nonEmptyString(str: any) {
     return str === null || str == undefined ? false : str.length > 0;
 }
 
-
+/**
+ * @deprecated use `callApi()` instead
+ */
 export const clientSideFetch = async <T>(route: string, params: Record<string, string> = {}): Promise<T> => {
     const url: URL = new URL(route, getAPIBaseUrl());
     Object.keys(params).forEach((key) =>
@@ -75,12 +77,25 @@ export const serverSideFetch = async<T>(
     cacheRule: RequestCache = "no-store",
 ): Promise<T> => {
     const url: URL = new URL(route, getAPIBaseUrl());
-    Object.keys(params).forEach((key) =>
+
+    // current auth workaround
+    var userid = "";
+
+    Object.keys(params).forEach((key) => {
+        if (key === "userid") {
+            userid = params[key];
+        }
         url.searchParams.append(key, params[key])
-    );
+    });
 
     const result = await fetch(url, {
-        cache: cacheRule
+        cache: cacheRule,
+        headers: {
+            "Content-Type": "application/json",
+            // add authorization header with token
+            // later, pass jwt, currently pass userid
+            "Authorization": userid,
+        },
     });
 
     if (result.status !== 200) return [] as T;
