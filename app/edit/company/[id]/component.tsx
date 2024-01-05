@@ -21,7 +21,7 @@ export default function SpecificCompanyComponent({
         await withNotification<ICompany>(
             () =>
                 callAPI(
-                    `/company/${data._id}`,
+                    `/company/${company._id}`,
                     "PUT",
                     { data: data },
                     { userid: session.userid }

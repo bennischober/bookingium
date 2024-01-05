@@ -18,7 +18,7 @@ export default function SpecificHotelComponent({
         await withNotification<IHotel>(
             () =>
                 callAPI(
-                    `/hotel/${data._id}`,
+                    `/hotel/${hotel._id}`,
                     "PUT",
                     { data: data },
                     { userid: session.userid }

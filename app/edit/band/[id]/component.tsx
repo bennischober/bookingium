@@ -30,11 +30,12 @@ export default function SpecificBandComponent({
     companies,
     memos,
 }: SpecificBandComponentProps) {
+    console.log(band)
     const handleUpdate = async (data: IBand) => {
         await withNotification(
             () =>
                 callAPI(
-                    `/band/${data._id}`,
+                    `/band/${band._id}`,
                     "PUT",
                     { data: data },
                     { userid: session.userid }

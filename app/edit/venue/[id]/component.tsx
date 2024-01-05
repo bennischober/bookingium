@@ -24,7 +24,7 @@ export default function SpecificVenueComponent({
         await withNotification<IVenue>(
             () =>
                 callAPI(
-                    `/venue/${data._id}`,
+                    `/venue/${venue._id}`,
                     "PUT",
                     { data: data },
                     { userid: session.userid }

@@ -18,7 +18,7 @@ export default function SpecificPersonComponent({
         await withNotification<IPerson>(
             () =>
                 callAPI(
-                    `/person/${data._id}`,
+                    `/person/${person._id}`,
                     "PUT",
                     { data: data },
                     { userid: session.userid }
