@@ -140,7 +140,7 @@ export interface LoproInputProps extends InputComponentProps {
 export interface BandFormProps {
 	handleData: (data: IBand) => void;
 	close?: () => void;
-	session: SessionProps["session"];
+	session: Session;
 	data?: IBand;
 	persons?: IPerson[];
 	existingMembers?: IPerson[];
@@ -151,7 +151,7 @@ export interface BandFormProps {
 export interface PersonFormProps {
 	handleData(data: IPerson): void;
 	close?: () => void;
-	session: SessionProps["session"];
+	session: Session;
 	data?: IPerson;
 }
 
@@ -239,7 +239,7 @@ export interface ItineraryPageProps extends ReqAuthProps {
 }
 
 export interface DealMemoFormProps {
-	session: SessionProps["session"];
+	session: Session;
 	bands: IBand[];
 	venues?: IVenue[];
 	hotels?: IHotel[];
@@ -252,12 +252,12 @@ export interface DealMemoFormProps {
 }
 
 export interface DealMemoProps {
-	session: SessionProps["session"];
+	session: Session;
 	memos: IDealMemo[];
 }
 
 export interface AddDealMemoProps {
-	session: SessionProps["session"];
+	session: Session;
 	bands: IBand[];
 	venues?: IVenue[];
 	hotels?: IHotel[];
@@ -275,7 +275,7 @@ export interface CompleteDealMemoPageProps {
 }
 
 export interface SpecificBandPageProps {
-	session: SessionProps["session"];
+	session: Session;
 	band: IBand;
 	persons: IPerson[];
 	companies: ICompany[];
@@ -284,7 +284,7 @@ export interface SpecificBandPageProps {
 
 export interface DealEditFormProps {
 	handleMemos: (data: IDealMemo) => void;
-	session: SessionProps["session"];
+	session: Session;
 	data: IDealMemo;
 	created: string;
 }
@@ -292,7 +292,7 @@ export interface DealEditFormProps {
 export interface VenueFormProps {
 	handleData: (data: IVenue) => void;
 	close?: () => void;
-	session: SessionProps["session"];
+	session: Session;
 	data?: IVenue;
 	companies?: ICompany[];
 	persons?: IPerson[];
@@ -302,14 +302,14 @@ export interface VenueFormProps {
 export interface HotelFormProps {
 	handleData: (data: IHotel) => void;
 	close?: () => void;
-	session: SessionProps["session"];
+	session: Session;
 	data?: IHotel;
 }
 
 export interface CompanyFormProps {
 	handleData: (data: ICompany) => void;
 	close?: () => void;
-	session: SessionProps["session"];
+	session: Session;
 	data?: ICompany;
 	persons?: IPerson[];
 }
@@ -363,7 +363,7 @@ export interface BandListValues {
 
 /** --- SPECIFIC PAGES --- **/
 export interface SpecificDealMemoPageContentProps {
-	session: SessionProps["session"];
+	session: Session;
 	memo: IDealMemo;
 	hotelState?: IHotel;
 	hotelAutocomplete: SearchableIdProxyData[];
@@ -375,7 +375,7 @@ export interface SpecificDealMemoPageContentProps {
 
 // PDF STUFF
 export interface PDFContractPageProps {
-	session: SessionProps["session"];
+	session: Session;
 	band: IBand,
 	bandCompany: ICompany,
 	bandResponsiblePerson?: IPerson,

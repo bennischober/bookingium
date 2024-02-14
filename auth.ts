@@ -71,7 +71,6 @@ export const config = {
         },
         signIn: async ({ user, account, profile, email, credentials }: any) => {
             if (user?.status === "authorized") {
-                console.log("authorized");
                 return true;
             }
             // Return false to display a default error message
