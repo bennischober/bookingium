@@ -1,8 +1,7 @@
 import dayjs from 'dayjs';
 import { MantineFontSize } from "@mantine/core";
 import { getAPIBaseUrl } from "./apiHandler";
-
-const BASE_URL = "http://localhost:3000";
+import { NextRequest, NextResponse } from 'next/server';
 
 /*--- OTHER HANDLE ---*/
 export function getCurrentYear() {
@@ -95,7 +94,7 @@ export const serverSideFetch = async<T>(
             // add authorization header with token
             // later, pass jwt, currently pass userid
             "Authorization": userid,
-        },
+        }
     });
 
     if (result.status !== 200) return [] as T;
@@ -103,6 +102,23 @@ export const serverSideFetch = async<T>(
     return raw.data as T;
 }
 
+export class BodyValidationError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'BodyValidationError';
+    }
+}
+
+export const validateBody = async (req: NextRequest) => {
+    const body = await req.json();
+
+    // validate the request body
+    if (!body || !body.data) {
+        throw new BodyValidationError('Invalid request. The body content could not be found or is empty.');
+    }
+
+    return body;
+}
 
 /* --- DATABASE HANDLE --- */
 
