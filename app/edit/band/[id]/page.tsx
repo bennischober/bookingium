@@ -3,9 +3,9 @@ import { ICompany } from "@/models/company";
 import { IPerson } from "@/models/person";
 import { serverSideFetch } from "@/utils/appHandles";
 import { Metadata } from "next";
-import { IBand } from "@/models/band";
 import SpecificBandComponent from "./component";
 import { IDealMemo } from "@/models/deal-memo";
+import { ApiClient } from "@/lib/apiClient";
 
 export const metadata: Metadata = {
     title: "Update Band data",
@@ -16,13 +16,8 @@ export const dynamic = "force-dynamic";
 export default async function Page({ params }: { params: { id: string } }) {
     const session = await authOrRedirect();
 
-    const band = await serverSideFetch<IBand>(`/api/band/${params.id}`, {
-        userid: session.userid,
-    });
-
-    const persons = await serverSideFetch<IPerson[]>("/api/person", {
-        userid: session.userid,
-    });
+    const band = await ApiClient.Band.getById(session.userid, params.id, session.userid);
+    const persons = await ApiClient.Person.get(session.userid);
 
     // band members
     let members: IPerson[] = [];

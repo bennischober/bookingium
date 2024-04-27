@@ -1,13 +1,20 @@
-import { notifications } from '@mantine/notifications';
+import { notifications } from "@mantine/notifications";
 import { MdCheck, MdClose } from "react-icons/md";
 
-interface ApiResponse<T> {
+export interface ApiResponse<T> {
     success: boolean;
     data?: T;
     error?: string;
 }
 
-type ApiMethod = "GET" | "POST" | "PUT" | "DELETE";
+export type ApiMethod = "GET" | "POST" | "PUT" | "DELETE";
+
+export const HttpMethod = {
+    GET: "GET",
+    POST: "POST",
+    PUT: "PUT",
+    DELETE: "DELETE",
+} as const;
 
 export const getAPIBaseUrl = () => {
     // If window is defined, we are on the client-side
@@ -19,36 +26,31 @@ export const getAPIBaseUrl = () => {
     return process.env.HOST ?? "";
 };
 
-export async function callAPI<T>(endpoint: string, method?: "GET"): Promise<T>;
-export async function callAPI<T>(
-    endpoint: string,
-    method: "POST" | "PUT",
-    body: any
-): Promise<T>;
-export async function callAPI<T>(
-    endpoint: string,
-    method: ApiMethod,
-    body?: any,
-    params?: Record<string, string>
-): Promise<T>;
 export async function callAPI<T = any>(
     endpoint: string,
     method: ApiMethod = "GET",
     body: any = null,
-    params: Record<string, string> = {}
+    params: Record<string, string> = {},
+    authentication: string = ""
 ): Promise<T> {
-    console.log(endpoint, method, body, params)
-
     const baseUrl = getAPIBaseUrl() + "/api/";
     if (endpoint.startsWith("/")) endpoint = endpoint.substring(1);
     const url = new URL(endpoint, baseUrl);
 
-    let userid = "";
+    let userid = authentication;
 
-    Object.keys(params).forEach((key) => {
-        if(key === "userid") userid = params[key]
-        url.searchParams.append(key, params[key])
-    });
+    for (let key of Object.keys(params)) {
+        // remove the userid from the search params
+        // this could happen, if the authentication
+        // parameter is not passed, but rather provided
+        // implicitly in the search params
+        if (key === "userid") {
+            userid = params[key];
+            continue;
+        }
+
+        url.searchParams.append(key, params[key]);
+    }
 
     const response = await fetch(url.toString(), {
         method: method,
@@ -56,7 +58,7 @@ export async function callAPI<T = any>(
             "Content-Type": "application/json",
             // add authorization header with token
             // later, pass jwt, currently pass userid
-            "Authorization": userid,
+            Authorization: userid,
         },
         body: body ? JSON.stringify(body) : undefined,
     });

@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
 import { MantineFontSize } from "@mantine/core";
 import { getAPIBaseUrl } from "./apiHandler";
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 
 /*--- OTHER HANDLE ---*/
 export function getCurrentYear() {
@@ -50,24 +50,6 @@ export function nonEmptyObj(obj: any) {
 
 export function nonEmptyString(str: any) {
     return str === null || str == undefined ? false : str.length > 0;
-}
-
-/**
- * @deprecated use `callApi()` instead
- */
-export const clientSideFetch = async <T>(route: string, params: Record<string, string> = {}): Promise<T> => {
-    const url: URL = new URL(route, getAPIBaseUrl());
-    Object.keys(params).forEach((key) =>
-        url.searchParams.append(key, params[key])
-    );
-
-    const result = await fetch(url, {
-        cache: "no-store"
-    });
-
-    if (result.status !== 200) return [] as T;
-    const raw = await result.json();
-    return raw.data as T;
 }
 
 export const serverSideFetch = async<T>(

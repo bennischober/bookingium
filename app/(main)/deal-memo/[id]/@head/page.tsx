@@ -14,8 +14,9 @@ async function fetchData(id: string, session: Session) {
     const params = { userid: session.userid };
     // parallel fetch data
     const memoData = serverSideFetch<IDealMemo>(`/api/deal-memo/${id}`, params);
-    const wpData = serverSideFetch<IWorkplace>("/api/user/workplace", params);
-    const [memo, workplace] = await Promise.all([memoData, wpData]);
+    const wpData = serverSideFetch<IWorkplace[]>("/api/user/workplace", params);
+    const [memo, workplaceList] = await Promise.all([memoData, wpData]);
+    const workplace: IWorkplace = workplaceList[0];
 
     // ensure data population
     const band = isPopulated<IBand>(memo.bandid)

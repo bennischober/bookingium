@@ -1,4 +1,13 @@
 import mongoose, { MongooseError } from 'mongoose';
+import '@/models/band';
+import '@/models/company';
+import '@/models/deal-memo';
+import '@/models/hotel';
+import '@/models/itinerary'
+import '@/models/person';
+import '@/models/user';
+import '@/models/venue';
+import '@/models/workplace';
 
 const mongoUrl = process.env.MONGODB_URI as string;
 const mongoOptions: mongoose.ConnectOptions = {

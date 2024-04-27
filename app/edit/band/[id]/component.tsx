@@ -9,7 +9,7 @@ import { IBand } from "@/models/band";
 import { ICompany } from "@/models/company";
 import { IDealMemo } from "@/models/deal-memo";
 import { IPerson } from "@/models/person";
-import { callAPI, getAPIBaseUrl, withNotification } from "@/utils/apiHandler";
+import { callAPI, withNotification } from "@/utils/apiHandler";
 import { Space, Tabs } from "@mantine/core";
 import { Session } from "next-auth";
 
