@@ -1,7 +1,7 @@
 > [!WARNING]
 > This repository has been archived and is no longer maintained.
 >
-> Development has moved to the [new repository](/bookingium-app).\
+> Development has moved to the [new repository](https://github.com/bennischober/bookingium-app).\
 > Please visit the new repository for updates and future contributions.
 
 # Bookingium - Event booking
